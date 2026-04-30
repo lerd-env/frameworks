@@ -97,6 +97,8 @@ workers:
     label: Queue Worker
     command: php artisan queue:work --queue=default --tries=3 --timeout=60
     restart: always
+    exclude_check:
+      composer: laravel/horizon
   schedule:
     label: Task Scheduler
     command: php artisan schedule:run
