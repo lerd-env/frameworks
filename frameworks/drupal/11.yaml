@@ -87,3 +87,9 @@ setup:
     command: php vendor/drush/drush/drush.php config:import --yes
     check:
       composer: drush/drush
+
+tinker:
+  command: ["vendor/drush/drush/drush.php", "php:eval"]
+  execute_positional: true
+  requires_package: drush/drush
+  requires_file: vendor/drush/drush/drush.php

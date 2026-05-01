@@ -87,3 +87,8 @@ setup:
   - label: Refresh stache
     command: php please stache:refresh
     default: true
+tinker:
+  command: ["artisan", "tinker"]
+  execute_flag: "--execute"
+  requires_package: laravel/tinker
+  requires_file: artisan
