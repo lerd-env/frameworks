@@ -85,3 +85,9 @@ setup:
   - label: Install assets
     command: php bin/console assets:install public
     default: true
+
+tinker:
+  command: ["vendor/bin/psysh"]
+  execute_flag: "--execute"
+  requires_package: psy/psysh
+  requires_file: vendor/bin/psysh

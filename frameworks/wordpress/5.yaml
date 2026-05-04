@@ -32,3 +32,9 @@ logs:
 
 composer: false
 npm: false
+
+tinker:
+  command: ["vendor/bin/wp", "eval"]
+  execute_positional: true
+  requires_package: wp-cli/wp-cli
+  requires_file: vendor/bin/wp
