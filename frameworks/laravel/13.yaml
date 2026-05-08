@@ -121,6 +121,13 @@ workers:
       composer: laravel/horizon
     conflicts_with:
       - queue
+  vite:
+    label: Vite Dev Server
+    command: npm run dev
+    restart: on-failure
+    host: true
+    check:
+      file: vite.config.js
 
 logs:
   - path: storage/logs/*.log
