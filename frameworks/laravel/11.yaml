@@ -127,7 +127,7 @@ workers:
     restart: on-failure
     host: true
     check:
-      file: vite.config.js
+      file: node_modules/vite
 
 logs:
   - path: storage/logs/*.log
