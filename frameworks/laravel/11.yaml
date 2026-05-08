@@ -122,6 +122,8 @@ workers:
     conflicts_with:
       - queue
   vite:
+    per_worktree: true
+    replaces_build: true
     label: Vite Dev Server
     command: npm run dev
     restart: on-failure
