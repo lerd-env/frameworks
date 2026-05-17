@@ -93,3 +93,36 @@ tinker:
   execute_positional: true
   requires_package: drush/drush
   requires_file: vendor/drush/drush/drush.php
+
+commands:
+  - name: cr
+    label: Rebuild cache
+    command: drush cr
+    description: Rebuild all Drupal caches
+    output: silent
+    icon: broom
+  - name: uli
+    label: Login as admin
+    command: drush uli
+    description: Generate a one-time admin login URL
+    output: url
+    icon: key
+  - name: updb
+    label: Run database updates
+    command: drush updb -y
+    description: Apply pending hook_update_N updates
+    output: silent
+    icon: database
+  - name: cex
+    label: Export config
+    command: drush cex -y
+    description: Export configuration to the sync directory
+    output: text
+    icon: arrow-up
+  - name: cim
+    label: Import config
+    command: drush cim -y
+    description: Import configuration from the sync directory
+    output: text
+    confirm: true
+    icon: arrow-down

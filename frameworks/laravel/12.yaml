@@ -124,7 +124,7 @@ workers:
   vite:
     per_worktree: true
     replaces_build: true
-    label: Vite Dev Server
+    label: Vite
     command: npm run dev
     restart: on-failure
     host: true
@@ -150,3 +150,24 @@ tinker:
   execute_flag: "--execute"
   requires_package: laravel/tinker
   requires_file: artisan
+
+commands:
+  - name: optimize:clear
+    label: Clear all caches
+    command: php artisan optimize:clear
+    description: Clear config, route, view, event, and compiled caches
+    output: silent
+    icon: broom
+  - name: migrate
+    label: Run migrations
+    command: php artisan migrate --force
+    description: Apply pending database migrations
+    output: silent
+    icon: database
+  - name: migrate:fresh
+    label: Drop and re-migrate
+    command: php artisan migrate:fresh --seed --force
+    description: Wipe the database, re-run all migrations, then seed
+    output: silent
+    confirm: true
+    icon: refresh
