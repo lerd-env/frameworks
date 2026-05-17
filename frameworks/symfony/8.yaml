@@ -97,3 +97,28 @@ tinker:
   execute_flag: "--execute"
   requires_package: psy/psysh
   requires_file: vendor/bin/psysh
+
+commands:
+  - name: cache:clear
+    label: Clear cache
+    command: bin/console cache:clear
+    description: Clear the Symfony cache for the current environment
+    output: silent
+    icon: broom
+  - name: doctrine:migrations:migrate
+    label: Run migrations
+    command: bin/console doctrine:migrations:migrate --no-interaction
+    description: Apply pending Doctrine migrations
+    output: silent
+    icon: database
+    check:
+      composer: doctrine/doctrine-migrations-bundle
+  - name: doctrine:fixtures:load
+    label: Load fixtures
+    command: bin/console doctrine:fixtures:load --no-interaction
+    description: Wipe data and load fixtures
+    output: silent
+    confirm: true
+    icon: refresh
+    check:
+      composer: doctrine/doctrine-fixtures-bundle

@@ -38,3 +38,23 @@ tinker:
   execute_positional: true
   requires_package: wp-cli/wp-cli
   requires_file: vendor/bin/wp
+
+commands:
+  - name: cache:flush
+    label: Flush cache
+    command: wp cache flush
+    description: Flush the WordPress object cache
+    output: silent
+    icon: broom
+  - name: rewrite:flush
+    label: Flush rewrites
+    command: wp rewrite flush
+    description: Regenerate permalink rules
+    output: silent
+    icon: refresh
+  - name: db:export
+    label: Export database
+    command: wp db export
+    description: Dump the database to a SQL file in the project directory
+    output: text
+    icon: database

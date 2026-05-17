@@ -56,3 +56,25 @@ setup:
   - label: Clear cache
     command: bin/cake cache clear_all
     default: true
+
+commands:
+  - name: cache:clear
+    label: Clear all caches
+    command: bin/cake cache clear_all
+    description: Clear every configured cache pool
+    output: silent
+    icon: broom
+  - name: migrate
+    label: Run migrations
+    command: bin/cake migrations migrate
+    description: Apply pending migrations
+    output: silent
+    icon: database
+    check:
+      composer: cakephp/migrations
+  - name: schema:cache:clear
+    label: Clear schema cache
+    command: bin/cake schema_cache clear
+    description: Drop the cached database schema
+    output: silent
+    icon: refresh

@@ -92,3 +92,23 @@ tinker:
   execute_flag: "--execute"
   requires_package: laravel/tinker
   requires_file: artisan
+
+commands:
+  - name: cache:clear
+    label: Clear all caches
+    command: php please cache:clear
+    description: Clear Statamic and Laravel caches
+    output: silent
+    icon: broom
+  - name: stache:warm
+    label: Warm Stache
+    command: php please stache:warm
+    description: Pre-build the Stache index
+    output: silent
+    icon: refresh
+  - name: search:update
+    label: Update search
+    command: php please search:update --all
+    description: Reindex all configured search indexes
+    output: silent
+    icon: refresh
