@@ -106,6 +106,7 @@ workers:
   horizon:
     label: Horizon
     command: php artisan horizon
+    reload_command: php artisan horizon:listen
     restart: always
     check:
       composer: laravel/horizon
