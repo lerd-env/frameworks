@@ -1,0 +1,97 @@
+name: codeigniter
+version: "4"
+label: CodeIgniter
+public_dir: public
+create: composer create-project codeigniter4/appstarter
+php:
+  min: "8.2"
+  max: "8.4"
+
+detect:
+  - file: spark
+  - composer: codeigniter4/framework
+
+env:
+  file: .env
+  example_file: env
+  format: dotenv
+  url_key: app.baseURL
+  key_generation:
+    env_key: encryption.key
+    command: key:generate
+    fallback_prefix: "hex2bin:"
+  services:
+    mysql:
+      detect:
+        - key: database.default.DBDriver
+          value_prefix: "MySQLi"
+      vars:
+        - "database.default.hostname=lerd-mysql"
+        - "database.default.database={{site}}"
+        - "database.default.username=root"
+        - "database.default.password=lerd"
+        - "database.default.DBDriver=MySQLi"
+        - "database.default.port=3306"
+    postgres:
+      detect:
+        - key: database.default.DBDriver
+          value_prefix: "Postgre"
+      vars:
+        - "database.default.hostname=lerd-postgres"
+        - "database.default.database={{site}}"
+        - "database.default.username=postgres"
+        - "database.default.password=lerd"
+        - "database.default.DBDriver=Postgre"
+        - "database.default.port=5432"
+    redis:
+      detect:
+        - key: cache.handler
+          value_prefix: "redis"
+      vars:
+        - "cache.handler=redis"
+        - "cache.redis.host=lerd-redis"
+        - "cache.redis.port=6379"
+    mailpit:
+      detect:
+        - key: email.SMTPHost
+      vars:
+        - "email.protocol=smtp"
+        - "email.SMTPHost=lerd-mailpit"
+        - "email.SMTPPort=1025"
+
+composer: auto
+npm: auto
+console: spark
+
+logs:
+  - path: writable/logs/*.log
+    format: raw
+
+setup:
+  - label: Run migrations
+    command: php spark migrate
+    default: true
+  - label: Clear cache
+    command: php spark cache:clear
+    default: true
+
+commands:
+  - name: cache:clear
+    label: Clear cache
+    command: php spark cache:clear
+    description: Clear every configured cache pool
+    output: silent
+    icon: broom
+  - name: migrate
+    label: Run migrations
+    command: php spark migrate
+    description: Apply pending migrations
+    output: silent
+    icon: database
+  - name: migrate:rollback
+    label: Rollback migrations
+    command: php spark migrate:rollback
+    description: Roll back the last migration batch
+    output: silent
+    confirm: true
+    icon: arrow-down
