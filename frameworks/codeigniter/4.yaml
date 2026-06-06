@@ -16,6 +16,8 @@ env:
   example_file: env
   format: dotenv
   url_key: app.baseURL
+  vars:
+    - "CI_ENVIRONMENT=development"
   key_generation:
     env_key: encryption.key
     command: key:generate
