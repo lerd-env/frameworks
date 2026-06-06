@@ -51,6 +51,16 @@
       ]
     },
     {
+      "name": "codeigniter",
+      "label": "CodeIgniter",
+      "versions": ["4"],
+      "latest": "4",
+      "detect": [
+        {"file": "spark"},
+        {"composer": "codeigniter4/framework"}
+      ]
+    },
+    {
       "name": "statamic",
       "label": "Statamic",
       "versions": ["6", "5"],

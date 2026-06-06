@@ -22,6 +22,7 @@ When you link a project and no local definition exists, lerd offers to install o
 | WordPress | 6, 5 | `wp-login.php` or `wp-config.php` file |
 | Drupal | 11, 10 | `drupal/core-recommended` or `drupal/core` in composer.json |
 | CakePHP | 5, 4 | `bin/cake` file, `cakephp/cakephp` in composer.json |
+| CodeIgniter | 4 | `spark` file, `codeigniter4/framework` in composer.json |
 | Statamic | 6, 5 | `statamic/cms` in composer.json |
 
 ## Contributing
