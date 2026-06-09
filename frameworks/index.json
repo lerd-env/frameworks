@@ -68,6 +68,16 @@
       "detect": [
         {"composer": "statamic/cms"}
       ]
+    },
+    {
+      "name": "tempest",
+      "label": "Tempest",
+      "versions": ["3"],
+      "latest": "3",
+      "detect": [
+        {"composer": "tempest/framework"},
+        {"file": "tempest"}
+      ]
     }
   ]
 }
