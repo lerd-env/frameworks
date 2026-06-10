@@ -23,22 +23,24 @@ env:
   services:
     mysql:
       detect:
-        - key: DB_HOST
+        - key: DATABASE_PORT
+          value_prefix: "3306"
       vars:
-        - DB_HOST=lerd-mysql
-        - DB_PORT=3306
-        - DB_DATABASE={{site}}
-        - DB_USERNAME=root
-        - DB_PASSWORD=lerd
+        - DATABASE_HOST=lerd-mysql
+        - DATABASE_PORT=3306
+        - DATABASE_DATABASE={{site}}
+        - DATABASE_USERNAME=root
+        - DATABASE_PASSWORD=lerd
     postgres:
       detect:
-        - key: DB_HOST
+        - key: DATABASE_PORT
+          value_prefix: "5432"
       vars:
-        - DB_HOST=lerd-postgres
-        - DB_PORT=5432
-        - DB_DATABASE={{site}}
-        - DB_USERNAME=postgres
-        - DB_PASSWORD=lerd
+        - DATABASE_HOST=lerd-postgres
+        - DATABASE_PORT=5432
+        - DATABASE_DATABASE={{site}}
+        - DATABASE_USERNAME=postgres
+        - DATABASE_PASSWORD=lerd
     mailpit:
       detect:
         - key: MAIL_SMTP_HOST
