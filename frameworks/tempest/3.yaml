@@ -1,0 +1,106 @@
+name: tempest
+version: "3"
+label: Tempest
+public_dir: public
+create: composer create-project tempest/app
+
+php:
+  min: "8.5"
+  max: "8.5"
+
+detect:
+  - composer: tempest/framework
+  - file: tempest
+
+env:
+  file: .env
+  example_file: .env.example
+  format: dotenv
+  url_key: BASE_URI
+  key_generation:
+    env_key: SIGNING_KEY
+    command: key:generate
+  services:
+    mysql:
+      detect:
+        - key: DATABASE_PORT
+          value_prefix: "3306"
+      vars:
+        - DATABASE_HOST=lerd-mysql
+        - DATABASE_PORT=3306
+        - DATABASE_DATABASE={{site}}
+        - DATABASE_USERNAME=root
+        - DATABASE_PASSWORD=lerd
+    postgres:
+      detect:
+        - key: DATABASE_PORT
+          value_prefix: "5432"
+      vars:
+        - DATABASE_HOST=lerd-postgres
+        - DATABASE_PORT=5432
+        - DATABASE_DATABASE={{site}}
+        - DATABASE_USERNAME=postgres
+        - DATABASE_PASSWORD=lerd
+    mailpit:
+      detect:
+        - key: MAIL_SMTP_HOST
+      vars:
+        - MAIL_SMTP_SCHEME=smtp
+        - MAIL_SMTP_HOST=lerd-mailpit
+        - MAIL_SMTP_PORT=1025
+
+composer: auto
+npm: auto
+console: tempest
+
+workers:
+  command_bus:
+    label: Async Command Monitor
+    command: php tempest command:monitor
+    restart: always
+    check:
+      composer: tempest/command-bus
+  schedule:
+    label: Task Scheduler
+    command: php tempest schedule:run
+    schedule: minutely
+  vite:
+    per_worktree: true
+    replaces_build: true
+    label: Vite
+    command: npm run dev
+    restart: on-failure
+    host: true
+    check:
+      file: node_modules/vite
+
+logs:
+  - path: .tempest/logs/*.log
+    format: monolog
+
+setup:
+  - label: Generate discovery cache
+    command: php tempest discovery:generate --no-interaction
+    default: true
+  - label: Run migrations
+    command: php tempest migrate:up --force
+    default: true
+    check:
+      composer: tempest/database
+
+commands:
+  - name: discovery:clear
+    label: Clear discovery cache
+    command: php tempest discovery:clear --no-interaction
+    output: silent
+    icon: broom
+  - name: migrate
+    label: Run migrations
+    command: php tempest migrate:up --force
+    output: silent
+    icon: database
+  - name: cache:clear
+    label: Clear caches
+    command: php tempest cache:clear --force
+    output: silent
+    icon: broom
