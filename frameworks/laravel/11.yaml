@@ -172,3 +172,15 @@ commands:
     output: silent
     confirm: true
     icon: refresh
+  - name: key:generate
+    label: Generate APP_KEY
+    command: php artisan key:generate
+    description: Set the application encryption key in .env
+    output: silent
+    icon: key
+  - name: storage:link
+    label: Link storage
+    command: php artisan storage:link
+    description: Create the public/storage symlink to storage/app/public
+    output: silent
+    icon: link
