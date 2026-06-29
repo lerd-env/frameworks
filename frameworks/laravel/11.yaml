@@ -184,3 +184,27 @@ commands:
     description: Create the public/storage symlink to storage/app/public
     output: silent
     icon: link
+
+doctor:
+  checks:
+    - name: app_debug
+      type: env_combo
+      when:
+        APP_ENV: production
+      warn_if:
+        APP_DEBUG: "true"
+      detail: "APP_DEBUG is on while APP_ENV=production, so stack traces and config will leak. Turn debug off."
+    - name: storage_link
+      type: symlink
+      link: public/storage
+      target: storage/app/public
+      requires_dir: public
+      fix: storage:link
+      detail: "public/storage symlink is missing, so files on the public disk won't be web-accessible."
+    - name: migrations
+      type: command
+      command: php artisan migrate:status
+      fail_if_output_contains: Pending
+      unknown_on_error: true
+      fix: migrate
+      detail: "There are pending migrations, run migrate to apply them."
