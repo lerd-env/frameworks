@@ -122,3 +122,13 @@ commands:
     icon: refresh
     check:
       composer: doctrine/doctrine-fixtures-bundle
+
+doctor:
+  checks:
+    - name: app_debug
+      type: env_combo
+      when:
+        APP_ENV: prod
+      warn_if:
+        APP_DEBUG: "true"
+      detail: "APP_DEBUG is on while APP_ENV=prod, so stack traces and internals will leak. Turn debug off in production."
