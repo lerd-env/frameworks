@@ -112,3 +112,19 @@ commands:
     description: Reindex all configured search indexes
     output: silent
     icon: refresh
+
+doctor:
+  checks:
+    - name: app_debug
+      type: env_combo
+      when:
+        APP_ENV: production
+      warn_if:
+        APP_DEBUG: "true"
+      detail: "APP_DEBUG is on while APP_ENV=production, so stack traces and config will leak. Turn debug off."
+    - name: storage_link
+      type: symlink
+      link: public/storage
+      target: storage/app/public
+      requires_dir: public
+      detail: "public/storage symlink is missing, so files on the public disk won't be web-accessible. Run php please storage:link."
