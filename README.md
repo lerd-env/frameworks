@@ -1,10 +1,10 @@
 # Lerd Framework Store
 
 > The community-driven store of framework definitions that powers
-> [Lerd](https://github.com/lerd-env/lerd) — teach Lerd a new PHP framework by
+> [Lerd](https://lerd.sh) — teach Lerd a new PHP framework by
 > editing YAML, no binary release required.
 
-[![Part of Lerd](https://img.shields.io/badge/part%20of-lerd-ff2d20)](https://github.com/lerd-env/lerd)
+[![Part of Lerd](https://img.shields.io/badge/part%20of-lerd-ff2d20)](https://lerd.sh)
 [![Docs](https://img.shields.io/badge/docs-lerd.sh-blue)](https://lerd.sh/usage/frameworks)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
