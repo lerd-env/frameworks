@@ -65,6 +65,17 @@ composer: auto
 npm: auto
 console: spark
 
+workers:
+  queue:
+    label: Queue Worker
+    command: php spark queue:work default
+    # Parameterized variant for `lerd queue:start --queue/--tries`. CI4 takes the
+    # queue name positionally and has no per-job timeout flag, so timeout is omitted.
+    tune_command: php spark queue:work {queue} -tries={tries}
+    restart: always
+    check:
+      composer: codeigniter4/queue
+
 logs:
   - path: writable/logs/*.log
     format: raw
@@ -97,3 +108,27 @@ commands:
     output: silent
     confirm: true
     icon: arrow-down
+  - name: queue:retry
+    label: Retry failed jobs
+    command: php spark queue:retry all
+    description: Retry every failed queue job
+    output: silent
+    icon: arrow-rotate-right
+    check:
+      composer: codeigniter4/queue
+  - name: queue:failed
+    label: Show failed jobs
+    command: php spark queue:failed
+    description: List failed queue jobs
+    icon: list
+    check:
+      composer: codeigniter4/queue
+  - name: queue:flush
+    label: Flush failed jobs
+    command: php spark queue:flush
+    description: Remove all failed queue jobs
+    output: silent
+    confirm: true
+    icon: trash
+    check:
+      composer: codeigniter4/queue
