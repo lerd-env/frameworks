@@ -45,6 +45,11 @@ env:
         - cache.frontend.default.backend_options.server=lerd-redis
         - cache.frontend.default.backend_options.port=6379
 
+# Magento 2.4 removed the MySQL catalog search engine, so a store cannot boot
+# without a search engine at all.
+requires:
+  - opensearch
+
 composer: auto
 npm: false
 console: bin/magento
