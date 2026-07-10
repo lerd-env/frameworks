@@ -1,0 +1,238 @@
+name: magento
+version: "2"
+label: Magento
+public_dir: pub
+create: composer create-project --repository-url=https://mirror.mage-os.org/ magento/project-community-edition
+php:
+  min: "8.1"
+  max: "8.5"
+
+detect:
+  - file: bin/magento
+  - composer: magento/product-community-edition
+  - composer: magento/product-enterprise-edition
+
+# Magento keeps its deployment config in app/etc/env.php, a PHP file returning a
+# nested array. Keys are addressed by dotted path.
+env:
+  file: app/etc/env.php
+  format: php-array
+  # Magento's base URL lives in the database (core_config_data), not env.php.
+  url_key: none
+  services:
+    mysql:
+      detect:
+        - key: db.connection.default.host
+      vars:
+        - db.connection.default.host=lerd-mysql
+        - db.connection.default.dbname={{site}}
+        - db.connection.default.username=root
+        - db.connection.default.password=lerd
+        - db.connection.default.active=1
+    opensearch:
+      detect:
+        - key: system.default.catalog.search.engine
+      vars:
+        - system.default.catalog.search.engine=opensearch
+        - system.default.catalog.search.opensearch_server_hostname=lerd-opensearch
+        - system.default.catalog.search.opensearch_server_port=9200
+        - system.default.catalog.search.opensearch_index_prefix={{site}}
+    redis:
+      detect:
+        - key: cache.frontend.default.backend_options.server
+      vars:
+        - cache.frontend.default.backend=Magento\Framework\Cache\Backend\Redis
+        - cache.frontend.default.backend_options.server=lerd-redis
+        - cache.frontend.default.backend_options.port=6379
+
+composer: auto
+npm: false
+console: bin/magento
+
+# setup/ lives outside pub/, and /static/ and /media/ are generated on demand by
+# pub/static.php and pub/get.php. Without these, an uninstalled store redirects
+# to /setup/ forever and developer-mode assets never resolve.
+nginx:
+  snippet: |
+    location ~* ^/(setup|update)($|/) {
+        root {{root}};
+
+        location ~ ^/(setup|update)/index\.php {
+            set $setupfpm "{{fpm}}";
+            fastcgi_pass $setupfpm:9000;
+            fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+            include fastcgi_params;
+        }
+
+        location ~ ^/(setup|update)/(?!pub/). {
+            deny all;
+        }
+    }
+
+    location /static/ {
+        # Deployed files are served directly. Anything else is generated on the
+        # fly by pub/static.php, which wants the path with the version signature
+        # stripped, handed over as ?resource=.
+        if (!-f $request_filename) {
+            rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+        }
+    }
+
+    location /media/ {
+        try_files $uri $uri/ /get.php$is_args$args;
+
+        location ~ ^/media/theme_customization/.*\.xml {
+            deny all;
+        }
+    }
+
+workers:
+  cron:
+    label: Cron
+    command: php bin/magento cron:run
+    schedule: minutely
+  consumers:
+    label: Queue Consumers
+    command: php bin/magento queue:consumers:start async.operations.all
+    restart: always
+    check:
+      file: vendor/magento/module-asynchronous-operations
+
+logs:
+  - path: var/log/*.log
+    format: monolog
+
+# Every step below needs an installed store. app/etc/config.php is the marker:
+# setup:install writes it, and lerd's env wiring never does, unlike env.php.
+# The schema, DI and index commands blow past PHP's default 128M memory_limit.
+setup:
+  - label: Apply schema and data updates
+    command: php -d memory_limit=-1 bin/magento setup:upgrade
+    default: true
+    check:
+      file: app/etc/config.php
+  - label: Flush the cache
+    command: php bin/magento cache:flush
+    default: true
+    check:
+      file: app/etc/config.php
+  - label: Switch to developer mode
+    command: php bin/magento deploy:mode:set developer
+    check:
+      file: app/etc/config.php
+  - label: Compile dependency injection
+    command: php -d memory_limit=-1 bin/magento setup:di:compile
+    check:
+      file: app/etc/config.php
+  - label: Reindex everything
+    command: php -d memory_limit=-1 bin/magento indexer:reindex
+    check:
+      file: app/etc/config.php
+
+commands:
+  # Magento 2.4 removed the web installer, so a fresh store is installed from the
+  # CLI. Confirm-gated rather than a setup step: it creates schema and an admin
+  # user, and `lerd setup --all` runs every setup step regardless of default.
+  - name: setup:install
+    label: Install Magento
+    command: >
+      php -d memory_limit=-1 bin/magento setup:install
+      --base-url={{scheme}}://{{domain}}/
+      --db-host=lerd-mysql --db-name={{site}} --db-user=root --db-password=lerd
+      --search-engine=opensearch --opensearch-host=lerd-opensearch --opensearch-port=9200
+      --admin-firstname=Lerd --admin-lastname=Admin --admin-email=admin@{{domain}}
+      --admin-user=admin --admin-password=lerdadmin1
+      --language=en_US --currency=USD --timezone=UTC --use-rewrites=1
+    description: Install a fresh store against lerd's mysql and opensearch, admin user admin/lerdadmin1
+    output: text
+    confirm: true
+    icon: play
+  - name: cache:flush
+    label: Flush cache
+    command: php bin/magento cache:flush
+    description: Purge every cache storage, including the full page cache
+    output: silent
+    icon: broom
+    check:
+      file: app/etc/config.php
+  - name: cache:clean
+    label: Clean cache
+    command: php bin/magento cache:clean
+    description: Invalidate cached entries without emptying the storage
+    output: silent
+    icon: refresh
+    check:
+      file: app/etc/config.php
+  - name: setup:upgrade
+    label: Run setup upgrade
+    command: php -d memory_limit=-1 bin/magento setup:upgrade
+    description: Apply pending schema and data updates from installed modules
+    output: silent
+    icon: database
+    check:
+      file: app/etc/config.php
+  - name: setup:di:compile
+    label: Compile DI
+    command: php -d memory_limit=-1 bin/magento setup:di:compile
+    description: Regenerate the dependency injection and interceptor classes
+    output: silent
+    icon: play
+    check:
+      file: app/etc/config.php
+  - name: indexer:reindex
+    label: Reindex
+    command: php -d memory_limit=-1 bin/magento indexer:reindex
+    description: Rebuild every index
+    output: silent
+    icon: list
+    check:
+      file: app/etc/config.php
+  - name: deploy:mode:developer
+    label: Switch to developer mode
+    command: php bin/magento deploy:mode:set developer
+    description: Put the store in developer mode, with errors shown and no static content caching
+    output: silent
+    icon: edit
+    check:
+      file: app/etc/config.php
+  - name: maintenance:enable
+    label: Enable maintenance mode
+    command: php bin/magento maintenance:enable
+    description: Take the storefront offline
+    output: silent
+    confirm: true
+    icon: arrow-down
+    check:
+      file: app/etc/config.php
+  - name: maintenance:disable
+    label: Disable maintenance mode
+    command: php bin/magento maintenance:disable
+    description: Bring the storefront back online
+    output: silent
+    icon: arrow-up
+    check:
+      file: app/etc/config.php
+
+doctor:
+  checks:
+    - name: installed
+      type: command
+      command: test -f app/etc/config.php
+      fix: setup:install
+      detail: "Magento is not installed. The web installer was removed in 2.4, so a fresh store must be installed from the CLI."
+    - name: db_status
+      type: command
+      # setup:db:status exits 2 when an upgrade is pending and 1 when the app
+      # isn't installed, so swallow the status and read the message instead.
+      command: php bin/magento setup:db:status || true
+      fail_if_output_contains: "Run 'setup:upgrade'"
+      fix: setup:upgrade
+      detail: "The module code no longer matches the database schema, run setup:upgrade to apply the pending updates."
+    - name: deploy_mode
+      type: command
+      command: php bin/magento deploy:mode:show
+      fail_if_output_contains: "Current application mode: production"
+      unknown_on_error: true
+      severity: warn
+      fix: deploy:mode:developer
+      detail: "The store is in production mode, so template changes need a static content deploy to show up. Switch to developer mode."

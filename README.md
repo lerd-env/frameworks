@@ -10,7 +10,7 @@
 
 When you run `lerd link` on a project, Lerd detects which framework it is and pulls the matching definition from this store — then it knows how to serve it, which workers to run, how to set up its `.env`, how to scaffold it, and how to health-check it. Everything is a versioned YAML file. Add a framework here and every Lerd install can use it within 24 hours, with no new Lerd release and no Go code.
 
-That's the whole point: **Lerd is framework-agnostic, and this repo is where that agnosticism lives.** Laravel, Symfony, WordPress, Drupal, CakePHP, CodeIgniter, Statamic, and Tempest are all defined here — not hardcoded in the binary — and so is whatever framework you add next.
+That's the whole point: **Lerd is framework-agnostic, and this repo is where that agnosticism lives.** Laravel, Symfony, WordPress, Drupal, CakePHP, CodeIgniter, Statamic, Magento, and Tempest are all defined here — not hardcoded in the binary — and so is whatever framework you add next.
 
 ## What a definition powers
 
@@ -37,6 +37,7 @@ All of it is data. None of it ships in the binary.
 | CakePHP | 5, 4 | `bin/cake` file or `cakephp/cakephp` in composer.json |
 | CodeIgniter | 4 | `spark` file or `codeigniter4/framework` in composer.json |
 | Statamic | 6, 5 | `statamic/cms` in composer.json |
+| Magento | 2 | `bin/magento` file or `magento/product-community-edition` in composer.json |
 | Tempest | 3 | `tempest` file or `tempest/framework` in composer.json |
 
 Don't see yours? [Add it](#contributing) — that's what this repo is for.

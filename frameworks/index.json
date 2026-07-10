@@ -70,6 +70,17 @@
       ]
     },
     {
+      "name": "magento",
+      "label": "Magento",
+      "versions": ["2"],
+      "latest": "2",
+      "detect": [
+        {"file": "bin/magento"},
+        {"composer": "magento/product-community-edition"},
+        {"composer": "magento/product-enterprise-edition"}
+      ]
+    },
+    {
       "name": "tempest",
       "label": "Tempest",
       "versions": ["3"],
