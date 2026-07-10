@@ -109,7 +109,8 @@ logs:
 
 # Every step below needs an installed store. app/etc/config.php is the marker:
 # setup:install writes it, and lerd's env wiring never does, unlike env.php.
-# The schema, DI and index commands blow past PHP's default 128M memory_limit.
+# Magento's CLI commands blow past PHP's 128M default, so every one-shot command
+# lifts the limit. The long-running workers keep it, so a leak cannot eat the box.
 setup:
   - label: Apply schema and data updates
     command: php -d memory_limit=-1 bin/magento setup:upgrade
@@ -117,12 +118,12 @@ setup:
     check:
       file: app/etc/config.php
   - label: Flush the cache
-    command: php bin/magento cache:flush
+    command: php -d memory_limit=-1 bin/magento cache:flush
     default: true
     check:
       file: app/etc/config.php
   - label: Switch to developer mode
-    command: php bin/magento deploy:mode:set developer
+    command: php -d memory_limit=-1 bin/magento deploy:mode:set developer
     check:
       file: app/etc/config.php
   - label: Compile dependency injection
@@ -154,7 +155,7 @@ commands:
     icon: play
   - name: cache:flush
     label: Flush cache
-    command: php bin/magento cache:flush
+    command: php -d memory_limit=-1 bin/magento cache:flush
     description: Purge every cache storage, including the full page cache
     output: silent
     icon: broom
@@ -162,7 +163,7 @@ commands:
       file: app/etc/config.php
   - name: cache:clean
     label: Clean cache
-    command: php bin/magento cache:clean
+    command: php -d memory_limit=-1 bin/magento cache:clean
     description: Invalidate cached entries without emptying the storage
     output: silent
     icon: refresh
@@ -194,7 +195,7 @@ commands:
       file: app/etc/config.php
   - name: deploy:mode:developer
     label: Switch to developer mode
-    command: php bin/magento deploy:mode:set developer
+    command: php -d memory_limit=-1 bin/magento deploy:mode:set developer
     description: Put the store in developer mode, with errors shown and no static content caching
     output: silent
     icon: edit
@@ -202,7 +203,7 @@ commands:
       file: app/etc/config.php
   - name: maintenance:enable
     label: Enable maintenance mode
-    command: php bin/magento maintenance:enable
+    command: php -d memory_limit=-1 bin/magento maintenance:enable
     description: Take the storefront offline
     output: silent
     confirm: true
@@ -211,7 +212,7 @@ commands:
       file: app/etc/config.php
   - name: maintenance:disable
     label: Disable maintenance mode
-    command: php bin/magento maintenance:disable
+    command: php -d memory_limit=-1 bin/magento maintenance:disable
     description: Bring the storefront back online
     output: silent
     icon: arrow-up
@@ -229,13 +230,13 @@ doctor:
       type: command
       # setup:db:status exits 2 when an upgrade is pending and 1 when the app
       # isn't installed, so swallow the status and read the message instead.
-      command: php bin/magento setup:db:status || true
+      command: php -d memory_limit=-1 bin/magento setup:db:status || true
       fail_if_output_contains: "Run 'setup:upgrade'"
       fix: setup:upgrade
       detail: "The module code no longer matches the database schema, run setup:upgrade to apply the pending updates."
     - name: deploy_mode
       type: command
-      command: php bin/magento deploy:mode:show
+      command: php -d memory_limit=-1 bin/magento deploy:mode:show
       fail_if_output_contains: "Current application mode: production"
       unknown_on_error: true
       severity: warn
