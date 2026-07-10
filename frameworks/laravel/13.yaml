@@ -133,6 +133,8 @@ workers:
     host: true
     check:
       file: node_modules/vite
+    health:
+      url_file: public/hot
 
 logs:
   - path: storage/logs/*.log
