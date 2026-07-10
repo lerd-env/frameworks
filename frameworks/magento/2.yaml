@@ -6,10 +6,12 @@ create: composer create-project --repository-url=https://mirror.mage-os.org/ mag
 php:
   min: "8.1"
   max: "8.5"
-  # Magento's CLI blows past PHP's 128M default. The web side is already covered
-  # by the pub/.user.ini Magento ships, which the CLI SAPI never reads.
+  # Magento's CLI blows past PHP's 128M default; it cannot even bootstrap there,
+  # so the cron and consumer workers crash-loop without this. Adobe asks for 2G.
+  # The web side is already covered by the pub/.user.ini Magento ships, which the
+  # CLI SAPI never reads. Bounded rather than -1, since a worker runs forever.
   cli_ini:
-    memory_limit: "-1"
+    memory_limit: 2G
 
 detect:
   - file: bin/magento
