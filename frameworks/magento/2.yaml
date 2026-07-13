@@ -25,6 +25,12 @@ env:
   format: php-array
   # Magento's base URL lives in the database (core_config_data), not env.php.
   url_key: none
+  # A worktree served on its own subdomain would redirect back to the parent,
+  # since the database base URL is the parent's. env.php's system config overrides
+  # the database, so point these keys at each worktree's own base URL.
+  worktree_url_keys:
+    - system.default.web.unsecure.base_url
+    - system.default.web.secure.base_url
   services:
     mysql:
       detect:
