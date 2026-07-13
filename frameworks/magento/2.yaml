@@ -66,6 +66,15 @@ composer: auto
 npm: false
 console: bin/magento
 
+# A worktree gets its own base_url in env.php, which changes the config hash
+# Magento stores in the database and refuses to serve without re-importing. That
+# import rewrites the hash, so it must never run against the parent's database.
+worktree:
+  db_isolation: required
+  db_source: main
+  commands:
+    - app:config:import
+
 # setup/ lives outside pub/, and /static/ and /media/ are generated on demand by
 # pub/static.php and pub/get.php. Without these, an uninstalled store redirects
 # to /setup/ forever and developer-mode assets never resolve.
