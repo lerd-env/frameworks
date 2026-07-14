@@ -18,6 +18,10 @@ env:
   example_file: .env
   format: dotenv
   url_key: DEFAULT_URI
+  # DATABASE_URL carries no serverVersion: Doctrine picks its platform from that
+  # string when it is set, and it cannot be spelled for a drop-in (a MariaDB server
+  # given "11.8" is read as MySQL). Left out, Doctrine asks the server and is right
+  # for every database and version.
   services:
     mysql:
       detect:
@@ -26,7 +30,7 @@ env:
         - key: DATABASE_URL
           value_prefix: "mariadb://"
       vars:
-        - "DATABASE_URL=mysql://root:lerd@lerd-mysql:3306/{{site}}?serverVersion={{mysql_version}}"
+        - "DATABASE_URL=mysql://root:lerd@lerd-mysql:3306/{{site}}"
     postgres:
       detect:
         - key: DATABASE_URL
@@ -34,7 +38,7 @@ env:
         - key: DATABASE_URL
           value_prefix: "postgres://"
       vars:
-        - "DATABASE_URL=postgresql://postgres:lerd@lerd-postgres:5432/{{site}}?serverVersion={{postgres_version}}"
+        - "DATABASE_URL=postgresql://postgres:lerd@lerd-postgres:5432/{{site}}"
     redis:
       detect:
         - key: REDIS_URL
