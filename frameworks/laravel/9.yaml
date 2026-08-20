@@ -110,6 +110,11 @@ workers:
     command: php artisan queue:work --queue=default --tries=3 --timeout=60
     tune_command: php artisan queue:work --queue={queue} --tries={tries} --timeout={timeout}
     restart_command: php artisan queue:restart
+    # The worker dies on a DNS error when the queue is Redis and lerd-redis is
+    # down, so lerd refuses the start with the service to run instead.
+    requires_service:
+      name: redis
+      when_env: QUEUE_CONNECTION=redis
     restart: always
     exclude_check:
       composer: laravel/horizon
