@@ -11,6 +11,15 @@
       ]
     },
     {
+      "name": "lumen",
+      "label": "Lumen",
+      "versions": ["11", "10", "9", "8"],
+      "latest": "11",
+      "detect": [
+        {"composer": "laravel/lumen-framework"}
+      ]
+    },
+    {
       "name": "symfony",
       "label": "Symfony",
       "versions": ["8", "7"],

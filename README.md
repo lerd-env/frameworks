@@ -31,6 +31,7 @@ All of it is data. None of it ships in the binary.
 | Framework | Versions | Detection |
 |-----------|----------|-----------|
 | Laravel | 13, 12, 11, 10 | `artisan` file or `laravel/framework` in composer.json |
+| Lumen | 11, 10, 9, 8 | `laravel/lumen-framework` in composer.json |
 | Symfony | 8, 7 | `symfony.lock` file or `symfony/framework-bundle` in composer.json |
 | WordPress | 7, 6, 5 | `wp-login.php` file or `wp-config.php` file |
 | Drupal | 11, 10 | `drupal/core-recommended` or `drupal/core` in composer.json |

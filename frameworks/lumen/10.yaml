@@ -1,0 +1,161 @@
+name: lumen
+version: "10"
+label: Lumen
+color: "#f4645f"
+public_dir: public
+create: composer create-project --no-install --no-plugins --no-scripts laravel/lumen:^10.0
+
+php:
+  min: "8.1"
+  max: "8.3"
+
+# Lumen ships the same artisan entrypoint Laravel detects on, so a file rule here
+# would match every Laravel project and win the tie-break against Laravel itself.
+detect:
+  - composer: laravel/lumen-framework
+
+env:
+  file: .env
+  example_file: .env.example
+  format: dotenv
+  # Lumen registers no key:generate command, so lerd writes the key itself.
+  key_generation:
+    env_key: APP_KEY
+    fallback_prefix: "base64:"
+  sqlite:
+    detect:
+      - key: DB_CONNECTION
+        value_prefix: sqlite
+    vars:
+      - DB_CONNECTION=sqlite
+      - DB_DATABASE=database/database.sqlite
+  services:
+    mysql:
+      detect:
+        - key: DB_CONNECTION
+          value_prefix: mysql
+        - key: DB_CONNECTION
+          value_prefix: mariadb
+      vars:
+        - DB_CONNECTION=mysql
+        - DB_HOST=lerd-mysql
+        - DB_PORT=3306
+        - DB_DATABASE={{site}}
+        - DB_USERNAME=root
+        - DB_PASSWORD=lerd
+    postgres:
+      detect:
+        - key: DB_CONNECTION
+          value_prefix: pgsql
+      vars:
+        - DB_CONNECTION=pgsql
+        - DB_HOST=lerd-postgres
+        - DB_PORT=5432
+        - DB_DATABASE={{site}}
+        - DB_USERNAME=postgres
+        - DB_PASSWORD=lerd
+    redis:
+      detect:
+        - key: REDIS_HOST
+        - key: CACHE_DRIVER
+          value_prefix: redis
+        - key: QUEUE_CONNECTION
+          value_prefix: redis
+      vars:
+        - REDIS_HOST=lerd-redis
+        - REDIS_PORT=6379
+        - REDIS_PASSWORD=
+    mailpit:
+      detect:
+        - key: MAIL_HOST
+      vars:
+        - MAIL_MAILER=smtp
+        - MAIL_HOST=lerd-mailpit
+        - MAIL_PORT=1025
+        - MAIL_USERNAME=null
+        - MAIL_PASSWORD=null
+        - MAIL_ENCRYPTION=null
+
+composer: auto
+npm: false
+console: artisan
+# Lumen caches no configuration and registers no optimize:clear, so flushing the
+# application cache is all there is to clear after a connection change.
+cache_command: cache:clear
+
+workers:
+  queue:
+    label: Queue Worker
+    icon: queue
+    command: php artisan queue:work --queue=default --tries=3 --timeout=60
+    tune_command: php artisan queue:work --queue={queue} --tries={tries} --timeout={timeout}
+    restart_command: php artisan queue:restart
+    # The worker dies on a DNS error when the queue is Redis and lerd-redis is
+    # down, so lerd refuses the start with the service to run instead.
+    requires_service:
+      name: redis
+      when_env: QUEUE_CONNECTION=redis
+    restart: always
+  schedule:
+    label: Task Scheduler
+    icon: clock
+    command: php artisan schedule:work
+    restart: always
+
+logs:
+  - path: storage/logs/*.log
+    format: monolog
+
+setup:
+  - label: php artisan migrate
+    command: php artisan migrate
+    default: true
+  - label: php artisan db:seed
+    command: php artisan db:seed
+    default: false
+
+tinker:
+  command: ["artisan", "tinker"]
+  execute_flag: "--execute"
+  requires_package: laravel/tinker
+  requires_file: artisan
+
+commands:
+  - name: cache:clear
+    label: Clear the cache
+    command: php artisan cache:clear
+    description: Flush the application cache store
+    output: silent
+    icon: broom
+  - name: migrate
+    label: Run migrations
+    command: php artisan migrate --force
+    description: Apply pending database migrations
+    output: silent
+    icon: database
+  - name: migrate:fresh
+    label: Drop and re-migrate
+    command: php artisan migrate:fresh --seed --force
+    description: Wipe the database, re-run all migrations, then seed
+    output: silent
+    confirm: true
+    icon: refresh
+
+doctor:
+  migrate_command: migrate
+  checks:
+    - name: app_debug
+      type: env_combo
+      when:
+        APP_ENV: production
+      warn_if:
+        APP_DEBUG: "true"
+      detail: "APP_DEBUG is on while APP_ENV=production, so stack traces and config will leak. Turn debug off."
+    - name: migrations
+      type: command
+      command: php artisan migrate:status
+      fail_if_output_contains: Pending
+      fail_if_error_contains: Migration table not found
+      unknown_on_error: true
+      fix: migrate
+      detail: "There are pending migrations, run migrate to apply them."
