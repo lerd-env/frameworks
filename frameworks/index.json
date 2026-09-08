@@ -3,7 +3,7 @@
     {
       "name": "laravel",
       "label": "Laravel",
-      "versions": ["13", "12", "11", "10"],
+      "versions": ["13", "12", "11", "10", "9", "8", "7", "6"],
       "latest": "13",
       "detect": [
         {"file": "artisan"},
@@ -13,7 +13,7 @@
     {
       "name": "lumen",
       "label": "Lumen",
-      "versions": ["11", "10", "9", "8"],
+      "versions": ["11", "10", "9", "8", "7", "6"],
       "latest": "11",
       "detect": [
         {"composer": "laravel/lumen-framework"}
@@ -22,7 +22,7 @@
     {
       "name": "symfony",
       "label": "Symfony",
-      "versions": ["8", "7"],
+      "versions": ["8", "7", "6", "5", "4"],
       "latest": "8",
       "detect": [
         {"file": "symfony.lock"},
@@ -42,7 +42,7 @@
     {
       "name": "drupal",
       "label": "Drupal",
-      "versions": ["11", "10"],
+      "versions": ["11", "10", "9", "8"],
       "latest": "11",
       "detect": [
         {"composer": "drupal/core-recommended"},
@@ -62,7 +62,7 @@
     {
       "name": "cakephp",
       "label": "CakePHP",
-      "versions": ["5", "4"],
+      "versions": ["5", "4", "3"],
       "latest": "5",
       "detect": [
         {"file": "bin/cake"},
@@ -72,7 +72,7 @@
     {
       "name": "codeigniter",
       "label": "CodeIgniter",
-      "versions": ["4"],
+      "versions": ["4", "3"],
       "latest": "4",
       "detect": [
         {"file": "spark"},
@@ -82,7 +82,7 @@
     {
       "name": "statamic",
       "label": "Statamic",
-      "versions": ["6", "5"],
+      "versions": ["6", "5", "4", "3"],
       "latest": "6",
       "detect": [
         {"composer": "statamic/cms"}
