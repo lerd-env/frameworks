@@ -170,3 +170,9 @@ notifications:
   # request, so the warning names a loop inside the framework rather than
   # anything a site's own code does.
   nplusone: false
+# Queue items. Every queue worker is a plugin implementing this interface, so
+# one seam covers cron and drush queue runs alike.
+devtools:
+  jobs:
+    - implements: Drupal\Core\Queue\QueueWorkerInterface
+      method: processItem

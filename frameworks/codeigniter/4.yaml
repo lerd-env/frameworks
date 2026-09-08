@@ -147,3 +147,9 @@ commands:
 
 doctor:
   migrate_command: migrate
+# Queued jobs. The Queue library runs every job through its own interface, so
+# one seam covers whatever the project queues.
+devtools:
+  jobs:
+    - implements: CodeIgniter\Queue\Interfaces\JobInterface
+      method: process

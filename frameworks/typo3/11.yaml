@@ -140,3 +140,9 @@ commands:
 
 doctor:
   migrate_command: extension-setup
+# Scheduler tasks. Every task extends AbstractTask and does its work in
+# execute(), which is the closest thing TYPO3 has to a queued job.
+devtools:
+  jobs:
+    - extends: TYPO3\CMS\Scheduler\Task\AbstractTask
+      method: execute

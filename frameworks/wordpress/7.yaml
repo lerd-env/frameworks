@@ -69,3 +69,10 @@ notifications:
   # request, so the warning names a loop inside the framework rather than
   # anything a site's own code does.
   nplusone: false
+# Background jobs. Action Scheduler is what WordPress plugins queue work
+# through; the action reports the hook it runs rather than its own class.
+devtools:
+  jobs:
+    - class: ActionScheduler_Action
+      method: execute
+      name: this.method:get_hook
