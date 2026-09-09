@@ -118,6 +118,7 @@
     {"name": "doctrine/doctrine-migrations-bundle"},
     {"name": "drush/drush"},
     {"name": "helhum/typo3-console"},
+    {"name": "laravel/cloud-cli"},
     {"name": "laravel/horizon"},
     {"name": "laravel/reverb"},
     {"name": "nativephp/desktop"},

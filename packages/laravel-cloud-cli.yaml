@@ -1,0 +1,7 @@
+package: laravel/cloud-cli
+
+# `cloud auth` opens the browser and then waits on a loopback callback, on a
+# port it picks per run, so nothing outside the container's network namespace
+# can answer it. Documented install is `composer global require`.
+host_binaries:
+  - cloud
