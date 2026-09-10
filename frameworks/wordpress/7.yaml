@@ -7,6 +7,9 @@ create: composer create-project --no-install --no-plugins --no-scripts johnpbloc
 php:
   min: "7.4"
   max: "8.5"
+  # wp-cli unzips core and dumps databases in one process; 128M is not enough.
+  cli_ini:
+    memory_limit: 512M
 
 detect:
   - file: wp-login.php
@@ -38,31 +41,46 @@ logs:
 composer: false
 npm: false
 
+# wp-cli refuses to start as root and lerd's containers are root, so the flag
+# rides along on `lerd wp` instead of every user having to type it.
+vendor_bin_args:
+  wp:
+    - --allow-root
+
 tinker:
-  command: ["vendor/bin/wp", "eval"]
+  command: ["vendor/wp-cli/wp-cli/php/boot-fs.php", "eval", "--allow-root"]
   execute_positional: true
   requires_package: wp-cli/wp-cli
-  requires_file: vendor/bin/wp
+  requires_file: vendor/wp-cli/wp-cli/php/boot-fs.php
 
+# wp-cli ships a shell wrapper as its composer binary, so the PHP entrypoint is
+# what lerd's php can run, and the containers are root, hence --allow-root.
 commands:
   - name: cache:flush
     label: Flush cache
-    command: wp cache flush
+    command: php vendor/wp-cli/wp-cli/php/boot-fs.php cache flush --allow-root
     description: Flush the WordPress object cache
     output: silent
     icon: broom
+    check:
+      file: vendor/wp-cli/wp-cli/php/boot-fs.php
   - name: rewrite:flush
     label: Flush rewrites
-    command: wp rewrite flush
+    command: php vendor/wp-cli/wp-cli/php/boot-fs.php rewrite flush --allow-root
     description: Regenerate permalink rules
     output: silent
     icon: refresh
+    check:
+      file: vendor/wp-cli/wp-cli/php/boot-fs.php
   - name: db:export
     label: Export database
-    command: wp db export
+    # mariadb-dump defaults to TLS and lerd's mysql serves a self-signed cert.
+    command: php vendor/wp-cli/wp-cli/php/boot-fs.php db export --allow-root --skip-ssl
     description: Dump the database to a SQL file in the project directory
     output: text
     icon: database
+    check:
+      file: vendor/wp-cli/wp-cli/php/boot-fs.php
 
 notifications:
   # The entity, config and cache layers issue the repeats during an ordinary
