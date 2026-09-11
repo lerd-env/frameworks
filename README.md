@@ -34,6 +34,7 @@ All of it is data. None of it ships in the binary.
 | Lumen | 11, 10, 9, 8, 7, 6 | `laravel/lumen-framework` in composer.json |
 | Symfony | 8, 7, 6, 5, 4 | `symfony.lock` file or `symfony/framework-bundle` in composer.json |
 | WordPress | 7, 6, 5 | `wp-login.php` file or `wp-config.php` file |
+| Bedrock | 1 | `web/wp-config.php` file or `web/wp/wp-login.php` file |
 | Drupal | 11, 10, 9, 8 | `drupal/core-recommended` or `drupal/core` in composer.json |
 | TYPO3 | 14, 13, 12, 11, 10 | `typo3/cms-core` in composer.json or `public/typo3` directory |
 | CakePHP | 5, 4, 3 | `bin/cake` file or `cakephp/cakephp` in composer.json |
