@@ -30,6 +30,16 @@
       ]
     },
     {
+      "name": "bedrock",
+      "label": "Bedrock",
+      "versions": ["1"],
+      "latest": "1",
+      "detect": [
+        {"file": "web/wp-config.php"},
+        {"file": "web/wp/wp-login.php"}
+      ]
+    },
+    {
       "name": "wordpress",
       "label": "WordPress",
       "versions": ["7", "6", "5"],

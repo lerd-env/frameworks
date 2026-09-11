@@ -1,0 +1,92 @@
+name: bedrock
+version: "1"
+label: Bedrock
+color: "#21759b"
+# Bedrock serves from web/, keeps core in web/wp and wp-content in web/app, and
+# configures WordPress from a real dotenv file instead of wp-config.php.
+public_dir: web
+create: composer create-project roots/bedrock
+php:
+  min: "7.4"
+  max: "8.4"
+  # wp-cli unzips core and dumps databases in one process; 128M is not enough.
+  cli_ini:
+    memory_limit: 512M
+
+detect:
+  - file: web/wp-config.php
+  - file: web/wp/wp-login.php
+
+source_dirs:
+  - config
+  - web/app
+
+env:
+  file: .env
+  format: dotenv
+  example_file: .env.example
+  url_key: WP_HOME
+  services:
+    mysql:
+      # Bedrock ships DB_HOST commented out, so the key that is always there is
+      # what says the site is on MySQL.
+      detect:
+        - key: DB_NAME
+      vars:
+        - DB_NAME={{site}}
+        - DB_USER=root
+        - DB_PASSWORD=lerd
+        - DB_HOST=lerd-mysql
+
+logs:
+  - path: web/app/debug.log
+    format: raw
+
+composer: auto
+npm: false
+
+# wp-cli refuses to start as root and lerd's containers are root, so the flag
+# rides along on `lerd wp` instead of every user having to type it.
+vendor_bin_args:
+  wp:
+    - --allow-root
+
+tinker:
+  command: ["vendor/wp-cli/wp-cli/php/boot-fs.php", "eval", "--allow-root"]
+  execute_positional: true
+  requires_package: wp-cli/wp-cli
+  requires_file: vendor/wp-cli/wp-cli/php/boot-fs.php
+
+# wp-cli ships a shell wrapper as its composer binary, so the PHP entrypoint is
+# what lerd's php can run, and the containers are root, hence --allow-root.
+commands:
+  - name: cache:flush
+    label: Flush cache
+    command: php vendor/wp-cli/wp-cli/php/boot-fs.php cache flush --allow-root
+    description: Flush the WordPress object cache
+    output: silent
+    icon: broom
+    check:
+      file: vendor/wp-cli/wp-cli/php/boot-fs.php
+  - name: rewrite:flush
+    label: Flush rewrites
+    command: php vendor/wp-cli/wp-cli/php/boot-fs.php rewrite flush --allow-root
+    description: Regenerate permalink rules
+    output: silent
+    icon: refresh
+    check:
+      file: vendor/wp-cli/wp-cli/php/boot-fs.php
+
+notifications:
+  # The entity, config and cache layers issue the repeats during an ordinary
+  # request, so the warning names a loop inside the framework rather than
+  # anything a site's own code does.
+  nplusone: false
+
+# Background jobs. Action Scheduler is what WordPress plugins queue work
+# through; the action reports the hook it runs rather than its own class.
+devtools:
+  jobs:
+    - class: ActionScheduler_Action
+      method: execute
+      name: this.method:get_hook
