@@ -1,0 +1,169 @@
+name: winter
+version: "1"
+label: Winter CMS
+color: "#2da7c7"
+# Winter can serve from the project root, where index.php sits beside artisan,
+# but then .env, composer.json and vendor/ answer over HTTP too. Its own
+# create-project runs `winter:mirror public`, so the folder is there from the
+# first minute, and that is the root lerd serves.
+public_dir: public
+create: composer create-project wintercms/winter:^1.0
+php:
+  min: "8.1"
+  max: "8.4"
+
+# Winter ships artisan and requires laravel/framework, so the Laravel definition
+# would claim it. Its own module is what says this is Winter, and the lock pins
+# laravel/framework to a dev branch that carries no major to read anyway.
+detect:
+  - composer: winter/wn-system-module
+
+env:
+  file: .env
+  example_file: .env.example
+  format: dotenv
+  key_generation:
+    env_key: APP_KEY
+    command: key:generate
+    fallback_prefix: "base64:"
+  sqlite:
+    detect:
+      - key: DB_CONNECTION
+        value_prefix: sqlite
+    vars:
+      - DB_CONNECTION=sqlite
+      - DB_DATABASE=storage/database.sqlite
+  services:
+    mysql:
+      detect:
+        - key: DB_CONNECTION
+          value_prefix: mysql
+      vars:
+        - DB_CONNECTION=mysql
+        - DB_HOST=lerd-mysql
+        - DB_PORT=3306
+        - DB_DATABASE={{site}}
+        - DB_USERNAME=root
+        - DB_PASSWORD=lerd
+    postgres:
+      detect:
+        - key: DB_CONNECTION
+          value_prefix: pgsql
+      vars:
+        - DB_CONNECTION=pgsql
+        - DB_HOST=lerd-postgres
+        - DB_PORT=5432
+        - DB_DATABASE={{site}}
+        - DB_USERNAME=postgres
+        - DB_PASSWORD=lerd
+    redis:
+      detect:
+        - key: REDIS_HOST
+      vars:
+        - REDIS_HOST=lerd-redis
+        - REDIS_PORT=6379
+        - REDIS_PASSWORD=
+    mailpit:
+      detect:
+        - key: MAIL_HOST
+      vars:
+        - MAIL_MAILER=smtp
+        - MAIL_HOST=lerd-mailpit
+        - MAIL_PORT=1025
+        - MAIL_USERNAME=null
+        - MAIL_PASSWORD=null
+        - MAIL_ENCRYPTION=null
+
+composer: auto
+npm: auto
+console: artisan
+# Run after a connection change: Winter caches the compiled config and the CMS
+# object cache, and both answer from the old database until they are dropped.
+cache_command: cache:clear
+
+# No asset worker here on purpose. Winter builds per package, a theme or a
+# plugin with its own vite.config.mjs and package.json against node_modules
+# hoisted to the project root, and which packages a site watches is the
+# project's own business rather than the framework's. A project declares one
+# worker per package in custom_workers: artisan vite:watch <package>, vite as
+# the dev_server it starts so its config gets lerd's values, and the package's
+# dist path proxied to the container, since artisan re-enters it through lerd's
+# php shim and the server listens there.
+workers:
+  queue:
+    label: Queue Worker
+    icon: queue
+    command: php artisan queue:work --queue=default --tries=3 --timeout=60
+    tune_command: php artisan queue:work --queue={queue} --tries={tries} --timeout={timeout}
+    restart_command: php artisan queue:restart
+    requires_service:
+      name: redis
+      when_env: QUEUE_CONNECTION=redis
+    restart: always
+  schedule:
+    label: Task Scheduler
+    icon: clock
+    command: php artisan schedule:run
+    schedule: minutely
+logs:
+  - path: storage/logs/*.log
+    format: monolog
+
+setup:
+  - label: php artisan winter:up
+    command: php artisan winter:up
+    default: true
+
+tinker:
+  command: ["artisan", "tinker"]
+  execute_flag: "--execute"
+  requires_package: laravel/tinker
+  requires_file: artisan
+
+commands:
+  - name: winter:up
+    label: Run migrations
+    command: php artisan winter:up
+    description: Apply outstanding module and plugin migrations
+    output: silent
+    icon: database
+  - name: cache:clear
+    label: Clear all caches
+    command: php artisan cache:clear
+    description: Drop the application and CMS caches
+    output: silent
+    icon: broom
+  - name: winter:util-purge-thumbs
+    label: Purge thumbnails
+    command: php artisan winter:util purge thumbs --force
+    description: Delete generated image thumbnails so they are rebuilt on demand
+    output: silent
+    icon: broom
+    confirm: true
+  - name: plugin:refresh
+    label: Refresh a plugin
+    command: php artisan plugin:refresh
+    description: Roll a plugin's tables back and migrate them again
+    output: stream
+    icon: refresh
+    confirm: true
+
+doctor:
+  checks:
+    - name: app_debug
+      type: env_combo
+      when:
+        APP_ENV: production
+      warn_if:
+        APP_DEBUG: "true"
+      detail: "APP_DEBUG is on while APP_ENV=production, so stack traces and config will leak. Turn debug off."
+    - name: public_mirror
+      type: command
+      command: test -d public
+      fix: winter:mirror public --relative
+      detail: "public/ is missing, so nothing is served: Winter mirrors it with `winter:mirror public`, and serving the project root instead would put .env and vendor/ on the web."
+    - name: csrf
+      type: env_combo
+      warn_if:
+        ENABLE_CSRF: "false"
+      detail: "ENABLE_CSRF is off, so the backend accepts cross-site form posts. Turn it back on."

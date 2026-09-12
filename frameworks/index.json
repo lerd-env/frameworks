@@ -99,6 +99,15 @@
       ]
     },
     {
+      "name": "winter",
+      "label": "Winter CMS",
+      "versions": ["1"],
+      "latest": "1",
+      "detect": [
+        {"composer": "winter/wn-system-module"}
+      ]
+    },
+    {
       "name": "magento",
       "label": "Magento",
       "versions": ["2"],
