@@ -5,7 +5,7 @@ color: "#21759b"
 # Bedrock serves from web/, keeps core in web/wp and wp-content in web/app, and
 # configures WordPress from a real dotenv file instead of wp-config.php.
 public_dir: web
-create: composer create-project roots/bedrock
+create: composer create-project roots/bedrock:^1.0
 php:
   min: "7.4"
   max: "8.4"
