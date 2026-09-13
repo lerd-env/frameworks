@@ -5,7 +5,10 @@ color: "#e85d22"
 public_dir: pub
 create: composer create-project --repository-url=https://mirror.mage-os.org/ magento/project-community-edition:^2.0
 php:
-  min: "8.1"
+  # 8.5 is the floor on lerd, not Magento's own. The setup code calls glob()
+  # with GLOB_BRACE, which musl does not provide and PHP only emulates from
+  # 8.5, so setup:install dies on the Alpine images every earlier version uses.
+  min: "8.5"
   max: "8.5"
   # Magento's CLI blows past PHP's 128M default; it cannot even bootstrap there,
   # so the cron and consumer workers crash-loop without this. Adobe asks for 2G.
