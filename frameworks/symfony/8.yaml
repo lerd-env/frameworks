@@ -165,4 +165,4 @@ doctor:
       type: host_mounted_path
       paths:
         - var/cache
-      detail: "var/cache sits on the macOS bind mount, so every compile and every cache clear crosses virtiofs. Have getCacheDir() in src/Kernel.php return $_ENV['APP_CACHE_DIR'] when it is set, then point APP_CACHE_DIR at a path outside the project such as /tmp/symfony-cache."
+      detail: "var/cache sits on the macOS bind mount, so every compile and every cache clear crosses virtiofs. The native runtime removes that boundary for every file the app reads rather than this directory alone, and is a single command: lerd php:runtime native. To stay on the container runtime instead, have getCacheDir() in src/Kernel.php return $_ENV['APP_CACHE_DIR'] when it is set, then point APP_CACHE_DIR at a path outside the project such as /tmp/symfony-cache."
