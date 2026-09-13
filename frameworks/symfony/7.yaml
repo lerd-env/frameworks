@@ -153,3 +153,9 @@ doctor:
       warn_if:
         APP_DEBUG: "true"
       detail: "APP_DEBUG is on while APP_ENV=prod, so stack traces and internals will leak. Turn debug off in production."
+    - name: cache_on_bind_mount
+      label: Cache Directory
+      type: host_mounted_path
+      paths:
+        - var/cache
+      detail: "var/cache sits on the macOS bind mount, so every compile and every cache clear crosses virtiofs. Have getCacheDir() in src/Kernel.php return $_ENV['APP_CACHE_DIR'] when it is set, then point APP_CACHE_DIR at a path outside the project such as /tmp/symfony-cache."
