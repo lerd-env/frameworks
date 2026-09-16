@@ -15,9 +15,11 @@ php:
 detect:
   # The v3 skeleton is the framework itself, so composer.json never requires
   # codeigniter/framework and the major has to come off the source constant.
+  # It changed shape during 3.x: define('CI_VERSION', '3.0.6') up to 3.1.0,
+  # const CI_VERSION = '3.1.1' from there on, so both spellings are matched.
   - file: system/core/CodeIgniter.php
     version_file: system/core/CodeIgniter.php
-    version_pattern: "CI_VERSION\\s*=\\s*'([^']+)'"
+    version_pattern: "CI_VERSION'?\\s*[=,]\\s*'([^']+)'"
   - composer: codeigniter/framework
 
 # Configuration lives in PHP files under application/config rather than a
