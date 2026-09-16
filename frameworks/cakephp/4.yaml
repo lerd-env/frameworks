@@ -35,6 +35,11 @@ env:
       detect:
         - key: Datasources.default.driver
           value_prefix: "Cake\\Database\\Driver\\Mysql"
+        # A fresh scaffold sets no driver in app_local.php: it inherits CakePHP's
+        # own default, which is MySQL. Without this the project matches nothing
+        # and comes up pointed at localhost with no connection written.
+        - key: Datasources.default.driver
+          absent: true
       vars:
         - "Datasources.default.driver=Cake\\Database\\Driver\\Mysql"
         - "Datasources.default.host=lerd-mysql"
