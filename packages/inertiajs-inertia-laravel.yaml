@@ -1,0 +1,17 @@
+package: inertiajs/inertia-laravel
+frameworks:
+  - name: laravel
+    min: "9"
+
+workers:
+  ssr:
+    label: Inertia SSR
+    icon: document
+    command: php artisan inertia:start-ssr
+    restart: always
+    # The built bundle is the honest signal that a project renders on the
+    # server. Laravel's starter kits ship the build:ssr script whether or not
+    # the project uses it, so the script says nothing, while the bundle only
+    # exists once someone has run it.
+    check:
+      file: bootstrap/ssr/ssr.js
