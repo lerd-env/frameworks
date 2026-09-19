@@ -137,6 +137,7 @@
     {"name": "doctrine/doctrine-migrations-bundle"},
     {"name": "drush/drush"},
     {"name": "helhum/typo3-console"},
+    {"name": "inspector-apm/inspector-php"},
     {"name": "inertiajs/inertia-laravel"},
     {"name": "laravel/cloud-cli"},
     {"name": "laravel/horizon"},

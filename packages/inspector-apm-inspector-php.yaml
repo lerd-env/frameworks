@@ -1,0 +1,13 @@
+package: inspector-apm/inspector-php
+
+# An app reports a fault to Inspector by handing it the throwable, so the seam
+# reads the same thing the exception lens shows for every other reporter. Its
+# segments are deliberately not captured: they carry no duration yet at the
+# point they are recorded, and lerd already times the spans they describe with
+# lenses of its own.
+devtools:
+  captures:
+    - kind: exception
+      class: Inspector\Inspector
+      method: reportException
+      name: inspector
