@@ -9,3 +9,4 @@ devtools:
     - kind: exception
       class: Sentry\Client
       method: captureEvent
+      name: sentry
