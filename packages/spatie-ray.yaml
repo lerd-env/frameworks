@@ -1,0 +1,12 @@
+package: spatie/ray
+
+# ray() ships its payload to the Ray desktop app over loopback, which inside a
+# container reaches nothing at all. Every call funnels through sendRequest,
+# whatever built the payload, and the seam is the base class because laravel-ray
+# overrides that method and calls the parent: matching the class the method is
+# declared on sees each call exactly once.
+devtools:
+  captures:
+    - kind: ray
+      class: Spatie\Ray\Ray
+      method: sendRequest

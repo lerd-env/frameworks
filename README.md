@@ -67,6 +67,7 @@ definition your project resolved when its `composer.json` requires the package.
 | `laravel/reverb` | `reverb` worker | Laravel 11+ |
 | `nativephp/electron` | `native` worker, `native:install`, `native:build` commands, 1 doctor check | Laravel 11+ |
 | `nativephp/mobile` | `native:install-mobile`, `native:jump`, `native:run`, `native:open` commands, 3 doctor checks | Laravel 11+ |
+| `spatie/ray` | `ray()` calls captured into the Debug window | any framework |
 | `symfony/messenger` | `messenger` worker | Symfony 4+ |
 | `symfony/scheduler` | `scheduler` worker | Symfony 8+ |
 | `tempest/command-bus` | `command_bus` worker | Tempest 3+ |
@@ -154,15 +155,32 @@ setup:
 doctor:
 ```
 
-Workers, commands, setup steps and doctor checks are the whole schema; env
-wiring, detection and services stay with the framework. Lerd merges the package
-onto the resolved definition when the project requires it in its `composer.json`
-and the framework falls inside the range, an empty `frameworks:` list meaning
-every framework. The package wins a name collision with the version file, which
-is what lets an entry move here without being shadowed by the copy it left
-behind. List the package under `packages` in `frameworks/index.json` as
+Workers, commands, setup steps, doctor checks and capture seams are the whole
+schema; env wiring, detection and services stay with the framework. Lerd merges
+the package onto the resolved definition when the project requires it in its
+`composer.json` and the framework falls inside the range, an empty `frameworks:`
+list meaning every framework. The package wins a name collision with the version
+file, which is what lets an entry move here without being shadowed by the copy
+it left behind. List the package under `packages` in `frameworks/index.json` as
 `{"name": "vendor/package"}`, which is where lerd reads the set from; a file
 nothing lists is never fetched.
+
+A capture seam names a method the Debug window should report, for a library
+whose own call is the event rather than the start of one. It belongs to the
+package rather than to any framework whenever the class it names ships with the
+package, which is the usual case:
+
+```yaml
+devtools:
+  captures:
+    - kind: ray              # what lerd makes of the call
+      class: Spatie\Ray\Ray  # or implements: / extends:
+      method: sendRequest
+```
+
+Pick a method whose arguments are declared parameters, since a variadic one
+carries them where the capture cannot read them. A kind lerd does not know is
+ignored, so a seam can be published before the release that reads it.
 
 When a major of the package itself changes what lerd runs, give that major its
 own file, `<vendor>-<name>@<major>.yaml`, and list the majors in the index entry
