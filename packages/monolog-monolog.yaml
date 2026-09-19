@@ -1,0 +1,12 @@
+package: monolog/monolog
+
+# Every framework's logging ends up here, and addRecord has carried the same
+# level, message and context arguments since Monolog 1, so one seam reports what
+# an app writes to its log whatever wrote it. The class is the concrete Logger
+# rather than the PSR interface: Symfony's bridge extends it without overriding
+# the method, so the call is seen once wherever it came from.
+devtools:
+  captures:
+    - kind: log
+      class: Monolog\Logger
+      method: addRecord

@@ -65,6 +65,7 @@ definition your project resolved when its `composer.json` requires the package.
 | `laravel/cloud-cli` | `cloud` runs on the host PHP | any framework |
 | `laravel/horizon` | `horizon` worker | Laravel 6+ |
 | `laravel/reverb` | `reverb` worker | Laravel 11+ |
+| `monolog/monolog` | log records captured into the Debug window | any framework |
 | `nativephp/electron` | `native` worker, `native:install`, `native:build` commands, 1 doctor check | Laravel 11+ |
 | `nativephp/mobile` | `native:install-mobile`, `native:jump`, `native:run`, `native:open` commands, 3 doctor checks | Laravel 11+ |
 | `symfony/messenger` | `messenger` worker | Symfony 4+ |

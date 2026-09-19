@@ -141,6 +141,7 @@
     {"name": "laravel/cloud-cli"},
     {"name": "laravel/horizon"},
     {"name": "laravel/reverb"},
+    {"name": "monolog/monolog"},
     {"name": "nativephp/desktop"},
     {"name": "nativephp/electron"},
     {"name": "nativephp/mobile"},
