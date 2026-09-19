@@ -1,0 +1,11 @@
+package: sentry/sentry
+
+# Every capture the SDK makes funnels through captureEvent, so one seam covers
+# an exception, an event the app assembled itself and a captured message alike.
+# The class is the concrete client rather than its interface: a wrapper that
+# overrides the method and calls the parent is then still seen once.
+devtools:
+  captures:
+    - kind: exception
+      class: Sentry\Client
+      method: captureEvent
