@@ -145,6 +145,7 @@
     {"name": "nativephp/desktop"},
     {"name": "nativephp/electron"},
     {"name": "nativephp/mobile"},
+    {"name": "sentry/sentry"},
     {"name": "spatie/ray"},
     {"name": "symfony/messenger"},
     {"name": "symfony/scheduler"},
