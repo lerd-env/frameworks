@@ -62,6 +62,7 @@ definition your project resolved when its `composer.json` requires the package.
 | `doctrine/doctrine-migrations-bundle` | `doctrine:migrations:migrate` command, 1 setup step | Symfony 4+ |
 | `drush/drush` | `cron` worker, `site:install`, `cr`, `uli`, `updb`, `cex`, `cim` commands, 3 setup steps | Drupal 8+ |
 | `helhum/typo3-console` | `setup` command | TYPO3 10-11 |
+| `inspector-apm/inspector-php` | reported faults shown in the Debug window | any framework |
 | `laravel/cloud-cli` | `cloud` runs on the host PHP | any framework |
 | `laravel/horizon` | `horizon` worker | Laravel 6+ |
 | `laravel/reverb` | `reverb` worker | Laravel 11+ |
