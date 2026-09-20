@@ -144,6 +144,7 @@
     {"name": "nativephp/desktop"},
     {"name": "nativephp/electron"},
     {"name": "nativephp/mobile"},
+    {"name": "spatie/ray"},
     {"name": "symfony/messenger"},
     {"name": "symfony/scheduler"},
     {"name": "tempest/command-bus"},
