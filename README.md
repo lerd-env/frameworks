@@ -72,6 +72,7 @@ definition your project resolved when its `composer.json` requires the package.
 | `sentry/sentry` | captured exceptions and messages shown in the Debug window | any framework |
 | `spatie/ray` | `ray()` calls captured into the Debug window | any framework |
 | `symfony/messenger` | `messenger` worker | Symfony 4+ |
+| `symfony/notifier` | SMS, chat and push shown in the Debug window | any framework |
 | `symfony/scheduler` | `scheduler` worker | Symfony 8+ |
 | `tempest/command-bus` | `command_bus` worker | Tempest 3+ |
 | `tempest/database` | 1 setup step | Tempest 3+ |

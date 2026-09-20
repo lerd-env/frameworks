@@ -149,6 +149,7 @@
     {"name": "sentry/sentry"},
     {"name": "spatie/ray"},
     {"name": "symfony/messenger"},
+    {"name": "symfony/notifier"},
     {"name": "symfony/scheduler"},
     {"name": "tempest/command-bus"},
     {"name": "tempest/database"},
