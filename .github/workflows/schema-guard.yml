@@ -1,0 +1,30 @@
+name: Schema guard
+
+on:
+  pull_request:
+
+# A store definition reaches every install within a day, whatever version of
+# lerd it runs, so a pull request may only grow the schema. This refuses a key
+# that disappeared or changed type, and reports a value no published definition
+# has used before.
+jobs:
+  schema-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install pyyaml
+
+      - name: Extract the published tree
+        run: |
+          mkdir -p "$RUNNER_TEMP/published"
+          git archive "origin/${{ github.base_ref }}" | tar -x -C "$RUNNER_TEMP/published"
+
+      - name: Compare this pull request against it
+        run: python3 .github/scripts/schema_guard.py "$RUNNER_TEMP/published" .
