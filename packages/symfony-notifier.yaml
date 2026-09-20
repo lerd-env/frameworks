@@ -1,0 +1,16 @@
+package: symfony/notifier
+
+# Every transport the component ships, Twilio, Vonage, Slack and the rest, is
+# reached through these two entry points, and each message answers the same
+# interface whatever channel it is for, so two lines cover the field. Both
+# classes are final, so the declaring class is always the one named here.
+devtools:
+  captures:
+    - kind: message
+      class: Symfony\Component\Notifier\Texter
+      method: send
+      name: notifier
+    - kind: message
+      class: Symfony\Component\Notifier\Chatter
+      method: send
+      name: notifier

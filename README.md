@@ -68,6 +68,7 @@ definition your project resolved when its `composer.json` requires the package.
 | `nativephp/electron` | `native` worker, `native:install`, `native:build` commands, 1 doctor check | Laravel 11+ |
 | `nativephp/mobile` | `native:install-mobile`, `native:jump`, `native:run`, `native:open` commands, 3 doctor checks | Laravel 11+ |
 | `symfony/messenger` | `messenger` worker | Symfony 4+ |
+| `symfony/notifier` | SMS, chat and push shown in the Debug window | any framework |
 | `symfony/scheduler` | `scheduler` worker | Symfony 8+ |
 | `tempest/command-bus` | `command_bus` worker | Tempest 3+ |
 | `tempest/database` | 1 setup step | Tempest 3+ |

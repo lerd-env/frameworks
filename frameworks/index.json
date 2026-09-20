@@ -145,6 +145,7 @@
     {"name": "nativephp/electron"},
     {"name": "nativephp/mobile"},
     {"name": "symfony/messenger"},
+    {"name": "symfony/notifier"},
     {"name": "symfony/scheduler"},
     {"name": "tempest/command-bus"},
     {"name": "tempest/database"},
