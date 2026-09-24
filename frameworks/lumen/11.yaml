@@ -161,3 +161,7 @@ doctor:
       unknown_on_error: true
       fix: migrate
       detail: "There are pending migrations, run migrate to apply them."
+
+# Where the schema migrations live; comparing it across checkouts picks a new worktree's database.
+worktree:
+  migrations: database/migrations
