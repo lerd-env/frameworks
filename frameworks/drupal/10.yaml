@@ -95,8 +95,10 @@ setup:
       composer: drush/drush
   - label: Import config
     command: php vendor/drush/drush/drush.php config:import --yes
+    # A fresh install has no exported config, and importing an empty sync
+    # directory is refused because it would delete the site's configuration.
     check:
-      composer: drush/drush
+      file: config/sync/system.site.yml
 
 tinker:
   command: ["vendor/drush/drush/drush.php", "php:eval"]
