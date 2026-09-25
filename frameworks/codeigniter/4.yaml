@@ -153,3 +153,7 @@ devtools:
   jobs:
     - implements: CodeIgniter\Queue\Interfaces\JobInterface
       method: process
+
+# Where the schema migrations live; comparing it across checkouts picks a new worktree's database.
+worktree:
+  migrations: app/Database/Migrations
