@@ -64,6 +64,10 @@ env:
         - databases.default.default.autoload=core/modules/pgsql/src/Driver/Database/pgsql/
 composer: auto
 npm: false
+# Offered unticked in the setup wizard; the search_api_solr package ticks it.
+suggest_services:
+  - name: solr
+    reason: Search API's usual search backend
 console: vendor/drush/drush/drush.php
 # Run after a connection change: the compiled container is built
 # against the old database and answers every request with an error.
@@ -100,22 +104,31 @@ tinker:
   requires_package: drush/drush
   requires_file: vendor/drush/drush/drush.php
 
+# The recommended project ships without drush, and until the installer has run
+# the connection lerd picked lives only in .env: DB_* from older releases, the
+# settings.php array keys from newer ones. {{…}} placeholders are not used,
+# since a release before v1.29 would take them literally.
+install:
+  label: Install Drupal
+  # Both installers write settings.php, and nothing else does before them.
+  missing_file: web/sites/default/settings.php
+  command: &site-install >
+    test -f vendor/drush/drush/drush.php || composer require drush/drush --no-interaction || exit 1;
+    v() { sed -n -e "s/^DB_$1=//p" -e "s/^databases\.default\.default\.$2=//p" .env 2>/dev/null | tail -n 1; };
+    driver=$(v DRIVER driver);
+    test -n "$driver" || { echo "no database connection in .env, run lerd env first" >&2; exit 1; };
+    if [ "$driver" = sqlite ]; then url="sqlite://$(v NAME database)";
+    else url="$driver://$(v USER username):$(v PASSWORD password)@$(v HOST host):$(v PORT port)/$(v NAME database)"; fi;
+    php vendor/drush/drush/drush.php site:install --yes --db-url="$url"
+    --account-name=admin --account-pass=lerdadmin1
+
 commands:
   # site:install drops and recreates the schema, and `lerd setup --all` runs
   # every setup step regardless of `default`, so this is a confirm-gated
   # command rather than a setup step.
   - name: site:install
     label: Install site
-    # The connection is read out of the .env lerd wrote rather than templated
-    # in: {{…}} placeholders are only expanded from lerd v1.29, and an older
-    # install would take them literally and install a whole site into a
-    # database named "{{site}}". Sourcing .env also picks up whichever engine
-    # the project uses, since DB_DRIVER already holds drush's scheme name.
-    command: >
-      set -a; . ./.env; set +a;
-      php vendor/drush/drush/drush.php site:install --yes
-      --db-url="$DB_DRIVER://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
-      --account-name=admin --account-pass=lerdadmin1
+    command: *site-install
     description: Install a fresh site against the database lerd provisioned, admin user admin/lerdadmin1
     output: text
     confirm: true

@@ -1,0 +1,9 @@
+package: predis/predis
+
+# Alternatives, most important first: lerd puts forward the first one this
+# machine already runs, else the first, and none when the project uses one.
+suggest_services:
+  - name: redis
+    reason: Redis server for predis to connect to
+  - name: valkey
+    reason: Redis-compatible server for predis

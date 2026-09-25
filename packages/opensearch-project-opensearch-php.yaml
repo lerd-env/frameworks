@@ -1,0 +1,6 @@
+package: opensearch-project/opensearch-php
+
+# The project talks to this service through the package, so the wizard ticks it.
+suggest_services:
+  - name: opensearch
+    reason: Local OpenSearch for this client

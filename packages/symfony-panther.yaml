@@ -1,0 +1,8 @@
+package: symfony/panther
+frameworks:
+  - name: symfony
+
+# The project talks to this service through the package, so the wizard ticks it.
+suggest_services:
+  - name: selenium
+    reason: The browser Panther tests drive

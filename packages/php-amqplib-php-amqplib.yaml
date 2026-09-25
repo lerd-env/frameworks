@@ -1,0 +1,6 @@
+package: php-amqplib/php-amqplib
+
+# The project talks to this service through the package, so the wizard ticks it.
+suggest_services:
+  - name: rabbitmq
+    reason: Local RabbitMQ broker for this client

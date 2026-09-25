@@ -1,0 +1,8 @@
+package: meilisearch/search-bundle
+frameworks:
+  - name: symfony
+
+# The project talks to this service through the package, so the wizard ticks it.
+suggest_services:
+  - name: meilisearch
+    reason: Meilisearch for this bundle

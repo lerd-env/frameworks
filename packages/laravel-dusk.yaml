@@ -1,0 +1,8 @@
+package: laravel/dusk
+frameworks:
+  - name: laravel
+
+# The project talks to this service through the package, so the wizard ticks it.
+suggest_services:
+  - name: selenium
+    reason: The browser Dusk tests drive

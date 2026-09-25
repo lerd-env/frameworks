@@ -1,0 +1,6 @@
+package: pda/pheanstalk
+
+# The project talks to this service through the package, so the wizard ticks it.
+suggest_services:
+  - name: beanstalkd
+    reason: Local Beanstalkd queue for this client

@@ -1,0 +1,8 @@
+package: mongodb/laravel-mongodb
+frameworks:
+  - name: laravel
+
+# The project talks to this service through the package, so the wizard ticks it.
+suggest_services:
+  - name: mongo
+    reason: MongoDB for Eloquent models

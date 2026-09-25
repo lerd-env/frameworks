@@ -13,3 +13,11 @@ workers:
     restart: always
     conflicts_with:
       - queue
+
+# Alternatives, most important first: lerd puts forward the first one this
+# machine already runs, else the first, and none when the project uses one.
+suggest_services:
+  - name: redis
+    reason: Horizon runs its queues on Redis
+  - name: valkey
+    reason: Redis-compatible queues for Horizon

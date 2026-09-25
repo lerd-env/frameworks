@@ -1,0 +1,8 @@
+package: apache-solr-for-typo3/solr
+frameworks:
+  - name: typo3
+
+# The project talks to this service through the package, so the wizard ticks it.
+suggest_services:
+  - name: solr
+    reason: Search backend for EXT:solr

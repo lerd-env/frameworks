@@ -1,0 +1,8 @@
+package: symfony/mercure-bundle
+frameworks:
+  - name: symfony
+
+# The project talks to this service through the package, so the wizard ticks it.
+suggest_services:
+  - name: mercure
+    reason: The hub the Mercure bundle publishes to

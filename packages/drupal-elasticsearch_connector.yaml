@@ -1,0 +1,11 @@
+package: drupal/elasticsearch_connector
+frameworks:
+  - name: drupal
+
+# Alternatives, most important first: lerd puts forward the first one this
+# machine already runs, else the first, and none when the project uses one.
+suggest_services:
+  - name: elasticsearch
+    reason: Search API backend for this connector
+  - name: opensearch
+    reason: OpenSearch as the connector's backend

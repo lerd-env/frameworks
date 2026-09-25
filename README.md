@@ -55,28 +55,60 @@ definition your project resolved when its `composer.json` requires the package.
 
 | Package | What it adds | Applies to |
 |---------|--------------|------------|
+| `apache-solr-for-typo3/solr` | suggests the `solr` service, ticked | TYPO3 |
 | `cakephp/migrations` | `migrate` command | CakePHP 3+ |
 | `cakephp/queue` | `queue` worker | CakePHP 5+ |
 | `codeigniter4/queue` | `queue` worker, `queue:retry`, `queue:failed`, `queue:flush` commands | CodeIgniter 4+ |
 | `doctrine/doctrine-fixtures-bundle` | `doctrine:fixtures:load` command, 1 setup step | Symfony 4+ |
 | `doctrine/doctrine-migrations-bundle` | `doctrine:migrations:migrate` command, 1 setup step | Symfony 4+ |
+| `doctrine/mongodb-odm-bundle` | suggests the `mongo` service, ticked | Symfony |
+| `drupal/elasticsearch_connector` | suggests `elasticsearch`, or `opensearch` when that is what runs | Drupal |
+| `drupal/memcache` | suggests the `memcached` service, ticked | Drupal |
+| `drupal/redis` | suggests `redis`, or `valkey` when that is what runs | Drupal |
+| `drupal/search_api_opensearch` | suggests the `opensearch` service, ticked | Drupal |
+| `drupal/search_api_solr` | suggests the `solr` service, ticked | Drupal 9+ |
 | `drush/drush` | `cron` worker, `site:install`, `cr`, `uli`, `updb`, `cex`, `cim` commands, 3 setup steps | Drupal 8+ |
+| `elasticsearch/elasticsearch` | suggests the `elasticsearch` service, ticked | any framework |
+| `friendsofsymfony/elastica-bundle` | suggests the `elasticsearch` service, ticked | Symfony |
+| `gotenberg/gotenberg-php` | suggests the `gotenberg` service, ticked | any framework |
 | `helhum/typo3-console` | `setup` command | TYPO3 10-11 |
 | `inspector-apm/inspector-php` | reported faults shown in the Debug window | any framework |
+| `laravel/cashier` | suggests the `stripe-mock` service, ticked | Laravel |
 | `laravel/cloud-cli` | `cloud` runs on the host PHP | any framework |
-| `laravel/horizon` | `horizon` worker | Laravel 6+ |
+| `laravel/dusk` | suggests the `selenium` service, ticked | Laravel |
+| `laravel/horizon` | `horizon` worker, suggests `redis`, or `valkey` when that is what runs | Laravel 6+ |
 | `laravel/reverb` | `reverb` worker | Laravel 11+ |
+| `league/flysystem-aws-s3-v3` | suggests `rustfs`, or `localstack` when that is what runs | any framework |
+| `meilisearch/meilisearch-php` | suggests the `meilisearch` service, ticked | any framework |
+| `meilisearch/search-bundle` | suggests the `meilisearch` service, ticked | Symfony |
+| `mongodb/laravel-mongodb` | suggests the `mongo` service, ticked | Laravel |
+| `mongodb/mongodb` | suggests the `mongo` service, ticked | any framework |
 | `monolog/monolog` | log records captured into the Debug window | any framework |
 | `nativephp/electron` | `native` worker, `native:install`, `native:build` commands, 1 doctor check | Laravel 11+ |
 | `nativephp/mobile` | `native:install-mobile`, `native:jump`, `native:run`, `native:open` commands, 3 doctor checks | Laravel 11+ |
+| `opensearch-project/opensearch-php` | suggests the `opensearch` service, ticked | any framework |
+| `pda/pheanstalk` | suggests the `beanstalkd` service, ticked | any framework |
+| `php-amqplib/php-amqplib` | suggests the `rabbitmq` service, ticked | any framework |
+| `predis/predis` | suggests `redis`, or `valkey` when that is what runs | any framework |
+| `pusher/pusher-php-server` | suggests the `soketi` service, ticked | any framework |
+| `sensiolabs/gotenberg-bundle` | suggests the `gotenberg` service, ticked | Symfony |
 | `sentry/sentry` | captured exceptions and messages shown in the Debug window | any framework |
+| `smi2/phpclickhouse` | suggests the `clickhouse` service, ticked | any framework |
 | `spatie/ray` | `ray()` calls captured into the Debug window | any framework |
+| `stripe/stripe-php` | suggests the `stripe-mock` service, ticked | any framework |
+| `symfony/amqp-messenger` | suggests the `rabbitmq` service, ticked | Symfony |
+| `symfony/beanstalkd-messenger` | suggests the `beanstalkd` service, ticked | Symfony |
+| `symfony/mercure-bundle` | suggests the `mercure` service, ticked | Symfony |
 | `symfony/messenger` | `messenger` worker | Symfony 4+ |
 | `symfony/notifier` | SMS, chat and push shown in the Debug window | any framework |
+| `symfony/panther` | suggests the `selenium` service, ticked | Symfony |
+| `symfony/redis-messenger` | suggests `redis`, or `valkey` when that is what runs | Symfony |
 | `symfony/scheduler` | `scheduler` worker | Symfony 8+ |
 | `tempest/command-bus` | `command_bus` worker | Tempest 3+ |
 | `tempest/database` | 1 setup step | Tempest 3+ |
+| `typesense/typesense-php` | suggests the `typesense` service, ticked | any framework |
 | `typo3/cms-scheduler` | `scheduler` worker, `scheduler` command | TYPO3 10+ |
+| `vladimir-yuldashev/laravel-queue-rabbitmq` | suggests the `rabbitmq` service, ticked | Laravel |
 
 Missing one you use? [Add it](#package-definitions) — a package file is a dozen
 lines, and it reaches every install within 24 hours like anything else here.

@@ -1,0 +1,6 @@
+package: smi2/phpclickhouse
+
+# The project talks to this service through the package, so the wizard ticks it.
+suggest_services:
+  - name: clickhouse
+    reason: Local ClickHouse for this client
