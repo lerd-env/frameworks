@@ -136,3 +136,7 @@ devtools:
   jobs:
     - implements: Cake\Queue\Job\JobInterface
       method: execute
+
+# Where the schema migrations live; comparing it across checkouts picks a new worktree's database.
+worktree:
+  migrations: config/Migrations
