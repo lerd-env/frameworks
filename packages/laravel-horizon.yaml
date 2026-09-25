@@ -13,3 +13,7 @@ workers:
     restart: always
     conflicts_with:
       - queue
+
+# The project talks to this service through the package, so the wizard ticks it.
+suggest_services:
+  - redis

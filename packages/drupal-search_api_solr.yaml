@@ -1,0 +1,9 @@
+package: drupal/search_api_solr
+# Search API Solr 4 supports Solr 9, the major lerd's preset runs, from Drupal 9.
+frameworks:
+  - name: drupal
+    min: "9"
+
+# A project requiring the module indexes into Solr, so the wizard ticks it.
+suggest_services:
+  - solr

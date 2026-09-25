@@ -63,6 +63,9 @@ env:
 
 composer: auto
 npm: false
+# Offered unticked in the setup wizard; apache-solr-for-typo3/solr ticks it.
+suggest_services:
+  - solr
 console: vendor/bin/typo3
 cache_command: cache:flush
 

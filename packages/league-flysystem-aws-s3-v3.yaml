@@ -1,0 +1,5 @@
+package: league/flysystem-aws-s3-v3
+
+# The project talks to this service through the package, so the wizard ticks it.
+suggest_services:
+  - rustfs

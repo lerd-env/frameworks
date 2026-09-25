@@ -1,0 +1,7 @@
+package: symfony/amqp-messenger
+frameworks:
+  - name: symfony
+
+# The project talks to this service through the package, so the wizard ticks it.
+suggest_services:
+  - rabbitmq

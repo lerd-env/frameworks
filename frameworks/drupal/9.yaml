@@ -60,6 +60,9 @@ env:
         - databases.default.default.password=lerd
 composer: auto
 npm: false
+# Offered unticked in the setup wizard; the search_api_solr package ticks it.
+suggest_services:
+  - solr
 console: vendor/drush/drush/drush.php
 # Run after a connection change: the compiled container is built
 # against the old database and answers every request with an error.
