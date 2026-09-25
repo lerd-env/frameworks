@@ -62,9 +62,9 @@ definition your project resolved when its `composer.json` requires the package.
 | `doctrine/doctrine-fixtures-bundle` | `doctrine:fixtures:load` command, 1 setup step | Symfony 4+ |
 | `doctrine/doctrine-migrations-bundle` | `doctrine:migrations:migrate` command, 1 setup step | Symfony 4+ |
 | `doctrine/mongodb-odm-bundle` | suggests the `mongo` service, ticked | Symfony |
-| `drupal/elasticsearch_connector` | suggests the `elasticsearch` service, ticked | Drupal |
+| `drupal/elasticsearch_connector` | suggests `elasticsearch`, or `opensearch` when that is what runs | Drupal |
 | `drupal/memcache` | suggests the `memcached` service, ticked | Drupal |
-| `drupal/redis` | suggests the `redis` service, ticked | Drupal |
+| `drupal/redis` | suggests `redis`, or `valkey` when that is what runs | Drupal |
 | `drupal/search_api_opensearch` | suggests the `opensearch` service, ticked | Drupal |
 | `drupal/search_api_solr` | suggests the `solr` service, ticked | Drupal 9+ |
 | `drush/drush` | `cron` worker, `site:install`, `cr`, `uli`, `updb`, `cex`, `cim` commands, 3 setup steps | Drupal 8+ |
@@ -76,9 +76,9 @@ definition your project resolved when its `composer.json` requires the package.
 | `laravel/cashier` | suggests the `stripe-mock` service, ticked | Laravel |
 | `laravel/cloud-cli` | `cloud` runs on the host PHP | any framework |
 | `laravel/dusk` | suggests the `selenium` service, ticked | Laravel |
-| `laravel/horizon` | `horizon` worker, suggests `redis` | Laravel 6+ |
+| `laravel/horizon` | `horizon` worker, suggests `redis`, or `valkey` when that is what runs | Laravel 6+ |
 | `laravel/reverb` | `reverb` worker | Laravel 11+ |
-| `league/flysystem-aws-s3-v3` | suggests the `rustfs` service, ticked | any framework |
+| `league/flysystem-aws-s3-v3` | suggests `rustfs`, or `localstack` when that is what runs | any framework |
 | `meilisearch/meilisearch-php` | suggests the `meilisearch` service, ticked | any framework |
 | `meilisearch/search-bundle` | suggests the `meilisearch` service, ticked | Symfony |
 | `mongodb/laravel-mongodb` | suggests the `mongo` service, ticked | Laravel |
@@ -89,7 +89,7 @@ definition your project resolved when its `composer.json` requires the package.
 | `opensearch-project/opensearch-php` | suggests the `opensearch` service, ticked | any framework |
 | `pda/pheanstalk` | suggests the `beanstalkd` service, ticked | any framework |
 | `php-amqplib/php-amqplib` | suggests the `rabbitmq` service, ticked | any framework |
-| `predis/predis` | suggests the `redis` service, ticked | any framework |
+| `predis/predis` | suggests `redis`, or `valkey` when that is what runs | any framework |
 | `pusher/pusher-php-server` | suggests the `soketi` service, ticked | any framework |
 | `sensiolabs/gotenberg-bundle` | suggests the `gotenberg` service, ticked | Symfony |
 | `sentry/sentry` | captured exceptions and messages shown in the Debug window | any framework |
@@ -102,7 +102,7 @@ definition your project resolved when its `composer.json` requires the package.
 | `symfony/messenger` | `messenger` worker | Symfony 4+ |
 | `symfony/notifier` | SMS, chat and push shown in the Debug window | any framework |
 | `symfony/panther` | suggests the `selenium` service, ticked | Symfony |
-| `symfony/redis-messenger` | suggests the `redis` service, ticked | Symfony |
+| `symfony/redis-messenger` | suggests `redis`, or `valkey` when that is what runs | Symfony |
 | `symfony/scheduler` | `scheduler` worker | Symfony 8+ |
 | `tempest/command-bus` | `command_bus` worker | Tempest 3+ |
 | `tempest/database` | 1 setup step | Tempest 3+ |

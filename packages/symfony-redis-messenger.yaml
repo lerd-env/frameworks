@@ -2,6 +2,10 @@ package: symfony/redis-messenger
 frameworks:
   - name: symfony
 
-# The project talks to this service through the package, so the wizard ticks it.
+# Alternatives, most important first: lerd puts forward the first one this
+# machine already runs, else the first, and none when the project uses one.
 suggest_services:
-  - redis
+  - name: redis
+    reason: Redis for this Messenger transport
+  - name: valkey
+    reason: Redis-compatible Messenger transport

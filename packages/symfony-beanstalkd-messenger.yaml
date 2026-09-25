@@ -4,4 +4,5 @@ frameworks:
 
 # The project talks to this service through the package, so the wizard ticks it.
 suggest_services:
-  - beanstalkd
+  - name: beanstalkd
+    reason: Beanstalkd for this Messenger transport

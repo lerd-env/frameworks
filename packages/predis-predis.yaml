@@ -1,5 +1,9 @@
 package: predis/predis
 
-# The project talks to this service through the package, so the wizard ticks it.
+# Alternatives, most important first: lerd puts forward the first one this
+# machine already runs, else the first, and none when the project uses one.
 suggest_services:
-  - redis
+  - name: redis
+    reason: Redis server for predis to connect to
+  - name: valkey
+    reason: Redis-compatible server for predis

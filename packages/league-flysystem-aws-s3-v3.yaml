@@ -1,5 +1,9 @@
 package: league/flysystem-aws-s3-v3
 
-# The project talks to this service through the package, so the wizard ticks it.
+# Alternatives, most important first: lerd puts forward the first one this
+# machine already runs, else the first, and none when the project uses one.
 suggest_services:
-  - rustfs
+  - name: rustfs
+    reason: S3-compatible storage without a real bucket
+  - name: localstack
+    reason: Local AWS, S3 included

@@ -14,6 +14,10 @@ workers:
     conflicts_with:
       - queue
 
-# The project talks to this service through the package, so the wizard ticks it.
+# Alternatives, most important first: lerd puts forward the first one this
+# machine already runs, else the first, and none when the project uses one.
 suggest_services:
-  - redis
+  - name: redis
+    reason: Horizon runs its queues on Redis
+  - name: valkey
+    reason: Redis-compatible queues for Horizon

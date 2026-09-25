@@ -4,4 +4,5 @@ frameworks:
 
 # The project talks to this service through the package, so the wizard ticks it.
 suggest_services:
-  - selenium
+  - name: selenium
+    reason: The browser Panther tests drive

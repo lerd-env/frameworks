@@ -66,7 +66,8 @@ composer: auto
 npm: false
 # Offered unticked in the setup wizard; the search_api_solr package ticks it.
 suggest_services:
-  - solr
+  - name: solr
+    reason: Search API's usual search backend
 console: vendor/drush/drush/drush.php
 # Run after a connection change: the compiled container is built
 # against the old database and answers every request with an error.

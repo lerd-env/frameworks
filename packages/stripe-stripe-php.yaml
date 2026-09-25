@@ -2,4 +2,5 @@ package: stripe/stripe-php
 
 # The project talks to this service through the package, so the wizard ticks it.
 suggest_services:
-  - stripe-mock
+  - name: stripe-mock
+    reason: Test Stripe calls without reaching Stripe
