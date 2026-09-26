@@ -164,6 +164,19 @@ workers:
       file: node_modules/vite
     health:
       url_file: public/hot
+  # Mix rebuilds into public/, which nginx already serves, so unlike vite there
+  # is no dev server to proxy and no hot file to probe.
+  mix:
+    icon: webpack
+    color: "#8DD6F9"
+    per_worktree: true
+    replaces_build: true
+    label: Laravel Mix
+    command: npm run watch
+    restart: on-failure
+    host: true
+    check:
+      file: node_modules/laravel-mix
 
 logs:
   - path: storage/logs/*.log
