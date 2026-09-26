@@ -1,12 +1,32 @@
-# Lerd Framework Store
+<h1 align="center">Lerd Framework Store</h1>
 
-> The community-driven store of framework definitions that powers
-> [Lerd](https://lerd.sh) — teach Lerd a new PHP framework by
-> editing YAML, no binary release required.
+<p align="center">
+  The community-driven store of framework definitions that powers <a href="https://lerd.sh">Lerd</a>.<br>
+  Teach Lerd a new PHP framework by editing YAML, no binary release required.
+</p>
 
-[![Part of Lerd](https://img.shields.io/badge/part%20of-lerd-ff2d20)](https://lerd.sh)
-[![Docs](https://img.shields.io/badge/docs-lerd.sh-blue)](https://lerd.sh/usage/frameworks)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+<p align="center">
+  <a href="https://lerd.sh"><img src="https://img.shields.io/badge/part%20of-lerd-ff2d20" alt="Part of Lerd"></a>
+  <a href="https://lerd.sh/usage/frameworks"><img src="https://img.shields.io/badge/docs-lerd.sh-blue" alt="Docs"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+</p>
+
+<p align="center">
+  <img src=".github/logos/bedrock.svg" width="44" height="44" alt="Bedrock" title="Bedrock">
+  <img src=".github/logos/cakephp.svg" width="44" height="44" alt="CakePHP" title="CakePHP">
+  <img src=".github/logos/codeigniter.svg" width="44" height="44" alt="CodeIgniter" title="CodeIgniter">
+  <img src=".github/logos/drupal.svg" width="44" height="44" alt="Drupal" title="Drupal">
+  <img src=".github/logos/laravel.svg" width="44" height="44" alt="Laravel" title="Laravel">
+  <img src=".github/logos/lumen.svg" width="44" height="44" alt="Lumen" title="Lumen">
+  <img src=".github/logos/magento.svg" width="44" height="44" alt="Magento" title="Magento">
+  <img src=".github/logos/statamic.svg" width="44" height="44" alt="Statamic" title="Statamic">
+  <img src=".github/logos/symfony.svg" width="44" height="44" alt="Symfony" title="Symfony">
+  <img src=".github/logos/tempest.svg" width="44" height="44" alt="Tempest" title="Tempest">
+  <img src=".github/logos/typo3.svg" width="44" height="44" alt="TYPO3" title="TYPO3">
+  <img src=".github/logos/winter.svg" width="44" height="44" alt="Winter CMS" title="Winter CMS">
+  <img src=".github/logos/wordpress.svg" width="44" height="44" alt="WordPress" title="WordPress">
+  <img src=".github/logos/yii.svg" width="44" height="44" alt="Yii" title="Yii">
+</p>
 
 When you run `lerd link` on a project, Lerd detects which framework it is and pulls the matching definition from this store — then it knows how to serve it, which workers to run, how to set up its `.env`, how to scaffold it, and how to health-check it. Everything is a versioned YAML file. Add a framework here and every Lerd install can use it within 24 hours, with no new Lerd release and no Go code.
 
@@ -28,22 +48,22 @@ All of it is data. None of it ships in the binary.
 
 ## Available frameworks
 
-| Framework | Versions | Detection |
-|-----------|----------|-----------|
-| Bedrock | 1 | `web/wp-config.php` file or `web/wp/wp-login.php` file |
-| CakePHP | 5, 4, 3 | `bin/cake` file or `cakephp/cakephp` in composer.json |
-| CodeIgniter | 4, 3 | `spark` file or `codeigniter4/framework` in composer.json |
-| Drupal | 11, 10, 9, 8 | `drupal/core-recommended` or `drupal/core` in composer.json |
-| Laravel | 13, 12, 11, 10, 9, 8, 7, 6 | `artisan` file or `laravel/framework` in composer.json |
-| Lumen | 11, 10, 9, 8, 7, 6 | `laravel/lumen-framework` in composer.json |
-| Magento | 2 | `bin/magento` file or `magento/product-community-edition` in composer.json |
-| Statamic | 6, 5, 4, 3 | `statamic/cms` in composer.json |
-| Symfony | 8, 7, 6, 5, 4 | `symfony.lock` file or `symfony/framework-bundle` in composer.json |
-| Tempest | 3 | `tempest` file or `tempest/framework` in composer.json |
-| TYPO3 | 14, 13, 12, 11, 10 | `typo3/cms-core` in composer.json or `public/typo3` directory |
-| Winter CMS | 1 | `winter/wn-system-module` in composer.json |
-| WordPress | 7, 6, 5 | `wp-login.php` file or `wp-config.php` file |
-| Yii | 2 | `yiisoft/yii2` in composer.json |
+| | Framework | Versions | Detected by |
+|:-:|---|---|---|
+| <img src=".github/logos/bedrock.svg" width="28" height="28" alt=""> | **Bedrock** | `1` | `web/wp-config.php` file or `web/wp/wp-login.php` file |
+| <img src=".github/logos/cakephp.svg" width="28" height="28" alt=""> | **CakePHP** | `5` `4` `3` | `bin/cake` file or `cakephp/cakephp` in composer.json |
+| <img src=".github/logos/codeigniter.svg" width="28" height="28" alt=""> | **CodeIgniter** | `4` `3` | `spark` file or `codeigniter4/framework` in composer.json |
+| <img src=".github/logos/drupal.svg" width="28" height="28" alt=""> | **Drupal** | `11` `10` `9` `8` | `drupal/core-recommended` or `drupal/core` in composer.json |
+| <img src=".github/logos/laravel.svg" width="28" height="28" alt=""> | **Laravel** | `13` `12` `11` `10` `9` `8` `7` `6` | `artisan` file or `laravel/framework` in composer.json |
+| <img src=".github/logos/lumen.svg" width="28" height="28" alt=""> | **Lumen** | `11` `10` `9` `8` `7` `6` | `laravel/lumen-framework` in composer.json |
+| <img src=".github/logos/magento.svg" width="28" height="28" alt=""> | **Magento** | `2` | `bin/magento` file or `magento/product-community-edition` in composer.json |
+| <img src=".github/logos/statamic.svg" width="28" height="28" alt=""> | **Statamic** | `6` `5` `4` `3` | `statamic/cms` in composer.json |
+| <img src=".github/logos/symfony.svg" width="28" height="28" alt=""> | **Symfony** | `8` `7` `6` `5` `4` | `symfony.lock` file or `symfony/framework-bundle` in composer.json |
+| <img src=".github/logos/tempest.svg" width="28" height="28" alt=""> | **Tempest** | `3` | `tempest` file or `tempest/framework` in composer.json |
+| <img src=".github/logos/typo3.svg" width="28" height="28" alt=""> | **TYPO3** | `14` `13` `12` `11` `10` | `typo3/cms-core` in composer.json or `public/typo3` directory |
+| <img src=".github/logos/winter.svg" width="28" height="28" alt=""> | **Winter CMS** | `1` | `winter/wn-system-module` in composer.json |
+| <img src=".github/logos/wordpress.svg" width="28" height="28" alt=""> | **WordPress** | `7` `6` `5` | `wp-login.php` file or `wp-config.php` file |
+| <img src=".github/logos/yii.svg" width="28" height="28" alt=""> | **Yii** | `2` | `yiisoft/yii2` in composer.json |
 
 Don't see yours? [Add it](#contributing) — that's what this repo is for.
 
@@ -137,7 +157,7 @@ New frameworks and version bumps are welcome — this store is only as good as t
 
 1. Fork this repo
 2. Add or update `frameworks/<name>/<version>.yaml`, or `packages/<vendor>-<name>.yaml` for something a composer package owns (see below)
-3. Optionally add the framework's own mark as `frameworks/<name>.svg` (see below)
+3. Add the framework's own mark as `frameworks/<name>.svg` (see below), then run `python3 .github/scripts/readme_logos.py` to draw it for this README
 4. Add or update the entry in `frameworks/index.json` (name, label, versions, latest, detect rules), and list a new package under `packages`
 5. Open a pull request
 
@@ -264,6 +284,8 @@ everything but the geometry on the way in, along with script, `foreignObject`,
 event handlers and external references, then paints it in the declared colour.
 Not a full colour logo, and not a wordmark, which is unreadable at the size this
 renders. Take the mark, not the lockup.
+
+The coloured tiles in this README are not the marks themselves. `.github/scripts/readme_logos.py` paints each one in its declared colour on a white tile, so GitHub shows it in either theme, and writes the result to `.github/logos/`. Run it again whenever a mark or a colour changes.
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="…"/></svg>
