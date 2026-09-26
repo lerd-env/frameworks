@@ -1,0 +1,70 @@
+name: yii
+version: "2"
+label: Yii
+color: "#40b3d8"
+public_dir: web
+create: composer create-project yiisoft/yii2-app-basic:^2.0
+php:
+  min: "7.4"
+  max: "8.4"
+# The yii console script alone is not enough: Yii 3 ships one too.
+detect:
+  - composer: "yiisoft/yii2"
+
+env:
+  file: config/db.php
+  format: php-array
+  # Yii keeps no application URL here, and db.php is handed straight to
+  # yii\db\Connection, which rejects any key it does not know.
+  url_key: none
+  services:
+    mysql:
+      detect:
+        - key: dsn
+          value_prefix: "mysql:"
+      vars:
+        - "dsn=mysql:host=lerd-mysql;dbname={{site}}"
+        - "username=root"
+        - "password=lerd"
+    postgres:
+      detect:
+        - key: dsn
+          value_prefix: "pgsql:"
+      vars:
+        - "dsn=pgsql:host=lerd-postgres;dbname={{site}}"
+        - "username=postgres"
+        - "password=lerd"
+
+workers:
+  queue:
+    label: Queue Worker
+    icon: queue
+    command: php yii queue/listen --verbose
+    restart: always
+    check:
+      composer: "yiisoft/yii2-queue"
+
+setup:
+  - label: Run migrations
+    command: php yii migrate --interactive=0
+    default: true
+  - label: Load fixtures
+    command: php yii fixture/load "*" --interactive=0
+    default: false
+    check:
+      file: tests/unit/fixtures
+
+commands:
+  - name: cache:flush
+    label: Flush cache
+    description: Clear all application caches
+    icon: cache
+    command: php yii cache/flush-all
+  - name: migrate
+    label: Run migrations
+    description: Apply database migrations
+    icon: database
+    command: php yii migrate --interactive=0
+
+doctor:
+  migrate_command: migrate

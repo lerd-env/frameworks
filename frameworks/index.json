@@ -127,15 +127,16 @@
         {"composer": "tempest/framework"},
         {"file": "tempest"}
       ]
-    }
-    ,
+    },
     {
-  "name": "yii2",
-  "label": "Yii 2",
-  "versions": ["2"],
-  "latest": "2",
-  "detect": ["file:yii", "composer:yiisoft/yii2"]
-}
+      "name": "yii",
+      "label": "Yii",
+      "versions": ["2"],
+      "latest": "2",
+      "detect": [
+        {"composer": "yiisoft/yii2"}
+      ]
+    }
   ],
   "packages": [
     {"name": "apache-solr-for-typo3/solr"},
