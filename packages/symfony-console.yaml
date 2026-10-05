@@ -1,0 +1,12 @@
+package: symfony/console
+
+# Every console command runs through Command::run, Laravel's included, since
+# Illuminate's command extends Symfony's. Seeing it tells the Debug window
+# which command a process is, by class, so one listed under exclude_commands
+# can be left out even when it is named by its class rather than as typed.
+devtools:
+  captures:
+    - kind: command
+      extends: Symfony\Component\Console\Command\Command
+      method: run
+      name: this

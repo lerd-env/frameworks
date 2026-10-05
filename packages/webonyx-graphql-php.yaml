@@ -1,0 +1,17 @@
+package: webonyx/graphql-php
+
+# The GraphQL engine Lighthouse, Rebing's GraphQL for Laravel and Overblog's
+# bundle all run on. lerd reads a GraphQL request's operations, the fields they
+# call and the response from the request itself; these seams add how long the
+# engine spent executing it, and the schema, so each field the request called
+# is named by the type it returns.
+devtools:
+  captures:
+    - kind: graphql_schema
+      class: GraphQL\GraphQL
+      method: promiseToExecute
+      name: arg:2
+    - kind: span
+      class: GraphQL\Executor\Executor
+      method: promiseToExecute
+      label: GraphQL

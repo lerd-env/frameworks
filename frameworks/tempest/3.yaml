@@ -112,3 +112,11 @@ commands:
 
 doctor:
   migrate_command: migrate
+
+# Each async command runs in its own command:handle child of the monitor,
+# which only loops, as do the log tails.
+devtools:
+  exclude_commands: [command:monitor, tail:logs, tail:debug]
+  jobs:
+    - class: Tempest\CommandBus\HandleAsyncCommand
+      method: __invoke

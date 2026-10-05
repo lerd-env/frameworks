@@ -68,3 +68,12 @@ commands:
 
 doctor:
   migrate_command: migrate
+
+# Each yii2-queue job runs through JobInterface::execute, in the listener's
+# own isolated queue/exec child by default. Only queue/listen loops, so it is
+# left out and the jobs it hands off are still reported.
+devtools:
+  exclude_commands: [queue/listen]
+  jobs:
+    - implements: yii\queue\JobInterface
+      method: execute

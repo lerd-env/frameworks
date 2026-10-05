@@ -192,9 +192,66 @@ notifications:
   # request, so the warning names a loop inside the framework rather than
   # anything a site's own code does.
   nplusone: false
-# Queue items. Every queue worker is a plugin implementing this interface, so
-# one seam covers cron and drush queue runs alike.
+# The phases of a Drupal request. DrupalKernel does not extend Symfony's
+# Kernel and Drupal routes with its own listener, so the kernel, routing and
+# template seams are Drupal's; HttpKernel::handleRaw, Response::send and the
+# session save still come from the Symfony packages. The controller is named
+# by the callable the render-context wrapper runs, each template by its path,
+# and the route by the first access check, which the router runs on the match.
+# Every queue worker is a plugin implementing QueueWorkerInterface, so one job
+# seam covers cron and drush queue runs alike.
 devtools:
+  exclude_commands: [server, quick-start]
   jobs:
     - implements: Drupal\Core\Queue\QueueWorkerInterface
       method: processItem
+  captures:
+    # The route's raw parameters, before upcasting, from the attribute Drupal's
+    # router keeps them in, read as the controller is resolved.
+    - kind: route_params
+      class: Drupal\Core\Controller\ControllerResolver
+      method: getController
+      name: arg:1.prop:attributes.method:all._raw_variables.method:all
+    - kind: span
+      class: Drupal\Core\DrupalKernel
+      method: boot
+      label: Bootstrap
+    - kind: span
+      class: Drupal\Core\DrupalKernel
+      method: preHandle
+      label: Prepare
+    - kind: span
+      class: Drupal\Core\Http\EventListener\RouterListener
+      method: onKernelRequest
+      label: Routing
+    - kind: span
+      class: Drupal\Core\EventSubscriber\EarlyRenderingControllerWrapperSubscriber
+      method: wrapControllerExecutionInRenderContext
+      name: arg:1
+      label: Controller
+    - kind: span
+      implements: Drupal\Core\Render\MainContent\MainContentRendererInterface
+      method: renderResponse
+      name: arg:3.method:getRouteName
+      label: Render
+    - kind: span
+      class: Drupal\Core\Template\TwigThemeEngine
+      method: renderTemplate
+      name: arg:1
+      label: View
+    - kind: span
+      class: Drupal\Core\DrupalKernel
+      method: terminate
+      label: Terminate
+    - kind: span
+      class: Drupal\Core\Cron
+      method: run
+      label: Cron
+    - kind: route
+      class: Drupal\Core\Access\AccessManager
+      method: check
+      name: arg:1.method:getRouteName
+    - kind: auth
+      class: Drupal\Core\Session\AccountProxy
+      method: setAccount
+      name: arg:1.method:id

@@ -76,3 +76,7 @@ setup:
     # directory is refused because it would delete the site's configuration.
     check:
       file: config/sync/system.site.yml
+
+# Tailing the log polls forever and runserver blocks on its php -S child.
+devtools:
+  exclude_commands: [watchdog:tail, wd-tail, runserver, rs]

@@ -140,12 +140,48 @@ commands:
 
 doctor:
   migrate_command: migrate
-# Queued jobs. The Queue plugin runs every job through its own interface, so
-# one seam covers whatever the project queues.
+# The phases of a CakePHP request: the server bootstrapping the app and its
+# plugins, the middleware queue, the controller action with its auto-render,
+# each view rendered and the response going out. The action is named by the
+# controller method it calls. The queue worker only loops; the jobs it runs
+# are reported, and the command seam names it for exclusion by class too.
 devtools:
+  exclude_commands: [queue worker]
   jobs:
     - implements: Cake\Queue\Job\JobInterface
       method: execute
+  captures:
+    # The routing parameters the request carries once a route matched.
+    - kind: route_params
+      class: Cake\Controller\ControllerFactory
+      method: invoke
+      name: arg:1.method:getRequest.method:getAttributes.params
+    - kind: span
+      class: Cake\Http\Server
+      method: bootstrap
+      label: Bootstrap
+    - kind: span
+      class: Cake\Console\CommandRunner
+      method: bootstrap
+      label: Bootstrap
+    - kind: span
+      class: Cake\Http\Runner
+      method: run
+      label: Middleware
+    - kind: span
+      class: Cake\Controller\Controller
+      method: invokeAction
+      name: arg:1
+      label: Controller
+    - kind: span
+      class: Cake\View\View
+      method: render
+      name: arg:1,this.method:getTemplate
+      label: View
+    - kind: span
+      class: Cake\Http\ResponseEmitter
+      method: emit
+      label: Send response
 
 # Where the schema migrations live; comparing it across checkouts picks a new worktree's database.
 worktree:

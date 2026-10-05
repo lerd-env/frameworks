@@ -1,0 +1,69 @@
+package: laravel/framework
+
+# Offered on the site's Debug tab: lerd/debug lets the app add its own rows,
+# log lines and tabs to the Requests lens, and does nothing outside lerd.
+suggest_packages:
+  - name: lerd/debug
+    dev: true
+    reason: puts your own timeline rows, log lines and tabs in lerd's Requests lens
+    docs: https://lerd.sh/features/debug-package/
+
+# The phases of a Laravel request, timed so the Requests lens can show where
+# the time went: booting the app, matching the route, the middleware stack and
+# the controller inside it, each view rendered, and the work done after the
+# response went out. Every method has kept its name since Laravel 5, so one
+# file covers every major, and Lumen and Statamic on top of it.
+#
+# The controller is named by the action it runs, a closure by the file and line
+# it was written on, and a Livewire page by its component rather than the page
+# controller Livewire routes it through. The session is read as the store saves
+# it, which is what it holds when the request is done, and the matched route's
+# name is read as the route binds to the request. Every Redis command, from
+# either driver, goes through the connection's command method, named by the
+# connection it ran on. The queue and schedule
+# workers only loop, so the Debug window reports the jobs they run and not them.
+devtools:
+  exclude_commands: [queue:work, queue:listen, schedule:work]
+  captures:
+    - kind: span
+      class: Illuminate\Foundation\Http\Kernel
+      method: bootstrap
+      label: Bootstrap
+    - kind: span
+      class: Illuminate\Foundation\Console\Kernel
+      method: bootstrap
+      label: Bootstrap
+    - kind: span
+      class: Illuminate\Routing\Router
+      method: findRoute
+      label: Routing
+    - kind: span
+      class: Illuminate\Routing\Router
+      method: runRouteWithinStack
+      label: Middleware
+    - kind: span
+      class: Illuminate\Routing\Route
+      method: run
+      name: this.prop:action.livewire_component,this.prop:action.uses
+      label: Controller
+    - kind: span
+      class: Illuminate\View\View
+      method: render
+      name: this.method:name
+      label: View
+    - kind: span
+      class: Illuminate\Foundation\Http\Kernel
+      method: terminate
+      label: Terminate
+    - kind: session
+      class: Illuminate\Session\Store
+      method: save
+      name: this.method:getName
+    - kind: route
+      class: Illuminate\Routing\Route
+      method: bind
+      name: this.method:getName
+    - kind: redis
+      extends: Illuminate\Redis\Connections\Connection
+      method: command
+      name: this.method:getName

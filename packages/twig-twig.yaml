@@ -1,0 +1,10 @@
+package: twig/twig
+
+# Each template an app renders through Twig, named by the template it asked for.
+devtools:
+  captures:
+    - kind: span
+      class: Twig\Environment
+      method: render
+      name: arg:1
+      label: View

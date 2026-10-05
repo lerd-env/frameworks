@@ -1,0 +1,58 @@
+package: tempest/framework
+
+# Offered on the site's Debug tab: lerd/debug lets the app add its own rows,
+# log lines and tabs to the Requests lens, and does nothing outside lerd.
+suggest_packages:
+  - name: lerd/debug
+    dev: true
+    reason: puts your own timeline rows, log lines and tabs in lerd's Requests lens
+    docs: https://lerd.sh/features/debug-package/
+
+# The phases of a Tempest request: booting the kernel with discovery, matching
+# the route, the route's own middleware with the controller inside it, each
+# view rendered and sending the response. Tempest routes carry no names, so the
+# matched route is named by its URI pattern. The session is read as the file or
+# Redis manager serializes it, and the user both as a login stores it and as
+# the session resolves it on a later request.
+devtools:
+  captures:
+    - kind: span
+      class: Tempest\Core\FrameworkKernel
+      method: boot
+      label: Bootstrap
+    - kind: span
+      class: Tempest\Router\GenericRouter
+      method: dispatch
+      label: Handle
+    - kind: span
+      class: Tempest\Router\Routing\Matching\GenericRouteMatcher
+      method: match
+      label: Routing
+    - kind: span
+      class: Tempest\Router\HandleRouteSpecificMiddleware
+      method: __invoke
+      label: Middleware
+    - kind: span
+      implements: Tempest\View\ViewRenderer
+      method: render
+      name: arg:1.prop:path,arg:1
+      label: View
+    - kind: span
+      class: Tempest\Router\GenericResponseSender
+      method: send
+      label: Send response
+    - kind: route
+      class: Tempest\Router\MatchedRoute
+      method: __construct
+      name: arg:1.prop:uri
+    - kind: session
+      class: Tempest\Http\Session\Session
+      method: __serialize
+    - kind: auth
+      implements: Tempest\Auth\Authentication\AuthenticatableResolver
+      method: resolve
+      name: arg:1
+    - kind: auth
+      class: Tempest\Auth\Authentication\SessionAuthenticator
+      method: authenticate
+      name: arg:1.prop:id.value

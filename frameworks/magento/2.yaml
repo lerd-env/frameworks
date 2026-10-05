@@ -293,3 +293,80 @@ notifications:
   # request, so the warning names a loop inside the framework rather than
   # anything a site's own code does.
   nplusone: false
+
+# The phases of a Magento request. Magento generates an Interceptor subclass
+# for any class with plugins whose override calls parent::, so every seam
+# names the declaring class; extends: would fire on both. The route is the
+# full action name, e.g. catalog_product_view. The consumer runner only loops;
+# the messages it handles are reported as jobs.
+devtools:
+  exclude_commands: [queue:consumers:start]
+  jobs:
+    - class: Magento\Framework\MessageQueue\Consumer
+      method: dispatchMessage
+    - class: Magento\AsynchronousOperations\Model\MassConsumerEnvelopeCallback
+      method: execute
+  captures:
+    - kind: span
+      class: Magento\Framework\App\Bootstrap
+      method: create
+      label: Bootstrap
+    - kind: span
+      class: Magento\Framework\App\Http
+      method: launch
+      label: Handle
+    - kind: span
+      class: Magento\Framework\App\Router\Base
+      method: match
+      name: this
+      label: Routing
+    - kind: span
+      class: Magento\UrlRewrite\Controller\Router
+      method: match
+      name: this
+      label: Routing
+    - kind: span
+      class: Magento\Cms\Controller\Router
+      method: match
+      name: this
+      label: Routing
+    - kind: span
+      class: Magento\Framework\App\Router\DefaultRouter
+      method: match
+      name: this
+      label: Routing
+    - kind: span
+      class: Magento\Framework\App\FrontController
+      method: processRequest
+      name: arg:1.method:getFullActionName
+      label: Controller
+    - kind: span
+      class: Magento\Framework\View\Result\Layout
+      method: renderResult
+      name: this
+      label: Render
+    - kind: span
+      class: Magento\Framework\View\TemplateEngine\Php
+      method: render
+      name: arg:2
+      label: View
+    - kind: span
+      class: Magento\Framework\HTTP\PhpEnvironment\Response
+      method: sendResponse
+      label: Send response
+    - kind: route
+      class: Magento\Backend\App\AbstractAction
+      method: dispatch
+      name: arg:1.method:getFullActionName
+    - kind: route
+      class: Magento\Framework\App\Action\Action
+      method: dispatch
+      name: arg:1.method:getFullActionName
+    - kind: auth
+      class: Magento\Customer\Model\Session
+      method: isLoggedIn
+      name: this.method:getCustomerId
+    - kind: auth
+      class: Magento\User\Model\User
+      method: getAclRole
+      name: this.method:getId

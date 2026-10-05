@@ -1,0 +1,10 @@
+package: lerd/debug
+
+# An app writes its own timeline rows and Debug window tabs through this
+# package, and every entry passes Lerd::track. Watching it is how a timeline
+# row, or each block of a tab, reaches the Requests lens.
+devtools:
+  captures:
+    - kind: lerd
+      class: Lerd\Debug\Lerd
+      method: track

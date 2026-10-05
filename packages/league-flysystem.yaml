@@ -1,0 +1,61 @@
+package: league/flysystem
+
+# Storage on every framework that uses Flysystem, Laravel's Storage facade and
+# its S3 disks included, goes through these methods, the path as the first
+# argument, so each operation is timed with what it touched.
+devtools:
+  captures:
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: fileExists
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: directoryExists
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: has
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: read
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: readStream
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: write
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: writeStream
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: delete
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: deleteDirectory
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: createDirectory
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: listContents
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: move
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: copy
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: lastModified
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: fileSize
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: mimeType
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: visibility
+    - kind: filesystem
+      class: League\Flysystem\Filesystem
+      method: setVisibility

@@ -19,3 +19,7 @@ workers:
         - /apps
       port_env_key: REVERB_SERVER_PORT
       default_port: 8080
+
+# The websocket server only loops, so the Debug window reports the jobs they run and not them.
+devtools:
+  exclude_commands: [reverb:start]

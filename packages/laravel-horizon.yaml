@@ -21,3 +21,7 @@ suggest_services:
     reason: Horizon runs its queues on Redis
   - name: valkey
     reason: Redis-compatible queues for Horizon
+
+# Horizon's processes only loop, so the Debug window reports the jobs they run and not them.
+devtools:
+  exclude_commands: [horizon, horizon:work, horizon:supervisor]

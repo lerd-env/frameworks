@@ -1,0 +1,10 @@
+package: cakephp/authentication
+
+# Who a request runs as: the identity the service builds on every
+# authenticated request, on login and when an identity is set by hand.
+devtools:
+  captures:
+    - kind: auth
+      class: Authentication\AuthenticationService
+      method: buildIdentity
+      name: arg:1.method:getIdentifier,arg:1.prop:id

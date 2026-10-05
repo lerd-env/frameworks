@@ -1,0 +1,64 @@
+package: yiisoft/yii2
+
+# Offered on the site's Debug tab: lerd/debug lets the app add its own rows,
+# log lines and tabs to the Requests lens, and does nothing outside lerd.
+suggest_packages:
+  - name: lerd/debug
+    dev: true
+    reason: puts your own timeline rows, log lines and tabs in lerd's Requests lens
+    docs: https://lerd.sh/features/debug-package/
+
+# The phases of a Yii 2 request: constructing the application (config,
+# components and bootstrap components), resolving the URL to a route, the
+# module and controller filters with the action inside them, each view file
+# rendered, and sending the response. Matching the declaring class keeps a
+# subclass that calls parent:: from being timed twice. The route is read as the
+# application's beforeAction runs, so a request a filter denies still names it.
+# The user is read as yii\web\User takes the identity on login, cookie login
+# or session restore.
+devtools:
+  captures:
+    # The parameters the URL resolved to, handed to the module that runs the action.
+    - kind: route_params
+      class: yii\base\Module
+      method: runAction
+      name: arg:2
+    - kind: span
+      class: yii\base\Application
+      method: __construct
+      label: Bootstrap
+    - kind: span
+      extends: yii\base\Application
+      method: handleRequest
+      label: Handle
+    - kind: span
+      extends: yii\base\Request
+      method: resolve
+      label: Routing
+    - kind: span
+      class: yii\base\Controller
+      method: runAction
+      name: this.method:getUniqueId
+      label: Middleware
+    - kind: span
+      extends: yii\base\Action
+      method: runWithParams
+      name: this.method:getUniqueId
+      label: Controller
+    - kind: span
+      class: yii\base\View
+      method: renderFile
+      name: arg:1
+      label: View
+    - kind: span
+      class: yii\web\Response
+      method: send
+      label: Send response
+    - kind: route
+      class: yii\base\Module
+      method: beforeAction
+      name: arg:1.method:getUniqueId
+    - kind: auth
+      class: yii\web\User
+      method: setIdentity
+      name: arg:1.method:getId

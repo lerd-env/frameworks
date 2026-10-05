@@ -1,0 +1,32 @@
+package: livewire/livewire
+
+# Livewire 3 and 4 route every component through one mechanism class: mount on
+# the first render, then a property update and a method call for each round
+# trip, each followed by a render. Watching those four methods gives every
+# component its phases and timings without knowing anything about the app.
+# The component's name comes from its own getName(); on mount it is the first
+# argument, since the instance does not exist yet. Livewire 4 compiles a
+# single-file component into a cached class, which getClassName loads from the
+# source path it is handed, so the component is shown at its source file.
+devtools:
+  captures:
+    - kind: component
+      class: Livewire\Mechanisms\HandleComponents\HandleComponents
+      method: mount
+      name: arg:1
+    - kind: component
+      class: Livewire\Mechanisms\HandleComponents\HandleComponents
+      method: render
+      name: arg:1.method:getName
+    - kind: component
+      class: Livewire\Mechanisms\HandleComponents\HandleComponents
+      method: updateProperty
+      name: arg:1.method:getName
+    - kind: component
+      class: Livewire\Mechanisms\HandleComponents\HandleComponents
+      method: callMethods
+      name: arg:1.method:getName
+    - kind: source
+      class: Livewire\Compiler\CacheManager
+      method: getClassName
+      name: arg:1

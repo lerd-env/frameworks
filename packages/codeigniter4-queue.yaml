@@ -32,3 +32,7 @@ commands:
     output: silent
     confirm: true
     icon: trash
+
+# The worker only loops; the Debug window reports the jobs it runs.
+devtools:
+  exclude_commands: [queue:work]

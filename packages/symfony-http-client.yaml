@@ -1,0 +1,17 @@
+package: symfony/http-client
+
+# An outgoing request's response, read as it is destroyed: a lazy response has
+# completed by then and the client has already checked its status, so its
+# status, headers and timing are final and holding it would change nothing.
+# Each transport destroys its own responses, so each is named.
+devtools:
+  captures:
+    - kind: http_response
+      class: Symfony\Component\HttpClient\Response\CurlResponse
+      method: __destruct
+    - kind: http_response
+      class: Symfony\Component\HttpClient\Response\NativeResponse
+      method: __destruct
+    - kind: http_response
+      class: Symfony\Component\HttpClient\Response\AmpResponse
+      method: __destruct

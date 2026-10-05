@@ -1,0 +1,37 @@
+package: symfony/http-kernel
+
+# Offered on the site's Debug tab: lerd/debug lets the app add its own rows,
+# log lines and tabs to the Requests lens, and does nothing outside lerd.
+suggest_packages:
+  - name: lerd/debug
+    dev: true
+    reason: puts your own timeline rows, log lines and tabs in lerd's Requests lens
+    docs: https://lerd.sh/features/debug-package/
+
+# The phases of a request on an HttpKernel app: booting the kernel, the router
+# listener matching the route, handling the request (listeners, controller and
+# the view listeners after it) and the work done after the response went out.
+devtools:
+  captures:
+    # The matched route's raw parameters, read once routing has put them on the
+    # request, so the Debug window can mask one in the path by its name.
+    - kind: route_params
+      class: Symfony\Component\HttpKernel\Controller\ControllerResolver
+      method: getController
+      name: arg:1.prop:attributes.method:all._route_params
+    - kind: span
+      class: Symfony\Component\HttpKernel\Kernel
+      method: boot
+      label: Bootstrap
+    - kind: span
+      class: Symfony\Component\HttpKernel\EventListener\RouterListener
+      method: onKernelRequest
+      label: Routing
+    - kind: span
+      class: Symfony\Component\HttpKernel\HttpKernel
+      method: handleRaw
+      label: Handle
+    - kind: span
+      class: Symfony\Component\HttpKernel\Kernel
+      method: terminate
+      label: Terminate

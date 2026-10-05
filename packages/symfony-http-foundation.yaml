@@ -1,0 +1,16 @@
+package: symfony/http-foundation
+
+# Sending the response is the last phase of a request on every framework built
+# on HttpFoundation, Laravel included, so the span lives with the package. A
+# Symfony session is read as it saves, which is what it holds when the request
+# is done.
+devtools:
+  captures:
+    - kind: span
+      class: Symfony\Component\HttpFoundation\Response
+      method: send
+      label: Send response
+    - kind: session
+      class: Symfony\Component\HttpFoundation\Session\Session
+      method: save
+      name: this.method:getName

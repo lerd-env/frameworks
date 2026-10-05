@@ -146,9 +146,70 @@ commands:
 
 doctor:
   migrate_command: extension-setup
-# Scheduler tasks. Every task extends AbstractTask and does its work in
-# execute(), which is the closest thing TYPO3 has to a queued job.
+# The phases of a TYPO3 request: booting, matching the site and the page, the
+# frontend or backend middleware stack, the page handler at its bottom, each
+# Extbase controller and Fluid view inside it, and sending the response. The
+# frontend route is the page uid, the backend one the route identifier. The
+# user is read as the frontend or backend user aspect is set.
+# Scheduler tasks do their work in execute(), the closest thing TYPO3 has to a
+# queued job, and messenger:consume only loops.
 devtools:
+  exclude_commands: [messenger:consume]
   jobs:
     - extends: TYPO3\CMS\Scheduler\Task\AbstractTask
       method: execute
+  captures:
+    - kind: span
+      class: TYPO3\CMS\Core\Core\Bootstrap
+      method: init
+      label: Bootstrap
+    - kind: span
+      class: TYPO3\CMS\Core\Routing\SiteMatcher
+      method: matchRequest
+      label: Routing
+    - kind: span
+      class: TYPO3\CMS\Core\Routing\PageRouter
+      method: matchRequest
+      label: Routing
+    - kind: span
+      class: TYPO3\CMS\Frontend\Http\Application
+      method: handle
+      label: Middleware
+    - kind: span
+      class: TYPO3\CMS\Backend\Http\Application
+      method: handle
+      label: Middleware
+    - kind: span
+      class: TYPO3\CMS\Frontend\Http\RequestHandler
+      method: handle
+      label: Handle
+    - kind: span
+      implements: TYPO3\CMS\Extbase\Mvc\Controller\ControllerInterface
+      method: processRequest
+      name: this
+      label: Controller
+    - kind: span
+      class: TYPO3Fluid\Fluid\View\AbstractTemplateView
+      method: render
+      name: arg:1
+      label: View
+    - kind: span
+      class: TYPO3\CMS\Core\Http\AbstractApplication
+      method: sendResponse
+      label: Send response
+    - kind: route
+      class: TYPO3\CMS\Frontend\Page\PageInformation
+      method: setId
+      name: arg:1
+    - kind: route
+      class: TYPO3\CMS\Backend\Routing\RouteResult
+      method: getRoute
+      name: this.method:getRouteName
+    - kind: auth
+      class: TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication
+      method: createUserAspect
+      name: this.method:getUserId
+    - kind: auth
+      class: TYPO3\CMS\Core\Middleware\BackendUserAuthenticator
+      method: setBackendUserAspect
+      name: arg:1.method:getUserId

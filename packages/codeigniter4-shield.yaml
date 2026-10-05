@@ -1,0 +1,19 @@
+package: codeigniter4/shield
+
+# Who a request runs as on Shield: the user a session login starts with, the
+# user a token, HMAC or JWT request logs in on every call, and on a request
+# riding an existing session the user Shield loads by the id it keeps there.
+devtools:
+  captures:
+    - kind: auth
+      class: CodeIgniter\Shield\Authentication\Authenticators\Session
+      method: startLogin
+      name: arg:1.prop:id
+    - kind: auth
+      implements: CodeIgniter\Shield\Authentication\AuthenticatorInterface
+      method: login
+      name: arg:1.prop:id
+    - kind: auth
+      class: CodeIgniter\Shield\Models\UserModel
+      method: findById
+      name: arg:1

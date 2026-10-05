@@ -1,0 +1,9 @@
+package: symfony/security-core
+
+# Who a request runs as on Symfony: the token the firewall stores once it has
+# authenticated someone, its user named by getUserIdentifier.
+devtools:
+  captures:
+    - kind: auth
+      class: Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage
+      method: setToken

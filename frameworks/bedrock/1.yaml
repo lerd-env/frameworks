@@ -83,10 +83,45 @@ notifications:
   # anything a site's own code does.
   nplusone: false
 
-# Background jobs. Action Scheduler is what WordPress plugins queue work
-# through; the action reports the hook it runs rather than its own class.
+# WordPress is mostly functions, so only its classes can be timed: the main
+# query on the front end, and on the REST API the whole request and the
+# endpoint inside it. The route is the rewrite rule the front end matched, or
+# the REST path dispatched. The user is read as WordPress opens the session
+# tokens of a cookie it has already validated. Action Scheduler is what
+# plugins queue work through; its action reports the hook it runs.
 devtools:
   jobs:
     - class: ActionScheduler_Action
       method: execute
       name: this.method:get_hook
+  captures:
+    # The query variables the request resolved to, a post's name or a category.
+    - kind: route_params
+      class: WP
+      method: send_headers
+      name: this.prop:query_vars
+    - kind: span
+      class: WP
+      method: query_posts
+      label: Query
+    - kind: route
+      class: WP
+      method: handle_404
+      name: this.prop:matched_rule
+    - kind: span
+      class: WP_REST_Server
+      method: serve_request
+      label: Handle
+    - kind: span
+      class: WP_REST_Server
+      method: respond_to_request
+      name: arg:1.method:get_route
+      label: Controller
+    - kind: route
+      class: WP_REST_Server
+      method: dispatch
+      name: arg:1.method:get_route
+    - kind: auth
+      class: WP_Session_Tokens
+      method: get_instance
+      name: arg:1
