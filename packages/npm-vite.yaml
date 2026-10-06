@@ -1,0 +1,10 @@
+package: "vite"
+type: npm
+
+browser:
+  preset: vite
+  label: Vite
+  events:
+    - event: vite:preloadError
+      label: Vite chunk failed to load
+      message: payload.message

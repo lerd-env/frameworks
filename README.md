@@ -222,7 +222,11 @@ list meaning every framework. The package wins a name collision with the version
 file, which is what lets an entry move here without being shadowed by the copy
 it left behind. List the package under `packages` in `frameworks/index.json` as
 `{"name": "vendor/package"}`, which is where lerd reads the set from; a file
-nothing lists is never fetched.
+nothing lists is never fetched. Only composer names belong there: every lerd
+since the package layer fetches each entry of `packages` on `lerd update` and
+refuses a name composer could not publish, so anything else, an npm package
+say, gets an index key of its own that those versions never read. The schema
+guard refuses a non-composer name under `packages`.
 
 A capture seam names a method the Debug window should report, for a library
 whose own call is the event rather than the start of one. It belongs to the
@@ -262,6 +266,33 @@ removes:
   setup: ["Publish Horizon assets"]   # a setup step by its label
   doctor: [horizon_supervisor]
 ```
+
+#### Browser events
+
+A frontend library reports what goes wrong through DOM events of its own, which
+lerd's browser capture records once it knows their names. The package that ships
+the library declares them in a `browser:` block, and lerd offers them as a preset
+for any project that requires the package:
+
+```yaml
+package: "@inertiajs/vue3"
+type: npm                  # optional: composer (the default) or npm
+browser:
+  preset: inertia          # packages sharing a preset are offered as one
+  label: Inertia.js
+  events:
+    - event: inertia:invalid
+      label: Inertia invalid response
+      message: detail.response          # where in the event the message is
+```
+
+An npm package lives in `packages/npm-<scope>-<name>.yaml`, its scope's `@`
+dropped (`npm-inertiajs-vue3.yaml`, `npm-vite.yaml`), and is listed in the index
+under `npm_packages` rather than `packages`: a lerd that predates npm packages
+fetches every entry of `packages` on `lerd update` and would count an npm name
+as a failure, while it never reads a key it does not know. It also reads a
+composer package's file without the keys it does not know, so a `browser:`
+block reaches only the versions that use it.
 
 The copies a package was lifted out of stay in the version files that already
 shipped them: an install whose binary predates the package layer still reads

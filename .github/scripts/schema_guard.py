@@ -14,8 +14,31 @@ Usage: schema_guard.py <published-dir> <candidate-dir> [glob]
 """
 
 import sys
+import json
+import re
 import pathlib
 import yaml
+
+# Every lerd since the package layer fetches each entry of the index's
+# `packages` on `lerd update` and refuses a name composer could not publish, so
+# an entry that is not a composer name fails a refresh on every install. Other
+# package kinds take an index key of their own, which those versions never read.
+COMPOSER_NAME = re.compile(r"^[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*$")
+
+
+def index_failures(candidate_dir):
+    path = pathlib.Path(candidate_dir) / "frameworks" / "index.json"
+    try:
+        index = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+    return [
+        f"frameworks/index.json: `{entry.get('name')}` under `packages` is not a composer name; "
+        "every lerd since the package layer fetches each entry there on update and refuses it. "
+        "List other package kinds under their own key, such as `npm_packages`"
+        for entry in index.get("packages", [])
+        if not COMPOSER_NAME.match(str(entry.get("name", "")))
+    ]
 
 # A key whose published values number no more than this across the whole store
 # is treated as a closed set, so a value outside it is worth a second look.
@@ -97,7 +120,7 @@ def main():
     candidate = profile(candidate_dir, pattern)
     enums = closed_sets(published)
 
-    failures, warnings = [], []
+    failures, warnings = index_failures(candidate_dir), []
 
     for rel, entry in published.items():
         if rel not in candidate:

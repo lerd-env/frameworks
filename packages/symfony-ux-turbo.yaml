@@ -1,0 +1,12 @@
+package: symfony/ux-turbo
+
+browser:
+  preset: turbo
+  label: Hotwire Turbo
+  events:
+    - event: turbo:fetch-request-error
+      label: Turbo request failed
+      message: detail.error.message
+    - event: turbo:frame-missing
+      label: Turbo frame missing
+      message: detail.response.status

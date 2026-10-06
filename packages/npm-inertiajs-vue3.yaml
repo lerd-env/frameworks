@@ -1,0 +1,13 @@
+package: "@inertiajs/vue3"
+type: npm
+
+browser:
+  preset: inertia
+  label: Inertia.js
+  events:
+    - event: inertia:invalid
+      label: Inertia invalid response
+      message: detail.response
+    - event: inertia:exception
+      label: Inertia exception
+      message: detail.exception.message

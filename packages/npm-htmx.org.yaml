@@ -1,0 +1,14 @@
+package: "htmx.org"
+type: npm
+
+browser:
+  preset: htmx
+  label: htmx
+  events:
+    - event: htmx:responseError
+      label: htmx error response
+      message: detail.xhr.status
+    - event: htmx:sendError
+      label: htmx request not sent
+    - event: htmx:swapError
+      label: htmx swap failed

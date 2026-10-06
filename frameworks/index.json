@@ -190,10 +190,21 @@
     {"name": "symfony/panther"},
     {"name": "symfony/redis-messenger"},
     {"name": "symfony/scheduler"},
+    {"name": "symfony/ux-turbo"},
     {"name": "tempest/command-bus"},
     {"name": "tempest/database"},
     {"name": "typesense/typesense-php"},
     {"name": "typo3/cms-scheduler"},
     {"name": "vladimir-yuldashev/laravel-queue-rabbitmq"}
+  ],
+  "npm_packages": [
+    {"name": "@hotwired/turbo"},
+    {"name": "@hotwired/turbo-rails"},
+    {"name": "@inertiajs/inertia"},
+    {"name": "@inertiajs/react"},
+    {"name": "@inertiajs/svelte"},
+    {"name": "@inertiajs/vue3"},
+    {"name": "htmx.org"},
+    {"name": "vite"}
   ]
 }
