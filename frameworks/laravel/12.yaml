@@ -85,6 +85,7 @@ env:
         - AWS_ENDPOINT=http://lerd-rustfs:9000
         - AWS_URL=http://localhost:9000/{{site}}
         - AWS_USE_PATH_STYLE_ENDPOINT=true
+        - FILESYSTEM_DISK=s3
     mailpit:
       detect:
         - key: MAIL_HOST

@@ -65,6 +65,19 @@ env:
         - REDIS_HOST=lerd-redis
         - REDIS_PORT=6379
         - REDIS_PASSWORD=
+    rustfs:
+      detect:
+        - key: FILESYSTEM_DRIVER
+          value_prefix: s3
+        - key: AWS_ENDPOINT
+      vars:
+        - AWS_ACCESS_KEY_ID=lerd
+        - AWS_SECRET_ACCESS_KEY=lerdpassword
+        - AWS_BUCKET={{site}}
+        - AWS_ENDPOINT=http://lerd-rustfs:9000
+        - AWS_URL=http://localhost:9000/{{site}}
+        - AWS_USE_PATH_STYLE_ENDPOINT=true
+        - FILESYSTEM_DRIVER=s3
     mailpit:
       detect:
         - key: MAIL_HOST

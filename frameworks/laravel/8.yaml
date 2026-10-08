@@ -75,7 +75,7 @@ env:
         - MEILISEARCH_NO_ANALYTICS=true
     rustfs:
       detect:
-        - key: FILESYSTEM_DISK
+        - key: FILESYSTEM_DRIVER
           value_prefix: s3
         - key: AWS_ENDPOINT
       vars:
@@ -85,6 +85,7 @@ env:
         - AWS_ENDPOINT=http://lerd-rustfs:9000
         - AWS_URL=http://localhost:9000/{{site}}
         - AWS_USE_PATH_STYLE_ENDPOINT=true
+        - FILESYSTEM_DRIVER=s3
     mailpit:
       detect:
         - key: MAIL_HOST
