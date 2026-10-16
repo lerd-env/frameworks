@@ -1,0 +1,47 @@
+# A Laravel package developed with Orchestra Testbench and served from its
+# workbench. Testbench boots its own Laravel skeleton from vendor/ and takes its
+# environment from testbench.yaml (SQLite unless the package says otherwise), so
+# lerd neither writes an env file nor wires services for it.
+name: testbench
+version: "11"
+label: Testbench
+color: "#475569"
+public_dir: vendor/orchestra/testbench-core/laravel/public
+
+# The skeleton finds the package's vendor through TESTBENCH_WORKING_PATH, which
+# testbench serve sets; testbench removes the vendor symlink it would otherwise use.
+nginx:
+  fastcgi_params:
+    TESTBENCH_WORKING_PATH: "{{root}}"
+
+php:
+  min: "8.3"
+  max: "8.5"
+
+detect:
+  - file: testbench.yaml
+
+composer: true
+npm: auto
+console: vendor/bin/testbench
+
+logs:
+  - path: vendor/orchestra/testbench-core/laravel/storage/logs/*.log
+    format: monolog
+
+setup:
+  # The skeleton's public/index.php reads the package's testbench.yaml from its
+  # bootstrap cache, which testbench writes when it discovers packages.
+  - label: Discover packages
+    command: php vendor/bin/testbench package:discover --ansi
+    default: true
+  - label: Build the workbench
+    command: php vendor/bin/testbench workbench:build --ansi
+    default: false
+
+commands:
+  - name: workbench:build
+    label: Build the workbench
+    command: php vendor/bin/testbench workbench:build --ansi
+    output: silent
+    icon: hammer

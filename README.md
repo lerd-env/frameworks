@@ -60,6 +60,7 @@ All of it is data. None of it ships in the binary.
 | <img src=".github/logos/statamic.svg" width="28" height="28" alt=""> | **Statamic** | `6` `5` `4` `3` | `statamic/cms` in composer.json |
 | <img src=".github/logos/symfony.svg" width="28" height="28" alt=""> | **Symfony** | `8` `7` `6` `5` `4` | `symfony.lock` file or `symfony/framework-bundle` in composer.json |
 | <img src=".github/logos/tempest.svg" width="28" height="28" alt=""> | **Tempest** | `3` | `tempest` file or `tempest/framework` in composer.json |
+| <img src=".github/logos/testbench.svg" width="28" height="28" alt=""> | **Testbench** | `11` | `testbench.yaml` file (a Laravel package served from its Orchestra Testbench workbench) |
 | <img src=".github/logos/typo3.svg" width="28" height="28" alt=""> | **TYPO3** | `14` `13` `12` `11` `10` | `typo3/cms-core` in composer.json or `public/typo3` directory |
 | <img src=".github/logos/winter.svg" width="28" height="28" alt=""> | **Winter CMS** | `1` | `winter/wn-system-module` in composer.json |
 | <img src=".github/logos/wordpress.svg" width="28" height="28" alt=""> | **WordPress** | `7` `6` `5` | `wp-login.php` file or `wp-config.php` file |
