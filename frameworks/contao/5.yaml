@@ -1,0 +1,86 @@
+name: contao
+version: "5"
+label: Contao
+color: "#f47c00"
+public_dir: public
+create: composer create-project contao/managed-edition:^5.0
+php:
+  min: "8.1"
+  max: "8.5"
+
+# Contao runs on Symfony but ships no symfony.lock and no flex-require, so the
+# Symfony definition never claims it. The managed edition requires the manager
+# bundle; a project assembled by hand requires the core bundle.
+detect:
+  - composer: contao/manager-bundle
+  - composer: contao/core-bundle
+
+env:
+  file: .env.local
+  format: dotenv
+  # The site's URL is kept per root page in the database, not in the env.
+  url_key: none
+  # Contao supports MySQL and MariaDB only.
+  default_service: mysql
+  services:
+    mysql:
+      detect:
+        - key: DATABASE_URL
+          value_prefix: "mysql://"
+        - key: DATABASE_URL
+          value_prefix: "mariadb://"
+      vars:
+        - "DATABASE_URL=mysql://root:lerd@lerd-mysql:3306/{{site}}"
+    mailpit:
+      detect:
+        - key: MAILER_DSN
+      vars:
+        - "MAILER_DSN=smtp://lerd-mailpit:1025"
+
+composer: auto
+npm: auto
+console: vendor/bin/contao-console
+# Run after a connection change: the compiled container is built against the
+# old database and answers every request with an error.
+cache_command: cache:clear
+
+workers:
+  # Contao's cron runs its scheduled jobs and, since 5.1, its messenger queue;
+  # without a real cron it falls back to running them on page views.
+  schedule:
+    label: Cron
+    icon: clock
+    command: vendor/bin/contao-console contao:cron
+    schedule: minutely
+
+logs:
+  - path: var/logs/*.log
+    format: monolog
+
+setup:
+  - label: Run migrations
+    command: vendor/bin/contao-console contao:migrate --no-interaction
+    default: true
+
+commands:
+  - name: contao:migrate
+    label: Run migrations
+    command: vendor/bin/contao-console contao:migrate --no-interaction
+    description: Update the database schema and run pending migrations
+    output: text
+    icon: database
+  - name: cache:clear
+    label: Clear cache
+    command: vendor/bin/contao-console cache:clear
+    description: Clear and warm up the Symfony cache
+    output: silent
+    icon: broom
+  - name: contao:user:create
+    label: Create a back end user
+    command: vendor/bin/contao-console contao:user:create --admin
+    description: Add an administrator to log in to the back end at /contao
+    output: terminal
+    icon: key
+
+doctor:
+  migrate_command: contao:migrate

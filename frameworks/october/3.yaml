@@ -1,0 +1,192 @@
+name: october
+version: "3"
+label: October CMS
+color: "#db6a26"
+# October serves from the project root out of the box, where .env, composer.json
+# and vendor/ would answer over HTTP too. `october:mirror public` builds a public
+# folder of symlinks to the files that should be served, and that is the root
+# lerd serves; setup builds it when it is missing.
+public_dir: public
+create: composer create-project october/october:^3.0
+php:
+  min: "8.0"
+  max: "8.3"
+
+# October ships artisan and requires laravel/framework, so the Laravel
+# definition would claim it too. october/rain is its own core, whose major is
+# October's, and Winter (the fork) requires neither.
+detect:
+  - composer: october/rain
+
+env:
+  file: .env
+  example_file: .env.example
+  format: dotenv
+  key_generation:
+    env_key: APP_KEY
+    command: key:generate
+    fallback_prefix: "base64:"
+  sqlite:
+    detect:
+      - key: DB_CONNECTION
+        value_prefix: sqlite
+    vars:
+      - DB_CONNECTION=sqlite
+      - DB_DATABASE=storage/database.sqlite
+  services:
+    mysql:
+      detect:
+        - key: DB_CONNECTION
+          value_prefix: mysql
+      vars:
+        - DB_CONNECTION=mysql
+        - DB_HOST=lerd-mysql
+        - DB_PORT=3306
+        - DB_DATABASE={{site}}
+        - DB_USERNAME=root
+        - DB_PASSWORD=lerd
+    postgres:
+      detect:
+        - key: DB_CONNECTION
+          value_prefix: pgsql
+      vars:
+        - DB_CONNECTION=pgsql
+        - DB_HOST=lerd-postgres
+        - DB_PORT=5432
+        - DB_DATABASE={{site}}
+        - DB_USERNAME=postgres
+        - DB_PASSWORD=lerd
+    redis:
+      detect:
+        - key: REDIS_HOST
+      vars:
+        - REDIS_HOST=lerd-redis
+        - REDIS_PORT=6379
+        - REDIS_PASSWORD=
+    rustfs:
+      detect:
+        - key: FILESYSTEM_DISK
+          value_prefix: s3
+        - key: AWS_ENDPOINT
+      vars:
+        - AWS_ACCESS_KEY_ID=lerd
+        - AWS_SECRET_ACCESS_KEY=lerdpassword
+        - AWS_BUCKET={{site}}
+        - AWS_ENDPOINT=http://lerd-rustfs:9000
+        - AWS_URL=http://localhost:9000/{{site}}
+        - AWS_USE_PATH_STYLE_ENDPOINT=true
+        - FILESYSTEM_DISK=s3
+    mailpit:
+      detect:
+        - key: MAIL_HOST
+      vars:
+        - MAIL_MAILER=smtp
+        - MAIL_HOST=lerd-mailpit
+        - MAIL_PORT=1025
+        - MAIL_USERNAME=null
+        - MAIL_PASSWORD=null
+        - MAIL_ENCRYPTION=null
+
+composer: auto
+npm: auto
+console: artisan
+# Run after a connection change: October caches the compiled config and the CMS
+# object cache, and both answer from the old database until they are dropped.
+cache_command: cache:clear
+
+workers:
+  queue:
+    label: Queue Worker
+    icon: queue
+    command: php artisan queue:work --queue=default --tries=3 --timeout=60
+    tune_command: php artisan queue:work --queue={queue} --tries={tries} --timeout={timeout}
+    restart_command: php artisan queue:restart
+    requires_service:
+      name: redis
+      when_env: QUEUE_CONNECTION=redis
+    restart: always
+  schedule:
+    label: Task Scheduler
+    icon: clock
+    command: php artisan schedule:run
+    schedule: minutely
+logs:
+  - path: storage/logs/*.log
+    format: monolog
+
+setup:
+  # Setup steps run without a shell, and the mirror refuses a folder that is
+  # not there yet, so creating it is a step of its own.
+  - label: mkdir -p public
+    command: mkdir -p public
+    default: true
+    check:
+      missing_file: public
+  - label: php artisan october:mirror public --relative
+    command: php artisan october:mirror public --relative
+    default: true
+    check:
+      missing_file: public
+  - label: php artisan october:migrate
+    command: php artisan october:migrate
+    default: true
+  # Tailor's content tables come from the theme's blueprints and are built by
+  # their own command; until then any page that reads them fails.
+  - label: php artisan tailor:migrate
+    command: php artisan tailor:migrate
+    default: true
+
+tinker:
+  command: ["artisan", "tinker"]
+  execute_flag: "--execute"
+  requires_package: laravel/tinker
+  requires_file: artisan
+
+commands:
+  - name: october:migrate
+    label: Run migrations
+    command: php artisan october:migrate
+    description: Apply outstanding module and plugin migrations
+    output: silent
+    icon: database
+  - name: tailor:migrate
+    label: Migrate Tailor
+    command: php artisan tailor:migrate
+    description: Build the content tables the theme's blueprints describe
+    output: silent
+    icon: database
+  - name: cache:clear
+    label: Clear all caches
+    command: php artisan cache:clear
+    description: Drop the application and CMS caches
+    output: silent
+    icon: broom
+  - name: october:mirror
+    label: Rebuild the public folder
+    command: mkdir -p public && php artisan october:mirror public --relative
+    description: Relink public/ to the files October serves, after adding a plugin or theme
+    output: silent
+    icon: link
+  - name: plugin:refresh
+    label: Refresh a plugin
+    command: php artisan plugin:refresh
+    description: Roll a plugin's tables back and migrate them again
+    output: text
+    icon: refresh
+    confirm: true
+
+doctor:
+  migrate_command: october:migrate
+  checks:
+    - name: app_debug
+      type: env_combo
+      when:
+        APP_ENV: production
+      warn_if:
+        APP_DEBUG: "true"
+      detail: "APP_DEBUG is on while APP_ENV=production, so stack traces and config will leak. Turn debug off."
+    - name: public_mirror
+      type: command
+      command: test -d public
+      fix: october:mirror
+      detail: "public/ is missing, so nothing is served: October builds it with `october:mirror public`, and serving the project root instead would put .env and vendor/ on the web."

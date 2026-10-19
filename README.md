@@ -15,10 +15,15 @@
   <img src=".github/logos/bedrock.svg" width="44" height="44" alt="Bedrock" title="Bedrock">
   <img src=".github/logos/cakephp.svg" width="44" height="44" alt="CakePHP" title="CakePHP">
   <img src=".github/logos/codeigniter.svg" width="44" height="44" alt="CodeIgniter" title="CodeIgniter">
+  <img src=".github/logos/contao.svg" width="44" height="44" alt="Contao" title="Contao">
+  <img src=".github/logos/craft.svg" width="44" height="44" alt="Craft CMS" title="Craft CMS">
   <img src=".github/logos/drupal.svg" width="44" height="44" alt="Drupal" title="Drupal">
+  <img src=".github/logos/joomla.svg" width="44" height="44" alt="Joomla!" title="Joomla!">
+  <img src=".github/logos/kirby.svg" width="44" height="44" alt="Kirby" title="Kirby">
   <img src=".github/logos/laravel.svg" width="44" height="44" alt="Laravel" title="Laravel">
   <img src=".github/logos/lumen.svg" width="44" height="44" alt="Lumen" title="Lumen">
   <img src=".github/logos/magento.svg" width="44" height="44" alt="Magento" title="Magento">
+  <img src=".github/logos/october.svg" width="44" height="44" alt="October CMS" title="October CMS">
   <img src=".github/logos/statamic.svg" width="44" height="44" alt="Statamic" title="Statamic">
   <img src=".github/logos/symfony.svg" width="44" height="44" alt="Symfony" title="Symfony">
   <img src=".github/logos/tempest.svg" width="44" height="44" alt="Tempest" title="Tempest">
@@ -30,7 +35,7 @@
 
 When you run `lerd link` on a project, Lerd detects which framework it is and pulls the matching definition from this store — then it knows how to serve it, which workers to run, how to set up its `.env`, how to scaffold it, and how to health-check it. Everything is a versioned YAML file. Add a framework here and every Lerd install can use it within 24 hours, with no new Lerd release and no Go code.
 
-That's the whole point: **Lerd is framework-agnostic, and this repo is where that agnosticism lives.** Laravel, Symfony, WordPress, Drupal, CakePHP, CodeIgniter, Statamic, Winter CMS, Magento, Tempest, and Yii are all defined here — not hardcoded in the binary — and so is whatever framework you add next.
+That's the whole point: **Lerd is framework-agnostic, and this repo is where that agnosticism lives.** Laravel, Symfony, WordPress, Drupal, CakePHP, CodeIgniter, Statamic, Winter CMS, October CMS, Magento, Tempest, Yii, Slim, Laminas, Contao, Craft CMS, Joomla!, ExpressionEngine, Kirby, Jigsaw, and Sculpin are all defined here — not hardcoded in the binary — and so is whatever framework you add next.
 
 ## What a definition powers
 
@@ -53,10 +58,20 @@ All of it is data. None of it ships in the binary.
 | <img src=".github/logos/bedrock.svg" width="28" height="28" alt=""> | **Bedrock** | `1` | `web/wp-config.php` file or `web/wp/wp-login.php` file |
 | <img src=".github/logos/cakephp.svg" width="28" height="28" alt=""> | **CakePHP** | `5` `4` `3` | `bin/cake` file or `cakephp/cakephp` in composer.json |
 | <img src=".github/logos/codeigniter.svg" width="28" height="28" alt=""> | **CodeIgniter** | `4` `3` | `spark` file or `codeigniter4/framework` in composer.json |
+| <img src=".github/logos/contao.svg" width="28" height="28" alt=""> | **Contao** | `6` `5` | `contao/manager-bundle` or `contao/core-bundle` in composer.json |
+| <img src=".github/logos/craft.svg" width="28" height="28" alt=""> | **Craft CMS** | `5` `4` | `craftcms/cms` in composer.json |
 | <img src=".github/logos/drupal.svg" width="28" height="28" alt=""> | **Drupal** | `11` `10` `9` `8` | `drupal/core-recommended` or `drupal/core` in composer.json |
+|  | **ExpressionEngine** | `7` | `system/ee/ExpressionEngine/Boot/boot.php` file |
+|  | **Jigsaw** | `1` | `tightenco/jigsaw` in composer.json |
+| <img src=".github/logos/joomla.svg" width="28" height="28" alt=""> | **Joomla!** | `6` `5` | `administrator/manifests/files/joomla.xml` file |
+| <img src=".github/logos/kirby.svg" width="28" height="28" alt=""> | **Kirby** | `5` `4` | `getkirby/cms` in composer.json or `kirby/bootstrap.php` file |
+|  | **Laminas** | `3` | `laminas/laminas-mvc` or `zendframework/zend-mvc` in composer.json |
 | <img src=".github/logos/laravel.svg" width="28" height="28" alt=""> | **Laravel** | `13` `12` `11` `10` `9` `8` `7` `6` | `artisan` file or `laravel/framework` in composer.json |
 | <img src=".github/logos/lumen.svg" width="28" height="28" alt=""> | **Lumen** | `11` `10` `9` `8` `7` `6` | `laravel/lumen-framework` in composer.json |
 | <img src=".github/logos/magento.svg" width="28" height="28" alt=""> | **Magento** | `2` | `bin/magento` file or `magento/product-community-edition` in composer.json |
+| <img src=".github/logos/october.svg" width="28" height="28" alt=""> | **October CMS** | `4` `3` | `october/rain` in composer.json |
+|  | **Sculpin** | `3` | `sculpin/sculpin` in composer.json |
+|  | **Slim** | `4` | `slim/slim` in composer.json |
 | <img src=".github/logos/statamic.svg" width="28" height="28" alt=""> | **Statamic** | `6` `5` `4` `3` | `statamic/cms` in composer.json |
 | <img src=".github/logos/symfony.svg" width="28" height="28" alt=""> | **Symfony** | `8` `7` `6` `5` `4` | `symfony.lock` file or `symfony/framework-bundle` in composer.json |
 | <img src=".github/logos/tempest.svg" width="28" height="28" alt=""> | **Tempest** | `3` | `tempest` file or `tempest/framework` in composer.json |

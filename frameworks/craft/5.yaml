@@ -1,0 +1,93 @@
+name: craft
+version: "5"
+label: Craft CMS
+color: "#e5422b"
+public_dir: web
+create: composer create-project craftcms/craft:^5.0
+php:
+  min: "8.2"
+  max: "8.5"
+
+# Craft is built on Yii 2, but a project requires craftcms/cms rather than
+# yiisoft/yii2, so the Yii definition never claims it.
+detect:
+  - composer: craftcms/cms
+
+env:
+  file: .env
+  example_file: .env.example.dev
+  format: dotenv
+  url_key: PRIMARY_SITE_URL
+  key_generation:
+    env_key: CRAFT_SECURITY_KEY
+    command: setup/security-key
+  default_service: mysql
+  services:
+    mysql:
+      detect:
+        - key: CRAFT_DB_DRIVER
+          value_prefix: mysql
+      vars:
+        - CRAFT_DB_DRIVER=mysql
+        - CRAFT_DB_SERVER=lerd-mysql
+        - CRAFT_DB_PORT=3306
+        - CRAFT_DB_DATABASE={{site}}
+        - CRAFT_DB_USER=root
+        - CRAFT_DB_PASSWORD=lerd
+    postgres:
+      detect:
+        - key: CRAFT_DB_DRIVER
+          value_prefix: pgsql
+      vars:
+        - CRAFT_DB_DRIVER=pgsql
+        - CRAFT_DB_SERVER=lerd-postgres
+        - CRAFT_DB_PORT=5432
+        - CRAFT_DB_DATABASE={{site}}
+        - CRAFT_DB_USER=postgres
+        - CRAFT_DB_PASSWORD=lerd
+
+composer: auto
+npm: auto
+console: craft
+cache_command: clear-caches/all
+
+workers:
+  queue:
+    label: Queue Worker
+    icon: queue
+    command: php craft queue/listen --verbose
+    restart: always
+
+logs:
+  - path: storage/logs/*.log
+    format: raw
+
+# Craft's installer creates the first user and site interactively, so lerd
+# leaves it to `php craft install` or the browser at /admin/install.
+setup:
+  - label: Apply migrations and project config
+    command: php craft up --interactive=0
+    default: false
+
+commands:
+  - name: up
+    label: Run migrations
+    command: php craft up --interactive=0
+    description: Run pending migrations and apply project config changes
+    output: text
+    icon: database
+  - name: clear-caches
+    label: Clear all caches
+    command: php craft clear-caches/all
+    description: Clear the data, template and asset caches
+    output: silent
+    icon: broom
+  - name: project-config-apply
+    label: Apply project config
+    command: php craft project-config/apply
+    description: Load config/project YAML into the database
+    output: text
+    icon: refresh
+
+doctor:
+  migrate_command: up

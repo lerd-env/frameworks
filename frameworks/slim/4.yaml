@@ -1,0 +1,25 @@
+name: slim
+version: "4"
+label: Slim
+color: "#719e40"
+public_dir: public
+create: composer create-project slim/slim-skeleton:^4.0
+php:
+  min: "7.4"
+  max: "8.5"
+
+detect:
+  - composer: slim/slim
+
+# The skeleton keeps its settings in app/settings.php and reads no dotenv, so
+# there is no file for lerd to write connection values into.
+env:
+  file: ""
+  format: none
+
+composer: auto
+npm: auto
+
+logs:
+  - path: logs/*.log
+    format: monolog

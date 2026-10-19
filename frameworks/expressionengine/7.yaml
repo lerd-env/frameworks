@@ -1,0 +1,47 @@
+name: expressionengine
+version: "7"
+label: ExpressionEngine
+color: "#0d1a2b"
+public_dir: .
+php:
+  min: "7.2"
+  max: "8.4"
+
+# ExpressionEngine is installed from its release zip rather than composer, so it
+# is recognised by its boot file, with the major read off the version constant.
+detect:
+  - file: system/ee/ExpressionEngine/Boot/boot.php
+    version_file: system/ee/legacy/libraries/Core.php
+    version_pattern: "define\\('APP_VER',\\s*'([^']+)'\\)"
+
+# EE's install guide keeps system/ out of the web root; served from the root
+# as here, nginx has to refuse it instead.
+nginx:
+  snippet: |
+    location ^~ /system/ {
+        return 404;
+    }
+
+# system/user/config/config.php is written by the web installer at admin.php,
+# which takes the database it is given, so lerd leaves the file to it.
+env:
+  file: ""
+  format: none
+
+composer: false
+npm: false
+console: system/ee/eecli.php
+
+commands:
+  - name: cache:clear
+    label: Clear caches
+    command: php system/ee/eecli.php cache:clear
+    description: Clear the page, tag and database caches
+    output: silent
+    icon: broom
+  - name: migrate
+    label: Run migrations
+    command: php system/ee/eecli.php migrate:all
+    description: Run pending core and add-on migrations
+    output: text
+    icon: database

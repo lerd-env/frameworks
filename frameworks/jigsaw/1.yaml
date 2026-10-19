@@ -1,0 +1,33 @@
+name: jigsaw
+version: "1"
+label: Jigsaw
+color: "#3f4f5f"
+# Jigsaw is a static site generator: a local build lands in build_local, and
+# that folder is the whole site.
+public_dir: build_local
+php:
+  min: "8.2"
+  max: "8.5"
+
+detect:
+  - composer: tightenco/jigsaw
+
+env:
+  file: ""
+  format: none
+
+composer: auto
+npm: auto
+
+setup:
+  - label: Build the site
+    command: vendor/bin/jigsaw build
+    default: true
+
+commands:
+  - name: build
+    label: Build the site
+    command: vendor/bin/jigsaw build
+    description: Regenerate build_local from the source folder
+    output: text
+    icon: refresh

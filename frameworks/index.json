@@ -136,6 +136,99 @@
       "detect": [
         {"composer": "yiisoft/yii2"}
       ]
+    },
+    {
+      "name": "slim",
+      "label": "Slim",
+      "versions": ["4"],
+      "latest": "4",
+      "detect": [
+        {"composer": "slim/slim"}
+      ]
+    },
+    {
+      "name": "laminas",
+      "label": "Laminas",
+      "versions": ["3"],
+      "latest": "3",
+      "detect": [
+        {"composer": "laminas/laminas-mvc"},
+        {"composer": "zendframework/zend-mvc"}
+      ]
+    },
+    {
+      "name": "contao",
+      "label": "Contao",
+      "versions": ["6", "5"],
+      "latest": "6",
+      "detect": [
+        {"composer": "contao/manager-bundle"},
+        {"composer": "contao/core-bundle"}
+      ]
+    },
+    {
+      "name": "craft",
+      "label": "Craft CMS",
+      "versions": ["5", "4"],
+      "latest": "5",
+      "detect": [
+        {"composer": "craftcms/cms"}
+      ]
+    },
+    {
+      "name": "expressionengine",
+      "label": "ExpressionEngine",
+      "versions": ["7"],
+      "latest": "7",
+      "detect": [
+        {"file": "system/ee/ExpressionEngine/Boot/boot.php", "version_file": "system/ee/legacy/libraries/Core.php", "version_pattern": "define\\('APP_VER',\\s*'([^']+)'\\)"}
+      ]
+    },
+    {
+      "name": "jigsaw",
+      "label": "Jigsaw",
+      "versions": ["1"],
+      "latest": "1",
+      "detect": [
+        {"composer": "tightenco/jigsaw"}
+      ]
+    },
+    {
+      "name": "joomla",
+      "label": "Joomla!",
+      "versions": ["6", "5"],
+      "latest": "6",
+      "detect": [
+        {"file": "administrator/manifests/files/joomla.xml", "version_file": "libraries/src/Version.php", "version_pattern": "MAJOR_VERSION\\s*=\\s*(\\d+)"}
+      ]
+    },
+    {
+      "name": "kirby",
+      "label": "Kirby",
+      "versions": ["5", "4"],
+      "latest": "5",
+      "detect": [
+        {"composer": "getkirby/cms"},
+        {"file": "kirby/bootstrap.php", "version_file": "kirby/composer.json", "version_pattern": "\"version\":\\s*\"([^\"]+)\""}
+      ]
+    },
+    {
+      "name": "october",
+      "label": "October CMS",
+      "versions": ["4", "3"],
+      "latest": "4",
+      "detect": [
+        {"composer": "october/rain"}
+      ]
+    },
+    {
+      "name": "sculpin",
+      "label": "Sculpin",
+      "versions": ["3"],
+      "latest": "3",
+      "detect": [
+        {"composer": "sculpin/sculpin"}
+      ]
     }
   ],
   "packages": [

@@ -1,0 +1,49 @@
+name: joomla
+version: "5"
+label: Joomla!
+color: "#5091cd"
+public_dir: .
+php:
+  min: "8.1"
+  max: "8.4"
+
+# Joomla is installed from its release package rather than composer, so it is
+# recognised by the manifest the package lays down, with the major read off the
+# version class.
+detect:
+  - file: administrator/manifests/files/joomla.xml
+    version_file: libraries/src/Version.php
+    version_pattern: 'MAJOR_VERSION\s*=\s*(\d+)'
+
+# configuration.php is a class of properties the web installer writes, a shape
+# none of lerd's env formats can edit, so the database is given to the installer
+# at /installation instead.
+env:
+  file: ""
+  format: none
+
+composer: false
+npm: false
+console: cli/joomla.php
+
+# No scheduler worker: Joomla's lazy scheduler runs due tasks on page views out
+# of the box, and `scheduler:run` exits non-zero whenever nothing is due, which
+# a minutely unit would report as a failing worker.
+
+logs:
+  - path: administrator/logs/*.php
+    format: raw
+
+commands:
+  - name: cache:clean
+    label: Clean expired cache
+    command: php cli/joomla.php cache:clean
+    description: Remove expired entries from the cache
+    output: silent
+    icon: broom
+  - name: update:extensions:check
+    label: Check extension updates
+    command: php cli/joomla.php update:extensions:check
+    description: List installed extensions that have an update available
+    output: text
+    icon: list

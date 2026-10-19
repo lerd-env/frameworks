@@ -1,0 +1,40 @@
+name: sculpin
+version: "3"
+label: Sculpin
+color: "#1e3a5f"
+# Sculpin is a static site generator: the dev environment writes to output_dev,
+# and that folder is the whole site.
+public_dir: output_dev
+php:
+  min: "7.4"
+  max: "8.4"
+
+detect:
+  - composer: sculpin/sculpin
+
+env:
+  file: ""
+  format: none
+
+composer: auto
+npm: auto
+
+workers:
+  watch:
+    label: Watch & rebuild
+    icon: refresh
+    command: vendor/bin/sculpin generate --watch
+    restart: always
+
+setup:
+  - label: Generate the site
+    command: vendor/bin/sculpin generate
+    default: true
+
+commands:
+  - name: generate
+    label: Generate the site
+    command: vendor/bin/sculpin generate
+    description: Regenerate output_dev from the source folder
+    output: text
+    icon: refresh
