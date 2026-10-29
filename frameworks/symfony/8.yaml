@@ -61,8 +61,11 @@ env:
       detect:
         - key: MEILISEARCH_HOST
         - key: MEILISEARCH_DSN
+        - key: MEILISEARCH_URL
       vars:
         - "MEILISEARCH_HOST=http://lerd-meilisearch:7700"
+        - "MEILISEARCH_URL=http://lerd-meilisearch:7700"
+        - "MEILISEARCH_PREFIX={{site}}_"
 
 composer: auto
 npm: auto
