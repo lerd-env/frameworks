@@ -73,6 +73,7 @@ env:
       vars:
         - MEILISEARCH_HOST=http://lerd-meilisearch:7700
         - MEILISEARCH_NO_ANALYTICS=true
+        - SCOUT_PREFIX={{site}}_
     rustfs:
       detect:
         - key: FILESYSTEM_DISK
