@@ -135,7 +135,6 @@ workers:
     restart: always
     check:
       composer: laravel/horizon
-      when_env: QUEUE_CONNECTION=redis
     conflicts_with:
       - queue
   # Mix rebuilds into public/, which nginx already serves, so unlike vite there
