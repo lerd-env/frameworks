@@ -11,6 +11,11 @@ workers:
     command: php artisan horizon
     reload_command: php artisan horizon:listen
     restart: always
+    # Horizon reads only Redis. Paired with composer so a binary that predates
+    # when_env still sees the rule it always did.
+    check:
+      composer: laravel/horizon
+      when_env: QUEUE_CONNECTION=redis
     conflicts_with:
       - queue
 
@@ -21,3 +26,13 @@ suggest_services:
     reason: Horizon runs its queues on Redis
   - name: valkey
     reason: Redis-compatible queues for Horizon
+
+doctor:
+  checks:
+    - name: horizon_queue_connection
+      type: env_combo
+      check:
+        composer: laravel/horizon
+      warn_if:
+        QUEUE_CONNECTION: database
+      detail: "Horizon only processes Redis queues, and QUEUE_CONNECTION is database. Set QUEUE_CONNECTION=redis to use Horizon, or run the queue worker for database jobs."
