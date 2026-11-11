@@ -10,6 +10,10 @@ php:
   # wp-cli unzips core and dumps databases in one process; 128M is not enough.
   cli_ini:
     memory_limit: 512M
+    # lerd's wp-cli phar bundles code PHP 8.5 deprecates; keep notices off stdout
+    # so piped wp output stays clean, and off the terminal for PHP's own ones.
+    display_errors: stderr
+    error_reporting: "24575"
 
 detect:
   - file: wp-login.php
@@ -46,6 +50,11 @@ npm: false
 vendor_bin_args:
   wp:
     - --allow-root
+
+# Without composer's wp-cli, lerd wp runs the wp-cli lerd pins in its tools
+# manifest, fetched on first use.
+vendor_bin_tools:
+  wp: wp-cli
 
 tinker:
   command: ["vendor/wp-cli/wp-cli/php/boot-fs.php", "eval", "--allow-root"]
