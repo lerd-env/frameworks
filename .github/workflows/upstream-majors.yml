@@ -1,0 +1,49 @@
+name: Upstream majors
+
+on:
+  schedule:
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+# Opens one issue per framework major that upstream released and the store has
+# no definition for yet. An issue with the same title, open or closed, is never
+# opened twice.
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Test the checker
+        run: python3 -m unittest discover -s .github/scripts -p "test_*.py"
+
+      - name: Find new majors
+        id: find
+        run: echo "found=$(python3 .github/scripts/check_upstream_majors.py)" >> "$GITHUB_OUTPUT"
+
+      - name: Open issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FOUND: ${{ steps.find.outputs.found }}
+        run: |
+          set -euo pipefail
+          echo "$FOUND" | jq -c '.[]' | while read -r fw; do
+            name=$(jq -r .name <<<"$fw")
+            label=$(jq -r .label <<<"$fw")
+            package=$(jq -r .package <<<"$fw")
+            latest=$(jq -r .latest <<<"$fw")
+            upstream=$(jq -r .upstream <<<"$fw")
+            title="$label $upstream is out"
+            if gh issue list --state all --search "\"$title\" in:title" --json title --jq '.[].title' | grep -qxF "$title"; then
+              echo "Already tracked: $title"
+              continue
+            fi
+            gh issue create --title "$title" --body "$package released a stable $upstream.x on Packagist, and the newest definition here is $latest. Add frameworks/$name/$upstream.yaml by copying $latest.yaml and checking its PHP range, workers, commands and env against the new release, then list it in frameworks/index.json. Packages under packages/ with a max for $name may need raising too."
+          done
