@@ -255,6 +255,7 @@
     {"name": "drupal/search_api_solr"},
     {"name": "drush/drush"},
     {"name": "elasticsearch/elasticsearch"},
+    {"name": "filament/filament"},
     {"name": "friendsofsymfony/elastica-bundle"},
     {"name": "gotenberg/gotenberg-php"},
     {"name": "helhum/typo3-console"},

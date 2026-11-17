@@ -112,6 +112,7 @@ definition your project resolved when its `composer.json` requires the package.
 | `drupal/search_api_solr` | suggests the `solr` service, ticked | Drupal 9+ |
 | `drush/drush` | `cron` worker, `site:install`, `cr`, `uli`, `updb`, `cex`, `cim` commands, 3 setup steps | Drupal 8+ |
 | `elasticsearch/elasticsearch` | suggests the `elasticsearch` service, ticked | any framework |
+| `filament/filament` | `filament:install`, `make:filament-user`, `filament:upgrade`, `filament:optimize`, `filament:optimize-clear` and five `make:filament-*` generator commands, 1 setup step, 2 doctor checks | Laravel 10+ |
 | `friendsofsymfony/elastica-bundle` | suggests the `elasticsearch` service, ticked | Symfony |
 | `gotenberg/gotenberg-php` | suggests the `gotenberg` service, ticked | any framework |
 | `helhum/typo3-console` | `setup` command | TYPO3 10-11 |
