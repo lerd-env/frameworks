@@ -1,0 +1,93 @@
+package: filament/filament
+frameworks:
+  - name: laravel
+    min: "10"
+
+commands:
+  - name: filament:install
+    label: Install panel
+    # Without a prompt the installer overwrites an existing panel provider.
+    command: >-
+      if grep -rqs 'extends PanelProvider' app; then
+      echo "A Filament panel already exists. Use New panel to add another." >&2; exit 1; fi;
+      php artisan filament:install --panels --no-interaction
+    description: Create the admin panel provider and publish Filament's assets
+    output: text
+    confirm: true
+    icon: arrow-down
+  - name: make:filament-user
+    label: Create admin user
+    command: php artisan make:filament-user
+    description: Create a user that can sign in to the Filament panel
+    # It prompts for name, email and password.
+    output: terminal
+    icon: key
+  - name: filament:upgrade
+    label: Upgrade Filament
+    command: php artisan filament:upgrade
+    description: Republish Filament's assets and clear the caches after a composer update
+    output: text
+    icon: arrow-up
+  - name: filament:optimize
+    label: Optimize Filament
+    command: php artisan filament:optimize
+    description: Cache Filament components and Blade icons
+    output: silent
+    icon: check
+  - name: filament:optimize-clear
+    label: Clear Filament cache
+    command: php artisan filament:optimize-clear
+    description: Remove the cached Filament components and Blade icons
+    output: silent
+    icon: broom
+  # The generators ask for the model, panel and options, so they open a terminal.
+  - name: make:filament-resource
+    label: New resource
+    command: php artisan make:filament-resource
+    description: Generate a Filament resource with its list, create and edit pages
+    output: terminal
+    icon: terminal
+  - name: make:filament-page
+    label: New page
+    command: php artisan make:filament-page
+    description: Generate a custom Filament page
+    output: terminal
+    icon: terminal
+  - name: make:filament-widget
+    label: New widget
+    command: php artisan make:filament-widget
+    description: Generate a Filament dashboard widget
+    output: terminal
+    icon: terminal
+  - name: make:filament-panel
+    label: New panel
+    command: php artisan make:filament-panel
+    description: Generate another Filament panel provider
+    output: terminal
+    icon: terminal
+  - name: make:filament-theme
+    label: New theme
+    command: php artisan make:filament-theme
+    description: Generate a custom Filament theme built with Vite
+    output: terminal
+    icon: terminal
+
+setup:
+  - label: Create Filament admin user
+    command: php artisan make:filament-user --name=Admin --email=admin@example.com --password=password
+    default: false
+
+doctor:
+  checks:
+    - name: filament_panel
+      type: command
+      command: grep -rqs 'extends PanelProvider' app
+      severity: warn
+      fix: filament:install
+      detail: "Filament is installed but no panel is set up, so there is no admin panel to open. Install the panel."
+    - name: filament_assets
+      type: command
+      command: test -d public/js/filament
+      severity: warn
+      fix: filament:upgrade
+      detail: "Filament's assets are not published to public/, so its panels load without their scripts and styles."
