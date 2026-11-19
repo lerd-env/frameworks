@@ -2,6 +2,8 @@ package: doctrine/doctrine-fixtures-bundle
 frameworks:
   - name: symfony
     min: "4"
+  - name: sulu
+    min: "3"
 
 commands:
   - name: doctrine:fixtures:load

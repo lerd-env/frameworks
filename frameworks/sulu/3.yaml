@@ -1,0 +1,103 @@
+name: sulu
+version: "3"
+label: Sulu
+color: "#52b6ca"
+based_on: symfony
+public_dir: public
+create: composer create-project sulu/skeleton:^3.0
+php:
+  min: "8.2"
+  max: "8.5"
+  # sulu:build and the composer auto-scripts run out of memory at PHP's 128M.
+  cli_ini:
+    memory_limit: 512M
+
+# The skeleton is a Symfony Flex project, so the Symfony rules match it too;
+# based_on above makes Sulu win over them.
+detect:
+  - composer: sulu/sulu
+
+env:
+  file: .env.local
+  example_file: .env
+  format: dotenv
+  url_key: DEFAULT_URI
+  # Sulu supports MySQL, MariaDB and PostgreSQL; the skeleton ships MySQL.
+  default_service: mysql
+  services:
+    mysql:
+      detect:
+        - key: DATABASE_URL
+          value_prefix: "mysql://"
+        - key: DATABASE_URL
+          value_prefix: "mariadb://"
+      vars:
+        - "DATABASE_URL=mysql://root:lerd@lerd-mysql:3306/{{site}}"
+    postgres:
+      detect:
+        - key: DATABASE_URL
+          value_prefix: "postgresql://"
+        - key: DATABASE_URL
+          value_prefix: "postgres://"
+      vars:
+        - "DATABASE_URL=postgresql://postgres:lerd@lerd-postgres:5432/{{site}}"
+    mailpit:
+      detect:
+        - key: MAILER_DSN
+      vars:
+        - "MAILER_DSN=smtp://lerd-mailpit:1025"
+
+composer: auto
+npm: auto
+# bin/console boots the admin kernel, which carries every Sulu command.
+console: bin/console
+cache_command: cache:clear
+
+logs:
+  - path: var/log/*.log
+    format: monolog
+
+install:
+  label: Build Sulu (database, admin user)
+  # sulu:build creates the search indexes here, and nothing else does before it.
+  missing_file: var/indexes
+  # A clone has no var/indexes either. sulu:build's schema update drops tables
+  # Doctrine does not map, so it runs only while Sulu's users table is absent.
+  command: >
+    php bin/console dbal:run-sql "SELECT 1 FROM se_users LIMIT 1" >/dev/null 2>&1
+    || php bin/console sulu:build dev --no-interaction
+
+tinker:
+  command: ["vendor/bin/psysh"]
+  execute_flag: "--execute"
+  requires_package: psy/psysh
+  requires_file: vendor/bin/psysh
+
+commands:
+  - name: sulu:build
+    label: Build Sulu
+    command: bin/console sulu:build dev --no-interaction
+    description: Create the database and update the schema, dropping tables Doctrine does not map, then the roles and the admin user
+    output: text
+    confirm: true
+    icon: database
+  - name: cache:clear
+    label: Clear cache
+    command: bin/console cache:clear && bin/websiteconsole cache:clear
+    description: Clear the admin and website caches
+    output: silent
+    icon: broom
+
+doctor:
+  migrate_command: sulu:build
+  checks:
+    - name: app_debug
+      type: env_combo
+      when:
+        APP_ENV: prod
+      warn_if:
+        APP_DEBUG: "true"
+      detail: "APP_DEBUG is on while APP_ENV=prod, so stack traces and internals will leak. Turn debug off in production."
+
+worktree:
+  migrations: migrations
