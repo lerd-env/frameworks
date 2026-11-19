@@ -20,6 +20,16 @@
       ]
     },
     {
+      "name": "sulu",
+      "label": "Sulu",
+      "based_on": "symfony",
+      "versions": ["3"],
+      "latest": "3",
+      "detect": [
+        {"composer": "sulu/sulu"}
+      ]
+    },
+    {
       "name": "symfony",
       "label": "Symfony",
       "versions": ["8", "7", "6", "5", "4"],

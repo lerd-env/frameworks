@@ -30,6 +30,7 @@
   <img src=".github/logos/sculpin.svg" width="44" height="44" alt="Sculpin" title="Sculpin">
   <img src=".github/logos/slim.svg" width="44" height="44" alt="Slim" title="Slim">
   <img src=".github/logos/statamic.svg" width="44" height="44" alt="Statamic" title="Statamic">
+  <img src=".github/logos/sulu.svg" width="44" height="44" alt="Sulu" title="Sulu">
   <img src=".github/logos/symfony.svg" width="44" height="44" alt="Symfony" title="Symfony">
   <img src=".github/logos/tempest.svg" width="44" height="44" alt="Tempest" title="Tempest">
   <img src=".github/logos/testbench.svg" width="44" height="44" alt="Testbench" title="Testbench">
@@ -41,7 +42,7 @@
 
 When you run `lerd link` on a project, Lerd detects which framework it is and pulls the matching definition from this store — then it knows how to serve it, which workers to run, how to set up its `.env`, how to scaffold it, and how to health-check it. Everything is a versioned YAML file. Add a framework here and every Lerd install can use it within 24 hours, with no new Lerd release and no Go code.
 
-That's the whole point: **Lerd is framework-agnostic, and this repo is where that agnosticism lives.** Laravel, Symfony, WordPress, Drupal, CakePHP, CodeIgniter, Statamic, Winter CMS, October CMS, Magento, Tempest, Yii, Slim, Laminas, Contao, Craft CMS, Joomla!, ExpressionEngine, Kirby, Jigsaw, and Sculpin are all defined here — not hardcoded in the binary — and so is whatever framework you add next.
+That's the whole point: **Lerd is framework-agnostic, and this repo is where that agnosticism lives.** Laravel, Symfony, WordPress, Drupal, CakePHP, CodeIgniter, Statamic, Sulu, Winter CMS, October CMS, Magento, Tempest, Yii, Slim, Laminas, Contao, Craft CMS, Joomla!, ExpressionEngine, Kirby, Jigsaw, and Sculpin are all defined here — not hardcoded in the binary — and so is whatever framework you add next.
 
 ## What a definition powers
 
@@ -79,6 +80,7 @@ All of it is data. None of it ships in the binary.
 | <img src=".github/logos/sculpin.svg" width="28" height="28" alt=""> | **Sculpin** | `3` | `sculpin/sculpin` in composer.json |
 | <img src=".github/logos/slim.svg" width="28" height="28" alt=""> | **Slim** | `4` | `slim/slim` in composer.json |
 | <img src=".github/logos/statamic.svg" width="28" height="28" alt=""> | **Statamic** | `6` `5` `4` `3` | `statamic/cms` in composer.json |
+| <img src=".github/logos/sulu.svg" width="28" height="28" alt=""> | **Sulu** | `3` | `sulu/sulu` in composer.json |
 | <img src=".github/logos/symfony.svg" width="28" height="28" alt=""> | **Symfony** | `8` `7` `6` `5` `4` | `symfony.lock` file or `symfony/framework-bundle` in composer.json |
 | <img src=".github/logos/tempest.svg" width="28" height="28" alt=""> | **Tempest** | `3` | `tempest` file or `tempest/framework` in composer.json |
 | <img src=".github/logos/testbench.svg" width="28" height="28" alt=""> | **Testbench** | `11` | `testbench.yaml` file (a Laravel package served from its Orchestra Testbench workbench) |
@@ -102,8 +104,8 @@ definition your project resolved when its `composer.json` requires the package.
 | `cakephp/migrations` | `migrate` command | CakePHP 3+ |
 | `cakephp/queue` | `queue` worker | CakePHP 5+ |
 | `codeigniter4/queue` | `queue` worker, `queue:retry`, `queue:failed`, `queue:flush` commands | CodeIgniter 4+ |
-| `doctrine/doctrine-fixtures-bundle` | `doctrine:fixtures:load` command, 1 setup step | Symfony 4+ |
-| `doctrine/doctrine-migrations-bundle` | `doctrine:migrations:migrate` command, 1 setup step | Symfony 4+ |
+| `doctrine/doctrine-fixtures-bundle` | `doctrine:fixtures:load` command, 1 setup step | Symfony 4+, Sulu 3+ |
+| `doctrine/doctrine-migrations-bundle` | `doctrine:migrations:migrate` command, 1 setup step | Symfony 4+, Sulu 3+ |
 | `doctrine/mongodb-odm-bundle` | suggests the `mongo` service, ticked | Symfony |
 | `drupal/elasticsearch_connector` | suggests `elasticsearch`, or `opensearch` when that is what runs | Drupal |
 | `drupal/memcache` | suggests the `memcached` service, ticked | Drupal |
