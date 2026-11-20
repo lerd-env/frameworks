@@ -6,7 +6,6 @@ public_dir: .
 create: composer create-project --no-install --no-plugins --no-scripts johnpbloch/wordpress-core:^7.0
 php:
   min: "7.4"
-  max: "8.5"
   # wp-cli unzips core and dumps databases in one process; 128M is not enough.
   cli_ini:
     memory_limit: 512M

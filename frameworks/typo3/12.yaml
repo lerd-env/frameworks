@@ -6,7 +6,6 @@ public_dir: public
 create: composer create-project typo3/cms-base-distribution:^12.0
 php:
   min: "8.1"
-  max: "8.3"
 
 detect:
   - composer: typo3/cms-core

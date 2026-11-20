@@ -6,7 +6,6 @@ public_dir: public
 create: composer create-project contao/managed-edition:^6.0
 php:
   min: "8.4"
-  max: "8.5"
 
 # Contao runs on Symfony but ships no symfony.lock and no flex-require, so the
 # Symfony definition never claims it. The managed edition requires the manager

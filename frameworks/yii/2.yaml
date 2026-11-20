@@ -6,7 +6,6 @@ public_dir: web
 create: composer create-project yiisoft/yii2-app-basic:^2.0
 php:
   min: "7.4"
-  max: "8.4"
 # The yii console script alone is not enough: Yii 3 ships one too.
 detect:
   - composer: "yiisoft/yii2"

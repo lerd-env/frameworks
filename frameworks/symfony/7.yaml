@@ -6,7 +6,6 @@ public_dir: public
 create: composer create-project symfony/skeleton:^7.0
 php:
   min: "8.2"
-  max: "8.4"
 
 detect:
   - file: symfony.lock

@@ -7,7 +7,6 @@ public_dir: public
 create: composer create-project sulu/skeleton:^3.0
 php:
   min: "8.2"
-  max: "8.5"
   # sulu:build and the composer auto-scripts run out of memory at PHP's 128M.
   cli_ini:
     memory_limit: 512M

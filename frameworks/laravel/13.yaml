@@ -7,7 +7,6 @@ create: composer create-project --no-install --no-plugins --no-scripts laravel/l
 
 php:
   min: "8.3"
-  max: "8.5"
 
 detect:
   - file: artisan

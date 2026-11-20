@@ -5,7 +5,6 @@ color: "#5091cd"
 public_dir: .
 php:
   min: "8.3"
-  max: "8.5"
 
 # Joomla is installed from its release package rather than composer, so it is
 # recognised by the manifest the package lays down, with the major read off the

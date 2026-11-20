@@ -6,7 +6,6 @@ public_dir: public
 create: composer create-project codeigniter4/appstarter:^4.0
 php:
   min: "8.2"
-  max: "8.4"
 
 detect:
   - file: spark

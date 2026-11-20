@@ -25,6 +25,10 @@ import yaml
 # package kinds take an index key of their own, which those versions never read.
 COMPOSER_NAME = re.compile(r"^[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*$")
 
+# Keys every lerd has read as absent-means-unbounded since the key first
+# shipped, so dropping one changes behaviour on purpose rather than breaking it.
+DROPPABLE_KEYS = {"php.max"}
+
 
 def index_failures(candidate_dir):
     path = pathlib.Path(candidate_dir) / "frameworks" / "index.json"
@@ -133,6 +137,8 @@ def main():
 
         for path, kinds in sorted(old_types.items()):
             if path not in new_types:
+                if path in DROPPABLE_KEYS:
+                    continue
                 failures.append(f"{rel}: key `{path}` was removed, an older lerd still reads it")
                 continue
             if kinds != new_types[path] and not kinds & new_types[path]:

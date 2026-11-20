@@ -6,7 +6,6 @@ public_dir: webroot
 create: composer create-project cakephp/app:^5.0
 php:
   min: "8.1"
-  max: "8.4"
 
 detect:
   - file: bin/cake
