@@ -10,7 +10,6 @@ public_dir: public
 create: composer create-project wintercms/winter:^1.0
 php:
   min: "8.1"
-  max: "8.4"
 
 # Winter ships artisan and requires laravel/framework, so the Laravel definition
 # would claim it. Its own module is what says this is Winter, and the lock pins

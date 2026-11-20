@@ -6,7 +6,7 @@ public_dir: public
 create: composer create-project statamic/statamic:^4.0
 php:
   min: "8.0"
-  max: "8.2"
+  max: "8.3"
 
 detect:
   - composer: statamic/cms

@@ -10,7 +10,6 @@ public_dir: public
 create: composer create-project october/october:^4.0
 php:
   min: "8.2"
-  max: "8.5"
 
 # October ships artisan and requires laravel/framework, so the Laravel
 # definition would claim it too. october/rain is its own core, whose major is

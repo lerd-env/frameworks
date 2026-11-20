@@ -8,7 +8,6 @@ public_dir: web
 create: composer create-project roots/bedrock:^1.0
 php:
   min: "7.4"
-  max: "8.4"
   # wp-cli unzips core and dumps databases in one process; 128M is not enough.
   cli_ini:
     memory_limit: 512M

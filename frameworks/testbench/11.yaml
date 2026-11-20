@@ -16,7 +16,6 @@ nginx:
 
 php:
   min: "8.3"
-  max: "8.5"
 
 detect:
   - file: testbench.yaml

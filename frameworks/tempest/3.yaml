@@ -7,7 +7,6 @@ create: composer create-project tempest/app:^3.0
 
 php:
   min: "8.5"
-  max: "8.5"
 
 detect:
   - composer: tempest/framework

@@ -7,7 +7,6 @@ favicon: core/misc/favicon.ico
 create: composer create-project drupal/recommended-project:^11.0
 php:
   min: "8.3"
-  max: "8.5"
   cli_ini:
     memory_limit: 512M
 

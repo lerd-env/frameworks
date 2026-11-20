@@ -6,7 +6,7 @@ public_dir: public
 create: composer create-project laminas/laminas-mvc-skeleton:^2.0
 php:
   min: "8.1"
-  max: "8.3"
+  max: "8.4"
 
 # Laminas is the Zend Framework renamed, so a project that never moved off the
 # zendframework packages is the same application and is recognised too. The
