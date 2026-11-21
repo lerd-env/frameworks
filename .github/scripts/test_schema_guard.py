@@ -29,6 +29,10 @@ class RemovedKeyTest(unittest.TestCase):
         code, out = self.guard('php:\n  min: "8.2"\n  max: "8.4"\n', 'php:\n  min: "8.2"\n')
         self.assertEqual(code, 0, out)
 
+    def test_dropping_the_create_command_passes(self):
+        code, out = self.guard('create: composer create-project x/y\nname: lumen\n', 'name: lumen\n')
+        self.assertEqual(code, 0, out)
+
     def test_dropping_another_key_still_fails(self):
         code, out = self.guard('php:\n  min: "8.2"\n  max: "8.4"\n', 'php:\n  max: "8.4"\n')
         self.assertEqual(code, 1)

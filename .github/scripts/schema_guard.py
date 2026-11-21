@@ -27,7 +27,9 @@ COMPOSER_NAME = re.compile(r"^[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*$")
 
 # Keys every lerd has read as absent-means-unbounded since the key first
 # shipped, so dropping one changes behaviour on purpose rather than breaking it.
-DROPPABLE_KEYS = {"php.max"}
+# Every lerd since `lerd new` declines a definition without `create` rather than
+# guessing a skeleton, so dropping it retires scaffolding on that major on purpose.
+DROPPABLE_KEYS = {"php.max", "create"}
 
 
 def index_failures(candidate_dir):
