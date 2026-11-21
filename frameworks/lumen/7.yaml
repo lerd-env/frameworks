@@ -3,7 +3,9 @@ version: "7"
 label: Lumen
 color: "#f4645f"
 public_dir: public
-create: composer create-project --no-install --no-plugins --no-scripts laravel/lumen:^7.0
+# Laravel no longer supports starting new projects with Lumen, so this major
+# carries no create command and lerd declines a new project instead of laying
+# down a skeleton. Existing Lumen apps still link and run as before.
 
 php:
   min: "7.2"
