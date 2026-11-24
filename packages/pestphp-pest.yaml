@@ -1,0 +1,7 @@
+package: pestphp/pest
+
+test:
+  command: php vendor/bin/pest
+  filter: --filter={filter}
+  over:
+    - phpunit/phpunit
