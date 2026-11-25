@@ -254,6 +254,7 @@
     {"name": "apache-solr-for-typo3/solr"},
     {"name": "cakephp/migrations"},
     {"name": "cakephp/queue"},
+    {"name": "codeception/codeception"},
     {"name": "codeigniter4/queue"},
     {"name": "doctrine/doctrine-fixtures-bundle"},
     {"name": "doctrine/doctrine-migrations-bundle"},
