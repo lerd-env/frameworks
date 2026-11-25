@@ -234,3 +234,9 @@ doctor:
 # Where the schema migrations live; comparing it across checkouts picks a new worktree's database.
 worktree:
   migrations: database/migrations
+  # Its own Redis keys once a worktree starts its own queue, or it takes the parent's jobs.
+  worker_env:
+    workers: [queue, horizon]
+    env:
+      REDIS_PREFIX: "{{parent}}_{{branch}}_database_"
+      HORIZON_PREFIX: "{{parent}}_{{branch}}_horizon:"
