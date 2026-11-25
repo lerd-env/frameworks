@@ -1,0 +1,95 @@
+name: rails
+version: "8"
+label: Rails
+color: "#d30001"
+public_dir: .
+
+detect:
+  - package:
+      file: Gemfile
+      name: rails
+    version_file: Gemfile
+    version_pattern: 'gem\s+["'']rails["'']\s*,\s*["''][^0-9"'']*(\d+)'
+
+dev_server:
+  command: sh -c 'exec bin/rails server --binding "$HOST"'
+  port: 3000
+  move_port: true
+  create: gem exec -v ~>8.0 rails new
+
+env:
+  file: .env
+  example_file: .env.example
+  format: dotenv
+  url_key: none
+  services:
+    postgres:
+      detect:
+        - key: DATABASE_URL
+          value_prefix: "postgres://"
+        - key: DATABASE_URL
+          value_prefix: "postgresql://"
+      vars:
+        - "DATABASE_URL=postgres://postgres:lerd@lerd-postgres:5432/{{site}}"
+    mysql:
+      detect:
+        - key: DATABASE_URL
+          value_prefix: "mysql2://"
+      vars:
+        - "DATABASE_URL=mysql2://root:lerd@lerd-mysql:3306/{{site}}"
+    redis:
+      detect:
+        - key: REDIS_URL
+      vars:
+        - "REDIS_URL=redis://lerd-redis:6379/0"
+
+composer: "false"
+
+workers:
+  jobs:
+    label: Jobs
+    icon: queue
+    command: bin/jobs
+    host: true
+    check:
+      file: bin/jobs
+  sidekiq:
+    label: Sidekiq
+    icon: queue
+    command: bundle exec sidekiq
+    host: true
+    check:
+      package:
+        file: Gemfile
+        name: sidekiq
+
+logs:
+  - path: log/*.log
+    format: raw
+
+commands:
+  - name: db:migrate
+    label: Migrate
+    command: bin/rails db:migrate
+    description: Apply pending migrations
+    icon: database
+  - name: db:prepare
+    label: Prepare database
+    command: bin/rails db:prepare
+    description: Create the database and load its schema
+    icon: database
+  - name: routes
+    label: Routes
+    command: bin/rails routes
+    description: List the application's routes
+
+doctor:
+  checks:
+    - name: migrations
+      type: command
+      label: Migrations
+      command: bin/rails db:abort_if_pending_migrations
+      fix: db:migrate
+      severity: warn
+      detail: There are migrations to apply, or the database cannot be reached.
+      timeout_seconds: 60
