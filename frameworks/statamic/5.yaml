@@ -86,6 +86,13 @@ console: artisan
 # against the old database and answers every request with an error.
 cache_command: optimize:clear
 
+# collision adds artisan test; without it the project's own runner is used.
+test:
+  command: php artisan test
+  filter: --filter={filter}
+  check:
+    composer: nunomaduro/collision
+
 workers:
   queue:
     label: Queue Worker

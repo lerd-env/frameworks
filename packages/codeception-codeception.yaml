@@ -1,0 +1,7 @@
+package: codeception/codeception
+
+# No filter: codecept run takes one only together with a suite name.
+test:
+  command: php vendor/bin/codecept run
+  over:
+    - phpunit/phpunit
