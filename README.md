@@ -239,8 +239,8 @@ setup:
 doctor:
 ```
 
-Workers, commands, setup steps, doctor checks and capture seams are the whole
-schema; env wiring, detection and services stay with the framework. Lerd merges
+Workers, commands, setup steps, doctor checks, capture seams and the `test`
+runner are the whole schema; env wiring, detection and services stay with the framework. Lerd merges
 the package onto the resolved definition when the project requires it in its
 `composer.json` and the framework falls inside the range, an empty `frameworks:`
 list meaning every framework. The package wins a name collision with the version

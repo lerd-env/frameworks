@@ -1,0 +1,5 @@
+package: symfony/phpunit-bridge
+
+test:
+  command: php vendor/bin/simple-phpunit
+  filter: --filter={filter}

@@ -1,0 +1,8 @@
+package: phpunit/phpunit
+
+test:
+  command: php vendor/bin/phpunit
+  filter: --filter={filter}
+  # The bridge's own runner only downloads a PHPUnit the project already has.
+  over:
+    - symfony/phpunit-bridge
