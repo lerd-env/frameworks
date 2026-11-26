@@ -1,0 +1,9 @@
+starter: vue
+label: Vue
+description: Inertia and Vue with authentication, from Laravel's starter kit
+framework:
+  name: laravel
+  # The kit publishes only its main branch, which tracks the newest Laravel, so
+  # min moves up with each Laravel major.
+  min: "13"
+create: composer create-project --no-install --no-plugins --no-scripts --stability=dev laravel/vue-starter-kit

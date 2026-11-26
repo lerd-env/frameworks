@@ -39,5 +39,35 @@ class RemovedKeyTest(unittest.TestCase):
         self.assertIn("`php.min` was removed", out)
 
 
+class StarterIndexTest(unittest.TestCase):
+    ENTRY = '{"name": "filament", "label": "Filament", "framework": {"name": "laravel", "min": "11"}}'
+
+    def failures(self, entry, body):
+        with tempfile.TemporaryDirectory() as root:
+            index = pathlib.Path(root, "frameworks", "index.json")
+            index.parent.mkdir(parents=True)
+            index.write_text('{"frameworks": [], "starters": [' + entry + ']}')
+            if body is not None:
+                path = pathlib.Path(root, "starters", "laravel", "filament.yaml")
+                path.parent.mkdir(parents=True)
+                path.write_text(body)
+            return schema_guard.index_failures(root)
+
+    def test_an_entry_matching_its_file_passes(self):
+        body = 'starter: filament\nlabel: Filament\nframework:\n  name: laravel\n  min: "11"\nrequire:\n  - filament/filament\n'
+        self.assertEqual(self.failures(self.ENTRY, body), [])
+
+    def test_an_entry_without_a_file_fails(self):
+        out = self.failures(self.ENTRY, None)
+        self.assertEqual(len(out), 1)
+        self.assertIn("starters/laravel/filament.yaml", out[0])
+
+    def test_an_entry_disagreeing_with_its_file_fails(self):
+        body = 'starter: filament\nlabel: Filament\nframework:\n  name: laravel\n  min: "12"\nrequire:\n  - filament/filament\n'
+        out = self.failures(self.ENTRY, body)
+        self.assertEqual(len(out), 1)
+        self.assertIn("framework", out[0])
+
+
 if __name__ == "__main__":
     unittest.main()
