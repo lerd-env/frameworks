@@ -1,0 +1,9 @@
+starter: filament
+label: Filament
+description: A Laravel app with a Filament admin panel
+framework:
+  name: laravel
+  # Filament 4 and 5 need Laravel 11.28 or newer.
+  min: "11"
+require:
+  - filament/filament

@@ -38,13 +38,37 @@ def index_failures(candidate_dir):
         index = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return []
-    return [
+    failures = [
         f"frameworks/index.json: `{entry.get('name')}` under `packages` is not a composer name; "
         "every lerd since the package layer fetches each entry there on update and refuses it. "
         "List other package kinds under their own key, such as `npm_packages`"
         for entry in index.get("packages", [])
         if not COMPOSER_NAME.match(str(entry.get("name", "")))
     ]
+    return failures + starter_failures(candidate_dir, index.get("starters", []))
+
+
+# The create step offers a starter from its index entry alone and fetches the
+# file only once it is picked, so the two have to say the same thing.
+STARTER_INDEX_KEYS = ("label", "description", "framework")
+
+
+def starter_failures(candidate_dir, entries):
+    failures = []
+    for entry in entries:
+        framework = (entry.get("framework") or {}).get("name", "")
+        rel = f"starters/{framework}/{entry.get('name')}.yaml"
+        try:
+            starter = load(pathlib.Path(candidate_dir) / rel)
+        except (OSError, yaml.YAMLError):
+            failures.append(f"frameworks/index.json: starter `{entry.get('name')}` is listed but {rel} is missing or unreadable")
+            continue
+        if starter.get("starter") != entry.get("name"):
+            failures.append(f"{rel}: declares itself as `{starter.get('starter')}`, the index lists it as `{entry.get('name')}`")
+        for key in STARTER_INDEX_KEYS:
+            if starter.get(key) != entry.get(key):
+                failures.append(f"frameworks/index.json: starter `{entry.get('name')}` has a `{key}` that differs from {rel}")
+    return failures
 
 # A key whose published values number no more than this across the whole store
 # is treated as a closed set, so a value outside it is worth a second look.

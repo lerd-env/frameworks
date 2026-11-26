@@ -73,6 +73,13 @@ commands:
     icon: terminal
 
 setup:
+  # Filament writes every panel provider under this directory, so its absence
+  # means the package is required but no panel exists yet, as after the starter.
+  - label: Install Filament panel
+    command: php artisan filament:install --panels --no-interaction
+    default: true
+    check:
+      missing_file: app/Providers/Filament
   - label: Create Filament admin user
     command: php artisan make:filament-user --name=Admin --email=admin@example.com --password=password
     default: false

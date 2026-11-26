@@ -114,7 +114,7 @@ definition your project resolved when its `composer.json` requires the package.
 | `drupal/search_api_solr` | suggests the `solr` service, ticked | Drupal 9+ |
 | `drush/drush` | `cron` worker, `site:install`, `cr`, `uli`, `updb`, `cex`, `cim` commands, 3 setup steps | Drupal 8+ |
 | `elasticsearch/elasticsearch` | suggests the `elasticsearch` service, ticked | any framework |
-| `filament/filament` | `filament:install`, `make:filament-user`, `filament:upgrade`, `filament:optimize`, `filament:optimize-clear` and five `make:filament-*` generator commands, 1 setup step, 2 doctor checks | Laravel 10+ |
+| `filament/filament` | `filament:install`, `make:filament-user`, `filament:upgrade`, `filament:optimize`, `filament:optimize-clear` and five `make:filament-*` generator commands, 2 setup steps, 2 doctor checks | Laravel 10+ |
 | `friendsofsymfony/elastica-bundle` | suggests the `elasticsearch` service, ticked | Symfony |
 | `gotenberg/gotenberg-php` | suggests the `gotenberg` service, ticked | any framework |
 | `helhum/typo3-console` | `setup` command | TYPO3 10-11 |
@@ -183,7 +183,7 @@ New frameworks and version bumps are welcome — this store is only as good as t
 1. Fork this repo
 2. Add or update `frameworks/<name>/<version>.yaml`, or `packages/<vendor>-<name>.yaml` for something a composer package owns (see below)
 3. Add the framework's own mark as `frameworks/<name>.svg` (see below), then run `python3 .github/scripts/readme_logos.py` to draw it for this README
-4. Add or update the entry in `frameworks/index.json` (name, label, versions, latest, detect rules), and list a new package under `packages`
+4. Add or update the entry in `frameworks/index.json` (name, label, versions, latest, detect rules), list a new package under `packages`, and a new [starter](#starters) under `starters`
 5. Open a pull request
 
 ### Definition schema
@@ -323,6 +323,41 @@ The copies a package was lifted out of stay in the version files that already
 shipped them: an install whose binary predates the package layer still reads
 those, and deleting them would take the worker away from it. The package file is
 the one that is maintained from here, since it is the one lerd prefers.
+
+### Starters
+
+A starter is another way to begin a project of a framework defined here, offered
+by `lerd new` and the dashboard's site wizard once a framework and major are
+picked. It lives in `starters/<framework>/<name>.yaml` and either swaps the
+skeleton, requires packages into the framework's own, or both:
+
+```yaml
+starter: filament
+label: Filament
+description: A Laravel app with a Filament admin panel
+framework:
+  name: laravel
+  min: "11"                # inclusive; max: works the same way, either may be omitted
+require:                   # composer packages, an optional :constraint after each
+  - filament/filament
+```
+
+`create:` in place of `require:` replaces the framework's create command, the
+way the React, Vue and Livewire starter kits do. A starter runs nothing after
+creation: the project is detected as its framework, so whatever a required
+package needs to finish installing is a `setup:` step in that package's file,
+where it also serves projects that required the package by hand.
+
+List each starter in `frameworks/index.json` under `starters`, repeating its
+`name`, `label`, `description` and `framework`; the schema guard fails a pull
+request where the entry and the file disagree.
+
+| Starter | Framework | Majors | Begins from |
+|---|---|---|---|
+| `filament` | Laravel | 11+ | `laravel/laravel` with `filament/filament` required |
+| `react` | Laravel | 13+ | `laravel/react-starter-kit` |
+| `vue` | Laravel | 13+ | `laravel/vue-starter-kit` |
+| `livewire` | Laravel | 13+ | `laravel/livewire-starter-kit` |
 
 ### The framework's own mark
 

@@ -325,5 +325,11 @@
     {"name": "@inertiajs/vue3"},
     {"name": "htmx.org"},
     {"name": "vite"}
+  ],
+  "starters": [
+    {"name": "filament", "label": "Filament", "description": "A Laravel app with a Filament admin panel", "framework": {"name": "laravel", "min": "11"}},
+    {"name": "react", "label": "React", "description": "Inertia and React with authentication, from Laravel's starter kit", "framework": {"name": "laravel", "min": "13"}},
+    {"name": "vue", "label": "Vue", "description": "Inertia and Vue with authentication, from Laravel's starter kit", "framework": {"name": "laravel", "min": "13"}},
+    {"name": "livewire", "label": "Livewire", "description": "Livewire and Flux with authentication, from Laravel's starter kit", "framework": {"name": "laravel", "min": "13"}}
   ]
 }
