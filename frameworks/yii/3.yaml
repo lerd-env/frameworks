@@ -1,0 +1,34 @@
+name: yii
+version: "3"
+label: Yii
+color: "#40b3d8"
+public_dir: public
+create: composer create-project yiisoft/app
+php:
+  min: "8.2"
+# Yii 3 has no framework package and its runner's major does not track Yii's,
+# so the console script detects it and carries no version: a Yii 2 app still
+# resolves to 2 from its yiisoft/yii2 lock, and anything else to the latest.
+detect:
+  - file: yii
+
+# The app template keeps no database or application URL in its .env.
+env:
+  file: .env
+  example_file: .env.example
+  format: dotenv
+  url_key: none
+
+composer: auto
+npm: auto
+console: yii
+
+# Yii ships no REPL, so tinker builds the DI container the way the yii script
+# does and evaluates the code it reads from stdin, with $container in scope.
+# VarDumper is dev-only here, and an older lerd always calls dump().
+tinker:
+  command:
+    - "-r"
+    - "require 'src/bootstrap.php'; $container = (new \\Yiisoft\\Yii\\Runner\\Console\\ConsoleApplicationRunner(rootPath: getcwd(), debug: \\App\\Environment::appDebug(), environment: \\App\\Environment::appEnv()))->getContainer(); if (!function_exists('dump')) { function dump(...$v) { foreach ($v as $x) { var_dump($x); } } } eval(stream_get_contents(STDIN));"
+  requires_package: yiisoft/yii-runner-console
+  requires_file: src/bootstrap.php

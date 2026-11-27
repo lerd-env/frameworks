@@ -141,10 +141,11 @@
     {
       "name": "yii",
       "label": "Yii",
-      "versions": ["2"],
-      "latest": "2",
+      "versions": ["3", "2"],
+      "latest": "3",
       "detect": [
-        {"composer": "yiisoft/yii2"}
+        {"composer": "yiisoft/yii2"},
+        {"file": "yii"}
       ]
     },
     {
