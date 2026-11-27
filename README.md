@@ -2,7 +2,7 @@
 
 <p align="center">
   The community-driven store of framework definitions that powers <a href="https://lerd.sh">Lerd</a>.<br>
-  Teach Lerd a new PHP framework by editing YAML, no binary release required.
+  Teach Lerd a new framework by editing YAML, in PHP or any other language, no binary release required.
 </p>
 
 <p align="center">
@@ -40,15 +40,29 @@
   <img src=".github/logos/yii.svg" width="44" height="44" alt="Yii" title="Yii">
 </p>
 
+<p align="center">
+  <strong>PHP first, and not only PHP</strong><br>
+  <img src=".github/logos/nestjs.svg" width="44" height="44" alt="NestJS" title="NestJS">
+  <img src=".github/logos/django.svg" width="44" height="44" alt="Django" title="Django">
+  <img src=".github/logos/rails.svg" width="44" height="44" alt="Rails" title="Rails">
+  <img src=".github/logos/axum.svg" width="44" height="44" alt="Axum" title="Axum">
+</p>
+
 When you run `lerd link` on a project, Lerd detects which framework it is and pulls the matching definition from this store — then it knows how to serve it, which workers to run, how to set up its `.env`, how to scaffold it, and how to health-check it. Everything is a versioned YAML file. Add a framework here and every Lerd install can use it within 24 hours, with no new Lerd release and no Go code.
 
-That's the whole point: **Lerd is framework-agnostic, and this repo is where that agnosticism lives.** Laravel, Symfony, WordPress, Drupal, CakePHP, CodeIgniter, Statamic, Sulu, Winter CMS, October CMS, Magento, Tempest, Yii, Slim, Laminas, Contao, Craft CMS, Joomla!, ExpressionEngine, Kirby, Jigsaw, and Sculpin are all defined here — not hardcoded in the binary — and so is whatever framework you add next.
+That's the whole point: **Lerd is framework-agnostic, and this repo is where that agnosticism lives.** Laravel, Symfony, WordPress, Drupal, CakePHP, CodeIgniter, Statamic, Sulu, Winter CMS, October CMS, Magento, Tempest, Yii, Slim, Laminas, Contao, Craft CMS, Joomla!, ExpressionEngine, Kirby, Jigsaw, Sculpin, NestJS, Django, Rails, and Axum are all defined here — not hardcoded in the binary — and so is whatever framework you add next.
+
+## Not only PHP
+
+A NestJS API, a Django site or a Rails app gets the same treatment as a Laravel one: its own HTTPS domain, database and Redis wired into its env file, workers, commands and health checks. Lerd runs the project's dev server and puts nginx in front of it, so every site in a stack sits side by side whatever it is written in. If another Node, Python, Ruby or Rust framework is missing, [it takes one YAML file](#frameworks-that-are-not-php).
+
+These need a Lerd release that knows them, newer than 1.39. An older one ignores them and keeps treating such a project as it did before.
 
 ## What a definition powers
 
 A single `frameworks/<name>/<version>.yaml` teaches Lerd to:
 
-- 🔎 **Auto-detect** the framework and its major version on `lerd link`, from lockfiles, marker files, or `composer.json` entries
+- 🔎 **Auto-detect** the framework and its major version on `lerd link`, from lockfiles, marker files, or an entry in `composer.json`, `package.json`, `requirements.txt`, `pyproject.toml`, `Gemfile` or `Cargo.toml`
 - 🐘 **Pin PHP** to the versions the framework supports, so the right runtime is selected automatically
 - 🌱 **Set up `.env`** — wire database, cache, and service hosts, generate app keys, and apply framework-specific defaults
 - ⚒️ **Run the right workers** — queue, schedule, Horizon, Reverb, a host-side Vite dev server, and more, each self-healing and idle-suspendable
@@ -59,6 +73,8 @@ A single `frameworks/<name>/<version>.yaml` teaches Lerd to:
 All of it is data. None of it ships in the binary.
 
 ## Available frameworks
+
+### PHP
 
 | | Framework | Versions | Detected by |
 |:-:|---|---|---|
@@ -88,6 +104,15 @@ All of it is data. None of it ships in the binary.
 | <img src=".github/logos/winter.svg" width="28" height="28" alt=""> | **Winter CMS** | `1` | `winter/wn-system-module` in composer.json |
 | <img src=".github/logos/wordpress.svg" width="28" height="28" alt=""> | **WordPress** | `7` `6` `5` | `wp-login.php` file or `wp-config.php` file |
 | <img src=".github/logos/yii.svg" width="28" height="28" alt=""> | **Yii** | `2` | `yiisoft/yii2` in composer.json |
+
+### Node, Python, Ruby and Rust
+
+| | Framework | Language | Versions | Detected by |
+|:-:|---|---|---|---|
+| <img src=".github/logos/nestjs.svg" width="28" height="28" alt=""> | **NestJS** | Node | `12` | `@nestjs/core` in package.json |
+| <img src=".github/logos/django.svg" width="28" height="28" alt=""> | **Django** | Python | `6` | `django` in requirements.txt or pyproject.toml |
+| <img src=".github/logos/rails.svg" width="28" height="28" alt=""> | **Rails** | Ruby | `8` | `rails` in Gemfile |
+| <img src=".github/logos/axum.svg" width="28" height="28" alt=""> | **Axum** | Rust | `0` | `axum` in Cargo.toml |
 
 Don't see yours? [Add it](#contributing) — that's what this repo is for.
 
@@ -216,6 +241,37 @@ major the file is for. `lerd new` asks which major to scaffold and resolves this
 definition from the answer, so a command that leaves the package unconstrained
 installs the newest release whatever was picked, and the project on disk ends up
 a major the definition was never written for.
+
+### Frameworks that are not PHP
+
+A framework served by its own dev server declares that server in place of a PHP range:
+
+```yaml
+name: myframework
+version: "3"
+label: My Framework
+color: "#4a90d9"
+public_dir: .
+composer: "false"
+detect:
+  - package: {file: package.json, name: "@myvendor/core"}
+    version_file: package.json
+    version_pattern: '"@myvendor/core"\s*:\s*"[^0-9"]*(\d+)'
+dev_server:
+  command: npm run dev
+  port: 3000
+  move_port: true        # it binds the PORT lerd injects, so it may start on another
+  create: npx --yes @myvendor/cli@3 new
+env:
+  # database/cache/service wiring, as for a PHP framework
+workers:
+  queue:
+    label: Queue
+    command: npm run queue
+    host: true           # there is no container to run it in
+```
+
+`package:` reads `package.json`, `requirements.txt`, `pyproject.toml`, `Gemfile` or `Cargo.toml`. Detect with it and never with `file:`, and keep the scaffold command under `dev_server` rather than at the top level: a Lerd that predates these keys ignores both, while a `file:` rule or a top-level `create` would make it serve the project as PHP. The [framework definitions guide](https://lerd.sh/usage/framework-definitions) covers the rest.
 
 ### Package definitions
 

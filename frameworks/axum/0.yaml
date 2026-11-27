@@ -1,0 +1,55 @@
+name: axum
+version: "0"
+label: Axum
+color: "#ce412b"
+public_dir: .
+
+detect:
+  - package:
+      file: Cargo.toml
+      name: axum
+
+# No move_port: which address an Axum app binds is its own code, so only a
+# project that reads PORT may be moved. cargo run does not reload on save, the
+# catalog's rust plugin does.
+dev_server:
+  command: cargo run
+  port: 3000
+
+env:
+  file: .env
+  example_file: .env.example
+  format: dotenv
+  url_key: none
+  services:
+    postgres:
+      detect:
+        - key: DATABASE_URL
+          value_prefix: "postgres://"
+        - key: DATABASE_URL
+          value_prefix: "postgresql://"
+      vars:
+        - "DATABASE_URL=postgres://postgres:lerd@lerd-postgres:5432/{{site}}"
+    mysql:
+      detect:
+        - key: DATABASE_URL
+          value_prefix: "mysql://"
+      vars:
+        - "DATABASE_URL=mysql://root:lerd@lerd-mysql:3306/{{site}}"
+    redis:
+      detect:
+        - key: REDIS_URL
+      vars:
+        - "REDIS_URL=redis://lerd-redis:6379/0"
+
+composer: "false"
+
+commands:
+  - name: check
+    label: Cargo check
+    command: cargo check
+    description: Type-check the project
+  - name: test
+    label: Cargo test
+    command: cargo test
+    description: Run the tests

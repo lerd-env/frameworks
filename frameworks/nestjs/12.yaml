@@ -1,0 +1,65 @@
+name: nestjs
+version: "12"
+label: NestJS
+color: "#e0234e"
+public_dir: .
+
+# Detected by package only: an older lerd ignores the rule, where a file rule
+# would make it serve the project as PHP.
+detect:
+  - package:
+      file: package.json
+      name: "@nestjs/core"
+    version_file: package.json
+    version_pattern: '"@nestjs/core"\s*:\s*"[^0-9"]*(\d+)'
+
+dev_server:
+  command: npm run start:dev
+  port: 3000
+  move_port: true
+  # npm 10 crashes resolving Nest's optional peers without legacy-peer-deps.
+  create: env npm_config_legacy_peer_deps=true npx --yes @nestjs/cli@12 new --skip-git --package-manager npm
+
+env:
+  file: .env
+  example_file: .env.example
+  format: dotenv
+  url_key: none
+  services:
+    postgres:
+      detect:
+        - key: DATABASE_URL
+          value_prefix: "postgres://"
+        - key: DATABASE_URL
+          value_prefix: "postgresql://"
+      vars:
+        - "DATABASE_URL=postgresql://postgres:lerd@lerd-postgres:5432/{{site}}"
+    mysql:
+      detect:
+        - key: DATABASE_URL
+          value_prefix: "mysql://"
+      vars:
+        - "DATABASE_URL=mysql://root:lerd@lerd-mysql:3306/{{site}}"
+    redis:
+      detect:
+        - key: REDIS_URL
+      vars:
+        - "REDIS_URL=redis://lerd-redis:6379/0"
+
+composer: "false"
+npm: auto
+
+commands:
+  - name: build
+    label: Build
+    command: npm run build
+    description: Compile the project
+    icon: hammer
+  - name: lint
+    label: Lint
+    command: npm run lint
+    description: Run the project's lint script
+  - name: test
+    label: Test
+    command: npm run test
+    description: Run the project's test script

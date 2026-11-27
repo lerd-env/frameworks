@@ -248,6 +248,43 @@
       "detect": [
         {"composer": "sculpin/sculpin"}
       ]
+    },
+    {
+      "name": "nestjs",
+      "label": "NestJS",
+      "versions": ["12"],
+      "latest": "12",
+      "detect": [
+        {"package": {"file": "package.json", "name": "@nestjs/core"}, "version_file": "package.json", "version_pattern": "\"@nestjs/core\"\\s*:\\s*\"[^0-9\"]*(\\d+)"}
+      ]
+    },
+    {
+      "name": "django",
+      "label": "Django",
+      "versions": ["6"],
+      "latest": "6",
+      "detect": [
+        {"package": {"file": "requirements.txt", "name": "django"}, "version_file": "requirements.txt", "version_pattern": "(?im)^django(?:\\[[^\\]]*\\])?\\s*[=~><]+\\s*(\\d+)"},
+        {"package": {"file": "pyproject.toml", "name": "django"}, "version_file": "pyproject.toml", "version_pattern": "(?i)[\"']?django(?:\\[[^\\]]*\\])?[\"']?\\s*[=~><\"^]+[^0-9\\n]{0,4}(\\d+)"}
+      ]
+    },
+    {
+      "name": "rails",
+      "label": "Rails",
+      "versions": ["8"],
+      "latest": "8",
+      "detect": [
+        {"package": {"file": "Gemfile", "name": "rails"}, "version_file": "Gemfile", "version_pattern": "gem\\s+[\"']rails[\"']\\s*,\\s*[\"'][^0-9\"']*(\\d+)"}
+      ]
+    },
+    {
+      "name": "axum",
+      "label": "Axum",
+      "versions": ["0"],
+      "latest": "0",
+      "detect": [
+        {"package": {"file": "Cargo.toml", "name": "axum"}}
+      ]
     }
   ],
   "packages": [
