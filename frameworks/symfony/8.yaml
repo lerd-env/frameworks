@@ -126,10 +126,15 @@ setup:
     default: true
 
 tinker:
-  command: ["vendor/bin/psysh"]
+  # PsySH has no --execute option, so the code runs as plain PHP with the
+  # autoloader. The "--" hands --execute=<code> to that script as $argv[1].
+  command:
+    - "-r"
+    - "require 'vendor/autoload.php'; eval(substr($argv[1], strlen('--execute=')));"
+    - "--"
   execute_flag: "--execute"
-  requires_package: psy/psysh
-  requires_file: vendor/bin/psysh
+  requires_package: symfony/framework-bundle
+  requires_file: vendor/autoload.php
 
 commands:
   - name: cache:clear
