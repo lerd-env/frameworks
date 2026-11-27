@@ -103,7 +103,7 @@ All of it is data. None of it ships in the binary.
 | <img src=".github/logos/typo3.svg" width="28" height="28" alt=""> | **TYPO3** | `14` `13` `12` `11` `10` | `typo3/cms-core` in composer.json or `public/typo3` directory |
 | <img src=".github/logos/winter.svg" width="28" height="28" alt=""> | **Winter CMS** | `1` | `winter/wn-system-module` in composer.json |
 | <img src=".github/logos/wordpress.svg" width="28" height="28" alt=""> | **WordPress** | `7` `6` `5` | `wp-login.php` file or `wp-config.php` file |
-| <img src=".github/logos/yii.svg" width="28" height="28" alt=""> | **Yii** | `2` | `yiisoft/yii2` in composer.json |
+| <img src=".github/logos/yii.svg" width="28" height="28" alt=""> | **Yii** | `3` `2` | `yii` file or `yiisoft/yii2` in composer.json |
 
 ### Node, Python, Ruby and Rust
 

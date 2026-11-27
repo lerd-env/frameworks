@@ -92,6 +92,15 @@ setup:
     check:
       composer: tempest/database
 
+# Tempest ships no REPL, so tinker boots the framework and evaluates the code
+# it reads from stdin. Its handlers print nothing outside its own console, so
+# PHP's come back, or a fatal would return blank.
+tinker:
+  command:
+    - "-r"
+    - "require 'vendor/autoload.php'; \\Tempest\\Core\\Tempest::boot(getcwd()); restore_exception_handler(); restore_error_handler(); ini_set('display_errors', 'stderr'); eval(stream_get_contents(STDIN));"
+  requires_package: tempest/framework
+
 commands:
   - name: discovery:clear
     label: Clear discovery cache
