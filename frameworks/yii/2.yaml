@@ -53,6 +53,16 @@ setup:
     check:
       file: tests/unit/fixtures
 
+# Yii ships no REPL, so tinker builds the console application the way the yii
+# script does and evaluates the code it reads from stdin, Yii::$app included.
+# VarDumper is dev-only here, and an older lerd always calls dump().
+tinker:
+  command:
+    - "-r"
+    - "defined('YII_DEBUG') or define('YII_DEBUG', true); defined('YII_ENV') or define('YII_ENV', 'dev'); require 'vendor/autoload.php'; require 'vendor/yiisoft/yii2/Yii.php'; new yii\\console\\Application(require 'config/console.php'); if (!function_exists('dump')) { function dump(...$v) { foreach ($v as $x) { var_dump($x); } } } eval(stream_get_contents(STDIN));"
+  requires_package: yiisoft/yii2
+  requires_file: config/console.php
+
 commands:
   - name: cache:flush
     label: Flush cache
