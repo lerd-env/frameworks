@@ -56,7 +56,17 @@ vendor_bin_tools:
   wp: wp-cli
 
 tinker:
-  command: ["vendor/wp-cli/wp-cli/php/boot-fs.php", "eval", "--allow-root"]
+  # WordPress's fatal-error handler and display_errors=0 swallow a fatal once
+  # tinker has printed output, so the run came back blank. Print it instead.
+  command:
+    - vendor/wp-cli/wp-cli/php/boot-fs.php
+    - eval
+    - --allow-root
+    - >-
+      --exec=define('WP_DISABLE_FATAL_ERROR_HANDLER', true);
+      register_shutdown_function(function () { $e = error_get_last();
+      if ($e && $e['type'] & (E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR)) {
+      fwrite(STDERR, 'PHP Fatal error: ' . strtok($e['message'], "\n") . PHP_EOL); } });
   execute_positional: true
   requires_package: wp-cli/wp-cli
   requires_file: vendor/wp-cli/wp-cli/php/boot-fs.php
